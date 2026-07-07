@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Shantell+Sans:ital,wght@0,500;1,600&display=swap');
+@import 'tailwindcss';
+
+@theme {
+    /* ---------- Colors ---------- */
+    /* Ink — dark text on the light sections */
+    --color-ink: #121212; /* body-font-color */
+    --color-ink-secondary: #262626; /* footer links; dark-section gradient end */
+    --color-ink-tertiary: #313131; /* footer credit line; dark-section gradient start */
+
+    /* Paper — light text & surfaces on the dark sections */
+    --color-paper: #f5f5f5; /* hero text, polaroid frame, email pill */
+    --color-paper-muted: #dfdfdf; /* nav links, card body text */
+
+    /* Accent — the brand yellow */
+    --color-accent: #ffb71b; /* accent */
+    --color-accent-soft: #ffe8b5; /* top stop of the accent gradient */
+
+    /* Lines & borders */
+    --color-line: #626262; /* project card border */
+
+    /* ---------- Fonts ---------- */
+    --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+    --font-hand: 'Shantell Sans', 'Segoe Print', cursive;
+
+    /* ---------- Type scale (from the page) ---------- */
+    /* 12/14/16px are shared across breakpoints; -lg sizes are the desktop
+       counterparts, e.g. `text-display md:text-display-lg` */
+    --text-caption: 0.75rem; /* 12px — card badges */
+    --text-small: 0.875rem; /* 14px — nav, footer, buttons */
+    --text-small--line-height: 1rem;
+    --text-body: 1rem; /* 16px — body copy, handwritten headlines */
+    --text-body--line-height: 1.3125rem; /* 21px */
+    --text-title: 1.375rem; /* 22px — project card titles (mobile) */
+    --text-title-lg: 1.5rem; /* 24px — project card titles (desktop) */
+    --text-display: 2rem; /* 32px — hero heading (mobile) */
+    --text-display--line-height: 2.5rem; /* 40px */
+    --text-display-lg: 3rem; /* 48px — hero heading (desktop) */
+    --text-display-lg--line-height: 3.25rem; /* 52px */
+    --text-script: 2.125rem; /* 34px — handwritten "curious" overlay (mobile) */
+    --text-script--line-height: 2.3125rem; /* 37px */
+    --text-script--letter-spacing: -0.04em;
+    --text-script-lg: 3.125rem; /* 50px — "curious" overlay (desktop) */
+    --text-script-lg--line-height: 2.3125rem; /* 37px in Figma on both sizes */
+    --text-script-lg--letter-spacing: -0.04em;
+
+    /* ---------- Spacing ---------- */
+    /* Default 4px scale covers most of the page (gap-1/-2/-4, p-6, header py-10…);
+       named exceptions: */
+    --spacing-gutter: 1.5rem; /* 24px — page side padding (mobile) */
+    --spacing-section: 8.125rem; /* 130px — vertical section padding (desktop) */
+
+    /* ---------- Layout widths ---------- */
+    --container-content: 40rem; /* 640px — centered content column (desktop), e.g. max-w-content */
+
+    /* ---------- Radii ---------- */
+    --radius-photo: 3px; /* polaroid frame & picture window */
+    --radius-badge: 6px; /* card status badge */
+    --radius-card: 16px; /* project cards */
+    --radius-pill: 25px; /* email button, social icon buttons */
+
+    /* ---------- Shadows ---------- */
+    --shadow-polaroid: 0 0 41.5px 0 rgb(0 0 0 / 0.4);
+    --inset-shadow-photo: inset 0 0 5.8px 0 rgb(0 0 0 / 0.3);
+}
+
+:root {
+    /* accent-gradient — fill of the handwritten "curious" */
+    --gradient-accent: linear-gradient(
+        180deg,
+        var(--color-accent-soft) 55%,
+        var(--color-accent) 60%
+    );
+    /* Pencil-grey fill of the polaroid caption */
+    --gradient-pencil: linear-gradient(181.56deg, #565656 58.4%, #bcbcbc 85.6%);
+    /* Dark section backgrounds (hero is linear top→bottom; the night section
+       uses the same stops as a radial from the center) */
+    --gradient-surface: linear-gradient(
+        180deg,
+        var(--color-ink-tertiary),
+        var(--color-ink-secondary)
+    );
+}
+
+/* Gradient-filled text, e.g. the "curious" overlay */
+@utility text-gradient-accent {
+    background-image: var(--gradient-accent);
+    background-clip: text;
+    color: transparent;
+}
+
+@utility text-gradient-pencil {
+    background-image: var(--gradient-pencil);
+    background-clip: text;
+    color: transparent;
+}
+
+@layer base {
+    html,
+    body,
+    #app {
+        min-height: 100%;
+    }
+
+    body {
+        margin: 0;
+        @apply bg-white font-sans text-ink antialiased;
+    }
+}
