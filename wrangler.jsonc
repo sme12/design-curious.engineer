@@ -3,5 +3,9 @@
   "name": "design-curious-engineer",
   "compatibility_date": "2025-09-02",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry"
+  "main": "@tanstack/react-start/server-entry",
+  "routes": [
+    { "pattern": "design-curious.engineer", "custom_domain": true },
+    { "pattern": "www.design-curious.engineer", "custom_domain": true }
+  ]
 }
