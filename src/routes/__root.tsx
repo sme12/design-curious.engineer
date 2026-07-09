@@ -81,6 +81,12 @@ export const Route = createRootRoute({
 				href: appCss,
 			},
 			{
+				rel: "preload",
+				as: "image",
+				href: "/polaroid.jpg",
+				fetchPriority: "high",
+			},
+			{
 				rel: "icon",
 				type: "image/svg+xml",
 				href: "/favicon.svg",

@@ -1,12 +1,70 @@
+import { useRef } from "react";
+import { useHandwrittenCaption } from "./useHandwrittenCaption";
+import { usePolaroidDevelop } from "./usePolaroidDevelop";
+
+const PHOTO_SRC = "/polaroid.jpg";
+const CAPTION = "Greetings from Finland";
+
 export function Polaroid({ className = "" }: { className?: string }) {
+	const frameRef = useRef<HTMLDivElement>(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const captionRef = useRef<HTMLElement>(null);
+
+	const writeCaption = useHandwrittenCaption(captionRef);
+	usePolaroidDevelop({
+		src: PHOTO_SRC,
+		frameRef,
+		canvasRef,
+		onDeveloped: writeCaption,
+	});
+
 	return (
 		<figure
 			className={`flex h-82.25 w-63.5 flex-col rounded-photo bg-paper p-3.5 shadow-polaroid md:h-87 md:w-67.25 ${className}`}
 		>
-			<div className="h-60.25 rounded-photo bg-paper-muted inset-shadow-photo md:h-63.75" />
-			<figcaption className="flex flex-1 items-center justify-center">
-				<span className="-rotate-4 font-hand font-medium text-body text-gradient-pencil md:rotate-0 md:italic">
-					Greetings from Finland
+			<div
+				ref={frameRef}
+				className="relative h-60.25 overflow-hidden rounded-photo bg-film md:h-63.75"
+			>
+				<canvas
+					ref={canvasRef}
+					aria-label="Polaroid photo"
+					className="absolute inset-0 h-full w-full"
+					role="img"
+				/>
+				<div
+					aria-hidden="true"
+					className="pointer-events-none absolute inset-0 rounded-photo inset-shadow-photo"
+				/>
+				<noscript>
+					<style>{"[data-word] { --p: 125%; }"}</style>
+					<img
+						alt=""
+						className="absolute inset-0 h-full w-full object-cover"
+						src={PHOTO_SRC}
+					/>
+				</noscript>
+			</div>
+			<figcaption
+				ref={captionRef}
+				className="flex flex-1 items-center justify-center"
+			>
+				<span className="sr-only">{CAPTION}</span>
+				<span
+					aria-hidden="true"
+					className="-rotate-4 font-hand font-medium text-body md:rotate-0 md:italic"
+				>
+					{CAPTION.split(" ").map((word, index) => (
+						<span key={word}>
+							{index > 0 && " "}
+							<span
+								className="pen-reveal inline-block text-gradient-pencil"
+								data-word=""
+							>
+								{word}
+							</span>
+						</span>
+					))}
 				</span>
 			</figcaption>
 		</figure>
