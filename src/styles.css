@@ -95,6 +95,22 @@
     color: transparent;
 }
 
+@utility btn {
+    @apply inline-flex cursor-pointer items-center justify-center rounded-pill border border-paper transition-colors;
+}
+
+@utility btn-solid {
+    @apply bg-paper px-4 py-2.75 font-medium text-ink text-small hover:bg-white;
+}
+
+@utility btn-icon {
+    @apply p-2.25 text-paper hover:bg-paper/10;
+}
+
+@utility clip-angle-b {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), 0 100%);
+}
+
 @layer base {
     html,
     body,
