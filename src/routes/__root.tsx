@@ -80,6 +80,23 @@ export const Route = createRootRoute({
 				rel: "stylesheet",
 				href: appCss,
 			},
+			// Fonts are needed above the fold and gate the polaroid animation
+			// via document.fonts.ready; the desktop-only caption italic is left
+			// to load on demand
+			{
+				rel: "preload",
+				as: "font",
+				type: "font/woff2",
+				href: "/fonts/geist-variable.woff2",
+				crossOrigin: "anonymous",
+			},
+			{
+				rel: "preload",
+				as: "font",
+				type: "font/woff2",
+				href: "/fonts/shantell-sans-medium.woff2",
+				crossOrigin: "anonymous",
+			},
 			{
 				rel: "preload",
 				as: "image",
