@@ -1,25 +1,30 @@
 import { useRef } from "react";
 import { useHandwrittenCaption } from "./useHandwrittenCaption";
 import { usePolaroidDevelop } from "./usePolaroidDevelop";
+import { usePolaroidShake } from "./usePolaroidShake";
 
 const PHOTO_SRC = "/polaroid.jpg";
 const CAPTION = "Greetings from Finland";
 
 export function Polaroid({ className = "" }: { className?: string }) {
+	const cardRef = useRef<HTMLElement>(null);
 	const frameRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const captionRef = useRef<HTMLElement>(null);
 
+	const shakeCard = usePolaroidShake(cardRef);
 	const writeCaption = useHandwrittenCaption(captionRef);
 	usePolaroidDevelop({
 		src: PHOTO_SRC,
 		frameRef,
 		canvasRef,
+		onDevelopStart: shakeCard,
 		onDeveloped: writeCaption,
 	});
 
 	return (
 		<figure
+			ref={cardRef}
 			className={`flex h-82.25 w-63.5 flex-col rounded-photo bg-paper p-3.5 shadow-polaroid md:h-87 md:w-67.25 ${className}`}
 		>
 			<div

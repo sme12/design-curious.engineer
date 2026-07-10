@@ -11,18 +11,20 @@ const ease = (x: number) => 1 - (1 - x) ** 2.6;
 /**
  * Runs the polaroid "develop" animation: once the photo is loaded and the
  * frame scrolls into view, the canvas develops from a milky blank into the
- * photo. Calls `onDeveloped` when the photo is fully developed (immediately
- * with reduced motion).
+ * photo. Calls `onDevelopStart` as the sequence kicks off and `onDeveloped`
+ * when the photo is fully developed (immediately with reduced motion).
  */
 export function usePolaroidDevelop({
 	src,
 	frameRef,
 	canvasRef,
+	onDevelopStart,
 	onDeveloped,
 }: {
 	src: string;
 	frameRef: RefObject<HTMLDivElement | null>;
 	canvasRef: RefObject<HTMLCanvasElement | null>;
+	onDevelopStart?: () => void;
 	onDeveloped: () => void;
 }) {
 	useEffect(() => {
@@ -114,6 +116,7 @@ export function usePolaroidDevelop({
 
 		const develop = () => {
 			fitCanvas();
+			onDevelopStart?.();
 			if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
 				done = true;
 				draw(1);
@@ -154,5 +157,5 @@ export function usePolaroidDevelop({
 			observer.disconnect();
 			resizeObserver.disconnect();
 		};
-	}, [src, frameRef, canvasRef, onDeveloped]);
+	}, [src, frameRef, canvasRef, onDevelopStart, onDeveloped]);
 }
