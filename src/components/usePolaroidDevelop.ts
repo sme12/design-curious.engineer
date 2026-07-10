@@ -25,7 +25,7 @@ export function usePolaroidDevelop({
 	frameRef: RefObject<HTMLDivElement | null>;
 	canvasRef: RefObject<HTMLCanvasElement | null>;
 	onDevelopStart?: () => void;
-	onDeveloped: () => void;
+	onDeveloped?: () => void;
 }) {
 	useEffect(() => {
 		const frame = frameRef.current;
@@ -110,7 +110,7 @@ export function usePolaroidDevelop({
 				raf = requestAnimationFrame(loop);
 			} else {
 				done = true;
-				onDeveloped();
+				onDeveloped?.();
 			}
 		};
 
@@ -120,7 +120,7 @@ export function usePolaroidDevelop({
 			if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
 				done = true;
 				draw(1);
-				onDeveloped();
+				onDeveloped?.();
 				return;
 			}
 			raf = requestAnimationFrame(loop);

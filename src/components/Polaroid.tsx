@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 import { useHandwrittenCaption } from "./useHandwrittenCaption";
 import { usePolaroidDevelop } from "./usePolaroidDevelop";
 import { usePolaroidShake } from "./usePolaroidShake";
@@ -14,12 +14,15 @@ export function Polaroid({ className = "" }: { className?: string }) {
 
 	const shakeCard = usePolaroidShake(cardRef);
 	const writeCaption = useHandwrittenCaption(captionRef);
+	const shakeThenWrite = useCallback(
+		() => void shakeCard().then(writeCaption),
+		[shakeCard, writeCaption],
+	);
 	usePolaroidDevelop({
 		src: PHOTO_SRC,
 		frameRef,
 		canvasRef,
-		onDevelopStart: shakeCard,
-		onDeveloped: writeCaption,
+		onDevelopStart: shakeThenWrite,
 	});
 
 	return (

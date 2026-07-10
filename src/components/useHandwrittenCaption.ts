@@ -4,7 +4,7 @@ import { type RefObject, useCallback, useEffect, useRef } from "react";
 // Handwriting knobs (seconds)
 const PEN_SPEED = 0.085; // per character
 const PEN_LIFT = 0.14; // pause between words
-const PEN_DELAY = 0.25; // before the first word
+const PEN_DELAY = 0; // before the first word
 
 /**
  * Handwrites the caption word by word: returns a `write` callback that
