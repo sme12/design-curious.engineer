@@ -98,6 +98,8 @@
     );
     /* Pencil-grey fill of the polaroid caption */
     --gradient-pencil: linear-gradient(181.56deg, #565656 58.4%, #bcbcbc 85.6%);
+    /* Torn-paper edge tile from */
+    --mask-torn-tile: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 12"%3E%3Cpath d="M384 0V9.3916L355.771 12L332.93 9.3916L322.37 12L297.158 9.3916L261.388 12L233.589 9.3916L213.979 12H170.021L150.411 9.3916L122.613 12L86.8418 9.3916L61.6299 12L51.0703 9.3916L28.2285 12L0 9.3916V0H384Z"/%3E%3C/svg%3E');
     /* Dark section backgrounds (hero is linear top→bottom; the night section
        uses the same stops as a radial from the center) */
     --gradient-surface: linear-gradient(
@@ -136,6 +138,17 @@
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), 0 100%);
 }
 
+/* Torn-paper bottom edge */
+@utility mask-torn-b {
+    mask-image: linear-gradient(#000, #000), var(--mask-torn-tile);
+    mask-size:
+        100% calc(100% - 12px),
+        384px 12px;
+    mask-position:
+        top,
+        bottom left;
+    mask-repeat: no-repeat, repeat-x;
+}
 /* Soft-edged wipe revealing handwriting; --p is the pen position, 0% → 125% */
 @property --p {
     syntax: '<percentage>';
@@ -145,7 +158,11 @@
 
 @utility pen-reveal {
     --p: 0%;
-    mask-image: linear-gradient(90deg, #000 calc(var(--p) - 18%), transparent var(--p));
+    mask-image: linear-gradient(
+        90deg,
+        #000 calc(var(--p) - 18%),
+        transparent var(--p)
+    );
 }
 
 @layer base {
