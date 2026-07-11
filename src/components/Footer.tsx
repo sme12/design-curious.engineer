@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 export function Footer() {
 	return (
 		<footer>
-			<div className="mx-auto flex max-w-content flex-col gap-6 px-gutter pt-12 pb-9 text-small md:flex-row md:items-center md:justify-between md:px-0 md:py-20">
+			<div className="mx-auto flex max-w-content flex-col gap-6 px-gutter pt-12 pb-9 text-small md:flex-row md:items-center md:justify-between md:px-0 md:py-20 2xl:max-w-content-xl 2xl:text-small-xl">
 				<p className="text-ink-tertiary">
 					Designed and developed by Vitalii Sazanov, Finland, 2026
 				</p>

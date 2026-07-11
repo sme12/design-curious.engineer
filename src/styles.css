@@ -76,6 +76,18 @@
     --text-script-lg: 3.125rem; /* 50px — "curious" overlay (desktop) */
     --text-script-lg--line-height: 2.3125rem; /* 37px in Figma on both sizes */
     --text-script-lg--letter-spacing: -0.04em;
+    --text-caption-xl: 0.875rem; /* 14px */
+    --text-small-xl: 1rem; /* 16px */
+    --text-small-xl--line-height: 1.125rem;
+    --text-body-xl: 1.125rem; /* 18px */
+    --text-body-xl--line-height: 1.5rem; /* 24px */
+    --text-title-xl: 1.625rem; /* 26px */
+    --text-display-xl: 3.5rem; /* 56px */
+    --text-display-xl--line-height: 3.875rem; /* 62px */
+    --text-script-xl: 3.625rem; /* 58px */
+    --text-script-xl--line-height: 2.6875rem; /* 43px — keeps -lg's 37/50 ratio;
+       smaller crops the gradient (background-clip paints only inside the box) */
+    --text-script-xl--letter-spacing: -0.04em;
 
     /* ---------- Spacing ---------- */
     /* Default 4px scale covers most of the page (gap-1/-2/-4, p-6, header py-10…);
@@ -85,6 +97,7 @@
 
     /* ---------- Layout widths ---------- */
     --container-content: 40rem; /* 640px — centered content column (desktop), e.g. max-w-content */
+    --container-content-xl: 60rem; /* 960px — content column on wide screens (2xl) */
 
     /* ---------- Radii ---------- */
     --radius-photo: 3px; /* polaroid frame & picture window */
