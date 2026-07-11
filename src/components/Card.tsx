@@ -39,7 +39,7 @@ export function Card({
 					</a>
 					<ArrowRightIcon
 						aria-hidden="true"
-						className="text-[#a7a7a7] transition-transform duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:translate-x-1"
+						className="text-[#a7a7a7] transition-transform duration-300 ease-out-cubic group-hover:translate-x-1"
 					/>
 				</span>
 			)}
