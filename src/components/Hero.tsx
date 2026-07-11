@@ -70,7 +70,7 @@ export function Hero() {
 			</div>
 			<div
 				aria-hidden="true"
-				className="mask-torn-b -left-3 absolute top-[calc(100%-12px)] h-6 w-[calc(100%+48px)] origin-top-left rotate-[atan2(-24px,100vw)] bg-ink-secondary md:hidden"
+				className="mask-torn-b -left-3 absolute top-[calc(100%-24px)] h-9 w-[calc(100%+48px)] origin-top-left rotate-[atan2(-24px,100vw)] bg-ink-secondary md:hidden"
 			/>
 		</section>
 	);

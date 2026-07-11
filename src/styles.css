@@ -25,6 +25,14 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Shantell Sans';
+    src: url('/fonts/shantell-sans-semibold-italic.woff2') format('woff2');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
 @theme {
     /* ---------- Colors ---------- */
     /* Ink — dark text on the light sections */
@@ -98,12 +106,18 @@
     );
     /* Pencil-grey fill of the polaroid caption */
     --gradient-pencil: linear-gradient(181.56deg, #565656 58.4%, #bcbcbc 85.6%);
-    /* Torn-paper edge tile from */
+    /* Torn-paper edge tiles */
     --mask-torn-tile: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 12"%3E%3Cpath d="M384 0V9.3916L355.771 12L332.93 9.3916L322.37 12L297.158 9.3916L261.388 12L233.589 9.3916L213.979 12H170.021L150.411 9.3916L122.613 12L86.8418 9.3916L61.6299 12L51.0703 9.3916L28.2285 12L0 9.3916V0H384Z"/%3E%3C/svg%3E');
+    --mask-torn-tile-t: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 12"%3E%3Cg transform="matrix(1 0 0 -1 0 12)"%3E%3Cpath d="M384 0V8.40039L365.124 5.40039L337.618 10.7998L324.135 8.40039L318.202 10.7998L307.955 8.40039L285.304 10.7998L256.18 8.40039L238.921 10.7998L212.494 8.40039L199.551 12L192 10.7998L184.449 12L171.506 8.40039L145.079 10.7998L127.82 8.40039L98.6963 10.7998L76.0449 8.40039L65.7979 10.7998L59.8652 8.40039L46.3818 10.7998L18.876 5.40039L0 8.40039V0H384Z"/%3E%3C/g%3E%3C/svg%3E');
     /* Dark section backgrounds (hero is linear top→bottom; the night section
        uses the same stops as a radial from the center) */
     --gradient-surface: linear-gradient(
         180deg,
+        var(--color-ink-tertiary),
+        var(--color-ink-secondary)
+    );
+    --gradient-surface-radial: radial-gradient(
+        50% 50% at 50% 50%,
         var(--color-ink-tertiary),
         var(--color-ink-secondary)
     );
@@ -138,16 +152,45 @@
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), 0 100%);
 }
 
-/* Torn-paper bottom edge */
+@utility clip-angle-y {
+    clip-path: polygon(0 24px, 100% 0, 100% calc(100% - 24px), 0 100%);
+}
+
 @utility mask-torn-b {
     mask-image: linear-gradient(#000, #000), var(--mask-torn-tile);
     mask-size:
-        100% calc(100% - 12px),
+        100% calc(100% - 11px),
         384px 12px;
     mask-position:
         top,
         bottom left;
     mask-repeat: no-repeat, repeat-x;
+}
+
+@utility mask-torn-t {
+    mask-image: linear-gradient(#000, #000), var(--mask-torn-tile-t);
+    mask-size:
+        100% calc(100% - 11px),
+        384px 12px;
+    mask-position:
+        bottom,
+        top left;
+    mask-repeat: no-repeat, repeat-x;
+}
+
+@utility mask-torn-y {
+    mask-image:
+        linear-gradient(#000, #000), var(--mask-torn-tile-t),
+        var(--mask-torn-tile);
+    mask-size:
+        100% calc(100% - 22px),
+        384px 12px,
+        384px 12px;
+    mask-position:
+        0 11px,
+        top left,
+        bottom left;
+    mask-repeat: no-repeat, repeat-x, repeat-x;
 }
 /* Soft-edged wipe revealing handwriting; --p is the pen position, 0% → 125% */
 @property --p {
