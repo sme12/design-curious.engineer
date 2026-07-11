@@ -43,6 +43,62 @@ export function XIcon(props: IconProps) {
 	);
 }
 
+export function EnvelopeIcon(props: IconProps) {
+	return (
+		<Icon
+			width="16"
+			height="16"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth="2"
+			{...props}
+		>
+			<path d="M4.75 7.75C4.75 6.64543 5.64543 5.75 6.75 5.75H17.25C18.3546 5.75 19.25 6.64543 19.25 7.75V16.25C19.25 17.3546 18.3546 18.25 17.25 18.25H6.75C5.64543 18.25 4.75 17.3546 4.75 16.25V7.75Z" />
+			<path d="M5.5 6.5L12 12.25L18.5 6.5" />
+		</Icon>
+	);
+}
+
+export function CopyIcon(props: IconProps) {
+	return (
+		<Icon
+			width="16"
+			height="16"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth="2"
+			{...props}
+		>
+			<path d="M6.5 15.25V15.25C5.5335 15.25 4.75 14.4665 4.75 13.5V6.75C4.75 5.64543 5.64543 4.75 6.75 4.75H13.5C14.4665 4.75 15.25 5.5335 15.25 6.5V6.5" />
+			<rect width="10.5" height="10.5" x="8.75" y="8.75" rx="2" />
+		</Icon>
+	);
+}
+
+export function CheckIcon(props: IconProps) {
+	return (
+		<Icon
+			width="16"
+			height="16"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth="2"
+			{...props}
+		>
+			<path d="M5.75 12.8665L8.33995 16.4138C9.15171 17.5256 10.8179 17.504 11.6006 16.3715L18.25 6.75" />
+		</Icon>
+	);
+}
+
 export function ArrowRightIcon(props: IconProps) {
 	return (
 		<Icon width="16" height="13" viewBox="0 0 16 13" {...props}>

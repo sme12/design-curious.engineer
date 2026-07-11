@@ -159,7 +159,8 @@
 }
 
 @utility btn {
-    @apply inline-flex cursor-pointer items-center justify-center rounded-pill border border-paper transition-colors;
+    /* press: mouse squeezes down, touch pops up (Apple-style) */
+    @apply inline-flex cursor-pointer items-center justify-center rounded-pill border border-paper transition-[color,background-color,scale] duration-200 ease-out-cubic active:scale-98 pointer-coarse:active:scale-104;
 }
 
 @utility btn-solid {

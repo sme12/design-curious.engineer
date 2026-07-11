@@ -1,11 +1,6 @@
+import { CopyEmailButton } from "./CopyEmailButton";
 import { GitHubIcon, LinkedInIcon, XIcon } from "./icons";
 import { Polaroid } from "./Polaroid";
-
-const EMAIL = "vitalii@sazanov.dev";
-
-function copyEmail() {
-	void navigator.clipboard.writeText(EMAIL);
-}
 
 export function Hero() {
 	return (
@@ -57,14 +52,7 @@ export function Hero() {
 								<XIcon />
 							</a>
 						</div>
-						<button
-							className="btn btn-solid md:order-1 2xl:text-small-xl"
-							onClick={copyEmail}
-							title="Copy email address"
-							type="button"
-						>
-							{EMAIL}
-						</button>
+						<CopyEmailButton className="md:order-1" />
 					</div>
 				</div>
 			</div>
