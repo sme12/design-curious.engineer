@@ -8,11 +8,14 @@ export function Footer() {
 					Designed and developed by Vitalii Sazanov, Finland, 2026
 				</p>
 				<nav className="flex items-center justify-end gap-6 text-ink-secondary">
-					<Link className="transition-colors hover:text-ink" to="/about">
+					<Link
+						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-colors hover:text-ink"
+						to="/about"
+					>
 						about
 					</Link>
 					<a
-						className="transition-colors hover:text-ink"
+						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-colors hover:text-ink"
 						href="/cv.pdf"
 						target="_blank"
 						rel="noopener"
