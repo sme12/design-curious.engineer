@@ -35,7 +35,9 @@ export function Card({
 		<article
 			ref={cardRef}
 			className={`relative flex flex-col items-start gap-4 rounded-card border border-line px-6 pt-6 pb-7.5 2xl:px-8 2xl:pt-8 2xl:pb-9.5 ${
-				href ? "group transition-colors hover:border-paper-muted" : ""
+				href
+					? "focus-ring-card group transition-[border-color] hover:border-paper-muted"
+					: ""
 			} ${backgroundVideo ? "card-with-background-media overflow-hidden" : ""}`}
 			onBlur={handleBlur}
 			onFocus={handleFocus}

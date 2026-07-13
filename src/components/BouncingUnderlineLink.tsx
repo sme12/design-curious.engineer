@@ -41,7 +41,7 @@ export function BouncingUnderlineLink({
 	return (
 		<a
 			{...props}
-			className={`whitespace-nowrap transition-colors duration-200 ease-out-cubic hover:text-ink-hover ${className}`}
+			className={`bouncing-underline-link whitespace-nowrap transition-colors duration-200 ease-out-cubic hover:text-ink-hover ${className}`}
 			href={href}
 			onFocus={(event) => {
 				onFocus?.(event);
@@ -57,7 +57,7 @@ export function BouncingUnderlineLink({
 			}}
 		>
 			{leading && <>{leading} </>}
-			<span className="relative inline-block">
+			<span className="bouncing-underline-link-label relative inline-block">
 				{children}
 				<span
 					aria-hidden="true"

@@ -6,7 +6,7 @@ export function Header() {
 			<div className="mx-auto flex max-w-content items-center justify-between px-gutter py-6 text-paper-muted text-small md:px-0 md:py-10 2xl:max-w-content-xl 2xl:text-small-xl">
 				<h1>
 					<Link
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-colors hover:text-paper"
+						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper"
 						to="/"
 					>
 						vitalii sazanov
@@ -14,13 +14,13 @@ export function Header() {
 				</h1>
 				<nav className="flex items-center gap-6">
 					<Link
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-colors hover:text-paper"
+						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper"
 						to="/about"
 					>
 						about
 					</Link>
 					<a
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-colors hover:text-paper"
+						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper"
 						href="/cv.pdf"
 						target="_blank"
 						rel="noopener"

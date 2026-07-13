@@ -9,13 +9,13 @@ export function Footer() {
 				</p>
 				<nav className="flex items-center justify-end gap-6 text-ink-secondary">
 					<Link
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-colors hover:text-ink"
+						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-ink"
 						to="/about"
 					>
 						about
 					</Link>
 					<a
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-colors hover:text-ink"
+						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-ink"
 						href="/cv.pdf"
 						target="_blank"
 						rel="noopener"

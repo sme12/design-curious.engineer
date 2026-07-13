@@ -120,6 +120,7 @@
 }
 
 :root {
+    --focus-ring-color: var(--color-accent);
     /* accent-gradient — fill of the handwritten "curious" */
     --gradient-accent: linear-gradient(
         180deg,
@@ -261,6 +262,24 @@
 }
 
 @layer base {
+    :focus-visible,
+    .focus-ring-card:has(a:focus-visible) {
+        outline: auto 1px var(--focus-ring-color);
+    }
+
+    .focus-ring-card a:focus-visible {
+        outline: none;
+    }
+
+    .bouncing-underline-link:focus-visible {
+        outline: none;
+    }
+
+    .bouncing-underline-link:focus-visible .bouncing-underline-link-label {
+        outline: auto 1px var(--focus-ring-color);
+        outline-offset: 3px;
+    }
+
     html,
     body,
     #app {
