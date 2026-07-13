@@ -46,18 +46,20 @@ export function CopyEmailButton({ className = "" }: { className?: string }) {
 					className="relative hidden md:block text-ink-tertiary"
 				>
 					<EnvelopeIcon
-						className={`size-5 transition-opacity duration-200 ease-out-cubic ${
-							copied ? "opacity-0" : "group-hover:opacity-0"
+						className={`size-5 transition-[opacity,filter] duration-200 ease-out-cubic ${
+							copied
+								? "opacity-0 blur-[2px]"
+								: "group-hover:opacity-0 group-hover:blur-[2px]"
 						}`}
 					/>
 					<CopyIcon
-						className={`absolute inset-0 size-5 opacity-0 transition-opacity duration-200 ease-out-cubic ${
-							copied ? "" : "group-hover:opacity-100"
+						className={`absolute inset-0 size-5 opacity-0 blur-[2px] transition-[opacity,filter] duration-200 ease-out-cubic ${
+							copied ? "" : "group-hover:opacity-100 group-hover:blur-none"
 						}`}
 					/>
 					<CheckIcon
-						className={`absolute inset-0 size-5 transition-opacity duration-200 ease-out-cubic ${
-							copied ? "opacity-100" : "opacity-0"
+						className={`absolute inset-0 size-5 transition-[opacity,filter] duration-200 ease-out-cubic ${
+							copied ? "opacity-100" : "opacity-0 blur-[2px]"
 						}`}
 					/>
 				</span>
