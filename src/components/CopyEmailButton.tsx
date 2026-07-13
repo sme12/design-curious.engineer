@@ -49,12 +49,14 @@ export function CopyEmailButton({ className = "" }: { className?: string }) {
 						className={`size-5 transition-[opacity,filter] duration-200 ease-out-cubic ${
 							copied
 								? "opacity-0 blur-[2px]"
-								: "group-hover:opacity-0 group-hover:blur-[2px]"
+								: "group-hover:opacity-0 group-hover:blur-[2px] group-focus-visible:opacity-0 group-focus-visible:blur-[2px]"
 						}`}
 					/>
 					<CopyIcon
 						className={`absolute inset-0 size-5 opacity-0 blur-[2px] transition-[opacity,filter] duration-200 ease-out-cubic ${
-							copied ? "" : "group-hover:opacity-100 group-hover:blur-none"
+							copied
+								? ""
+								: "group-hover:opacity-100 group-hover:blur-none group-focus-visible:opacity-100 group-focus-visible:blur-none"
 						}`}
 					/>
 					<CheckIcon
