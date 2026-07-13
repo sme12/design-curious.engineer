@@ -1,6 +1,11 @@
 import { Card } from "./Card";
 import { HandHeading } from "./HandHeading";
 
+const PREVIEW_25600 = {
+	src: "/media/25600/preview.mp4",
+	poster: "/media/25600/preview.jpg",
+};
+
 export function ByNight() {
 	return (
 		<section className="relative overflow-x-clip">
@@ -11,6 +16,7 @@ export function ByNight() {
 					</HandHeading>
 					<div className="mt-10 flex flex-col gap-11.5 md:mt-0 2xl:gap-14">
 						<Card
+							backgroundVideo={PREVIEW_25600}
 							badge="Study"
 							cta="have a look"
 							href="https://25600.design"

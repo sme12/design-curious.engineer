@@ -143,6 +143,13 @@
         var(--color-ink-tertiary),
         var(--color-ink-secondary)
     );
+    /* Softens background media into the surrounding dark card surface. */
+    --gradient-media-vignette: radial-gradient(
+        ellipse at center,
+        transparent 30%,
+        color-mix(in srgb, var(--color-ink-secondary) 35%, transparent) 65%,
+        var(--color-ink-secondary) 100%
+    );
 }
 
 /* Gradient-filled text, e.g. the "curious" overlay */
@@ -169,6 +176,28 @@
 
 @utility btn-icon {
     @apply p-2.25 text-paper hover:bg-paper/10;
+}
+
+.card-background-media {
+    opacity: 1;
+    transition: opacity 300ms var(--ease-out-cubic);
+}
+
+@media (hover: hover) {
+    .card-with-background-media .card-background-media {
+        opacity: 0;
+    }
+
+    .card-with-background-media:hover .card-background-media,
+    .card-with-background-media:focus-within .card-background-media {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card-background-media {
+        transition: none;
+    }
 }
 
 @utility clip-angle-b {
