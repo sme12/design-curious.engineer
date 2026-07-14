@@ -99,7 +99,7 @@
     /* Default 4px scale covers most of the page (gap-1/-2/-4, p-6, header py-10…);
        named exceptions: */
     --spacing-gutter: 1.5rem; /* 24px — page side padding (mobile) */
-    --spacing-section: 5.75rem; /* 92px — vertical section padding (desktop) */
+    --spacing-section: 5rem; /* 80px — vertical section padding (desktop) */
 
     /* ---------- Layout widths ---------- */
     --container-content: 40rem; /* 640px — centered content column (desktop), e.g. max-w-content */

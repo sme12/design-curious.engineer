@@ -3,7 +3,7 @@ import { HandHeading } from "./HandHeading";
 
 export function ByDay() {
 	return (
-		<section className="pt-12 pb-15 md:py-section 2xl:py-26">
+		<section className="pt-12 pb-15 md:py-section 2xl:py-23">
 			<div className="mx-auto max-w-content px-gutter md:grid md:grid-cols-[235px_1fr] md:items-start md:px-0 2xl:max-w-content-xl 2xl:grid-cols-[272px_1fr]">
 				<HandHeading>by day</HandHeading>
 				<div className="mt-10 space-y-6 text-pretty md:mt-0 2xl:space-y-8">
