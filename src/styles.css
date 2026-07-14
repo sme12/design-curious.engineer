@@ -274,8 +274,10 @@
 }
 
 @layer base {
+    /* :where() keeps specificity at (0,1,0) even after the minifier merges
+       this list into :is(), so the outline:none overrides below still win */
     :focus-visible,
-    .focus-ring-card:has(a:focus-visible) {
+    :where(.focus-ring-card:has(a:focus-visible)) {
         outline: auto 1px var(--focus-ring-color);
     }
 
