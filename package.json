@@ -19,21 +19,20 @@
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.26.0",
     "@tailwindcss/vite": "^4.1.18",
-    "@tanstack/react-devtools": "latest",
     "@tanstack/react-router": "latest",
-    "@tanstack/react-router-devtools": "latest",
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
     "lucide-react": "^0.545.0",
+    "motion": "^12.42.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "web-haptics": "^0.0.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.5",
     "@tailwindcss/typography": "^0.5.16",
-    "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.132.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.0",

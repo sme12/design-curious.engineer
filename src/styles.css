@@ -1,16 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Shantell+Sans:ital,wght@0,500;1,600&display=swap');
 @import 'tailwindcss';
+
+/* Self-hosted fonts (see public/fonts, licenses alongside) */
+@font-face {
+    font-family: 'Geist';
+    src: url('/fonts/geist-variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Shantell Sans';
+    src: url('/fonts/shantell-sans-medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Shantell Sans';
+    src: url('/fonts/shantell-sans-medium-italic.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Shantell Sans';
+    src: url('/fonts/shantell-sans-semibold-italic.woff2') format('woff2');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
 
 @theme {
     /* ---------- Colors ---------- */
-    /* Ink — dark text on the light sections */
-    --color-ink: #121212; /* body-font-color */
-    --color-ink-secondary: #262626; /* footer links; dark-section gradient end */
-    --color-ink-tertiary: #313131; /* footer credit line; dark-section gradient start */
+    /* Ink — text on the light sections */
+    --color-ink: #444444; /* body-font-color */
+    --color-ink-secondary: #525252; /* footer links */
+    --color-ink-tertiary: #5c5c5c; /* email pill label */
+    --color-ink-muted: #6b6b6b; /* footer credit line */
+    --color-ink-hover: #767676; /* hover states only */
+
+    /* Surface — dark section backgrounds */
+    --color-surface: #313131; /* dark-section gradient start */
+    --color-surface-deep: #262626; /* gradient end; torn mobile edges, toast */
 
     /* Paper — light text & surfaces on the dark sections */
     --color-paper: #f5f5f5; /* hero text, polaroid frame, email pill */
     --color-paper-muted: #dfdfdf; /* nav links, card body text */
+    --color-film: #b9bfb4; /* undeveloped instant-film blank (opacifier gray-green) */
 
     /* Accent — the brand yellow */
     --color-accent: #ffb71b; /* accent */
@@ -30,41 +69,66 @@
     --text-small: 0.875rem; /* 14px — nav, footer, buttons */
     --text-small--line-height: 1rem;
     --text-body: 1rem; /* 16px — body copy, handwritten headlines */
-    --text-body--line-height: 1.3125rem; /* 21px */
+    --text-body--line-height: 1.5rem; /* 24px — 1.5 ratio */
     --text-title: 1.375rem; /* 22px — project card titles (mobile) */
     --text-title-lg: 1.5rem; /* 24px — project card titles (desktop) */
     --text-display: 2rem; /* 32px — hero heading (mobile) */
     --text-display--line-height: 2.5rem; /* 40px */
     --text-display-lg: 3rem; /* 48px — hero heading (desktop) */
     --text-display-lg--line-height: 3.25rem; /* 52px */
-    --text-script: 2.125rem; /* 34px — handwritten "curious" overlay (mobile) */
+    --text-script: 2.125rem; /* 34px — handwritten "curious" in the hero (mobile) */
     --text-script--line-height: 2.3125rem; /* 37px */
     --text-script--letter-spacing: -0.04em;
-    --text-script-lg: 3.125rem; /* 50px — "curious" overlay (desktop) */
-    --text-script-lg--line-height: 2.3125rem; /* 37px in Figma on both sizes */
+    --text-script-lg: 3.125rem; /* 50px — "curious" (desktop) */
+    --text-script-lg--line-height: 2.3125rem; /* 37px on both sizes */
     --text-script-lg--letter-spacing: -0.04em;
+    --text-caption-xl: 0.875rem; /* 14px */
+    --text-small-xl: 1rem; /* 16px */
+    --text-small-xl--line-height: 1.125rem;
+    --text-body-xl: 1.125rem; /* 18px */
+    --text-body-xl--line-height: 1.6875rem; /* 27px — 1.5 ratio */
+    --text-title-xl: 1.625rem; /* 26px */
+    --text-display-xl: 3.5rem; /* 56px */
+    --text-display-xl--line-height: 3.875rem; /* 62px */
+    --text-script-xl: 3.625rem; /* 58px */
+    --text-script-xl--line-height: 2.3125rem; /* 37px at every size; the word
+       renders inline, so it must stay below the display line-height to not open the line */
+    --text-script-xl--letter-spacing: -0.04em;
 
     /* ---------- Spacing ---------- */
     /* Default 4px scale covers most of the page (gap-1/-2/-4, p-6, header py-10…);
        named exceptions: */
     --spacing-gutter: 1.5rem; /* 24px — page side padding (mobile) */
-    --spacing-section: 8.125rem; /* 130px — vertical section padding (desktop) */
+    --spacing-section: 5rem; /* 80px — vertical section padding (desktop) */
 
     /* ---------- Layout widths ---------- */
     --container-content: 40rem; /* 640px — centered content column (desktop), e.g. max-w-content */
+    --container-content-xl: 50rem; /* 800px — content column on wide screens (2xl) */
 
     /* ---------- Radii ---------- */
-    --radius-photo: 3px; /* polaroid frame & picture window */
+    --radius-photo: 4px; /* polaroid picture window */
+    --radius-photo-frame: 6px; /* polaroid outer frame */
+    --radius-photo-xl: 6px; /* picture window on wide screens (2xl) */
+    --radius-photo-frame-xl: 8px; /* outer frame on wide screens (2xl) */
     --radius-badge: 6px; /* card status badge */
     --radius-card: 16px; /* project cards */
     --radius-pill: 25px; /* email button, social icon buttons */
 
     /* ---------- Shadows ---------- */
     --shadow-polaroid: 0 0 41.5px 0 rgb(0 0 0 / 0.4);
-    --inset-shadow-photo: inset 0 0 5.8px 0 rgb(0 0 0 / 0.3);
+    --inset-shadow-photo: inset 0 0 7px 0 rgb(0 0 0 / 0.16);
+
+    /* ---------- Easing ---------- */
+    --ease-out-cubic: cubic-bezier(
+        0.33,
+        1,
+        0.68,
+        1
+    ); /* card arrow nudge, link color fades */
 }
 
 :root {
+    --focus-ring-color: var(--color-accent);
     /* accent-gradient — fill of the handwritten "curious" */
     --gradient-accent: linear-gradient(
         180deg,
@@ -72,17 +136,36 @@
         var(--color-accent) 60%
     );
     /* Pencil-grey fill of the polaroid caption */
-    --gradient-pencil: linear-gradient(181.56deg, #565656 58.4%, #bcbcbc 85.6%);
+    --gradient-pencil: linear-gradient(
+        181.56deg,
+        var(--color-ink-muted) 58.4%,
+        #bcbcbc 85.6%
+    );
+    /* Torn-paper edge tiles */
+    --mask-torn-tile: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 12"%3E%3Cpath d="M384 0V9.3916L355.771 12L332.93 9.3916L322.37 12L297.158 9.3916L261.388 12L233.589 9.3916L213.979 12H170.021L150.411 9.3916L122.613 12L86.8418 9.3916L61.6299 12L51.0703 9.3916L28.2285 12L0 9.3916V0H384Z"/%3E%3C/svg%3E');
+    --mask-torn-tile-t: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 12"%3E%3Cg transform="matrix(1 0 0 -1 0 12)"%3E%3Cpath d="M384 0V8.40039L365.124 5.40039L337.618 10.7998L324.135 8.40039L318.202 10.7998L307.955 8.40039L285.304 10.7998L256.18 8.40039L238.921 10.7998L212.494 8.40039L199.551 12L192 10.7998L184.449 12L171.506 8.40039L145.079 10.7998L127.82 8.40039L98.6963 10.7998L76.0449 8.40039L65.7979 10.7998L59.8652 8.40039L46.3818 10.7998L18.876 5.40039L0 8.40039V0H384Z"/%3E%3C/g%3E%3C/svg%3E');
     /* Dark section backgrounds (hero is linear top→bottom; the night section
        uses the same stops as a radial from the center) */
     --gradient-surface: linear-gradient(
         180deg,
-        var(--color-ink-tertiary),
-        var(--color-ink-secondary)
+        var(--color-surface),
+        var(--color-surface-deep)
+    );
+    --gradient-surface-radial: radial-gradient(
+        50% 50% at 50% 50%,
+        var(--color-surface),
+        var(--color-surface-deep)
+    );
+    /* Softens background media into the surrounding dark card surface. */
+    --gradient-media-vignette: radial-gradient(
+        ellipse at center,
+        transparent 30%,
+        color-mix(in srgb, var(--color-surface-deep) 35%, transparent) 65%,
+        var(--color-surface-deep) 100%
     );
 }
 
-/* Gradient-filled text, e.g. the "curious" overlay */
+/* Gradient-filled text, e.g. the hero's handwritten "curious" */
 @utility text-gradient-accent {
     background-image: var(--gradient-accent);
     background-clip: text;
@@ -95,7 +178,120 @@
     color: transparent;
 }
 
+@utility btn {
+    /* press: mouse squeezes down, touch pops up (Apple-style) */
+    @apply inline-flex cursor-pointer items-center justify-center rounded-pill border border-paper transition-[color,background-color,scale] duration-200 ease-out-cubic active:scale-98 pointer-coarse:active:scale-104;
+}
+
+@utility btn-solid {
+    @apply bg-paper px-4 py-2.75 font-medium text-ink text-small hover:bg-white;
+}
+
+@utility btn-icon {
+    @apply p-2.25 text-paper hover:bg-paper/10;
+}
+
+.card-background-media {
+    opacity: 1;
+    transition: opacity 300ms var(--ease-out-cubic);
+}
+
+@media (hover: hover) {
+    .card-with-background-media .card-background-media {
+        opacity: 0;
+    }
+
+    .card-with-background-media:hover .card-background-media,
+    .card-with-background-media:has(:focus-visible) .card-background-media {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card-background-media {
+        transition: none;
+    }
+}
+
+@utility clip-angle-b {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24px), 0 100%);
+}
+
+@utility clip-angle-y {
+    clip-path: polygon(0 24px, 100% 0, 100% calc(100% - 24px), 0 100%);
+}
+
+@utility mask-torn-b {
+    mask-image: linear-gradient(#000, #000), var(--mask-torn-tile);
+    mask-size:
+        100% calc(100% - 11px),
+        384px 12px;
+    mask-position:
+        top,
+        bottom left;
+    mask-repeat: no-repeat, repeat-x;
+}
+
+@utility mask-torn-t {
+    mask-image: linear-gradient(#000, #000), var(--mask-torn-tile-t);
+    mask-size:
+        100% calc(100% - 11px),
+        384px 12px;
+    mask-position:
+        bottom,
+        top left;
+    mask-repeat: no-repeat, repeat-x;
+}
+
+@utility mask-torn-y {
+    mask-image:
+        linear-gradient(#000, #000), var(--mask-torn-tile-t),
+        var(--mask-torn-tile);
+    mask-size:
+        100% calc(100% - 22px),
+        384px 12px,
+        384px 12px;
+    mask-position:
+        0 11px,
+        top left,
+        bottom left;
+    mask-repeat: no-repeat, repeat-x, repeat-x;
+}
+/* Soft-edged wipe revealing handwriting; --p is the pen position, 0% → 125% */
+@property --p {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+}
+
+@utility pen-reveal {
+    --p: 0%;
+    mask-image: linear-gradient(
+        90deg,
+        #000 calc(var(--p) - 18%),
+        transparent var(--p)
+    );
+}
+
 @layer base {
+    :focus-visible,
+    .focus-ring-card:has(a:focus-visible) {
+        outline: auto 1px var(--focus-ring-color);
+    }
+
+    .focus-ring-card a:focus-visible {
+        outline: none;
+    }
+
+    .bouncing-underline-link:focus-visible {
+        outline: none;
+    }
+
+    .bouncing-underline-link:focus-visible .bouncing-underline-link-label {
+        outline: auto 1px var(--focus-ring-color);
+        outline-offset: 3px;
+    }
+
     html,
     body,
     #app {
