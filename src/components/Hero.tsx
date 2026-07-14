@@ -7,16 +7,11 @@ export function Hero() {
 		<section className="relative overflow-x-clip">
 			<div className="clip-angle-b bg-(image:--gradient-surface) pt-18.5 pb-16 md:mask-torn-b md:[clip-path:none] md:pt-39.5 md:pb-25 2xl:pt-47 2xl:pb-30">
 				<div className="relative mx-auto max-w-content px-gutter md:px-0 2xl:max-w-content-xl">
-					<p className="text-display text-paper md:text-display-lg 2xl:text-display-xl">
+					<p className="whitespace-nowrap text-display text-paper md:text-display-lg 2xl:text-display-xl">
 						Hi, I'm Vitalii —
 						<br />a design-
-						<span className="relative">
-							<span aria-hidden="true" className="opacity-0">
-								curious
-							</span>
-							<span className="-translate-y-1/2 absolute top-1/2 left-0 whitespace-nowrap font-hand font-medium text-gradient-accent text-script md:text-script-lg 2xl:text-script-xl">
-								curious
-							</span>
+						<span className="font-hand font-medium text-gradient-accent text-script md:text-script-lg 2xl:text-script-xl">
+							curious
 						</span>
 						<br />
 						engineer

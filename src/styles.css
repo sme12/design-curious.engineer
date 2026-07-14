@@ -71,11 +71,11 @@
     --text-display--line-height: 2.5rem; /* 40px */
     --text-display-lg: 3rem; /* 48px — hero heading (desktop) */
     --text-display-lg--line-height: 3.25rem; /* 52px */
-    --text-script: 2.125rem; /* 34px — handwritten "curious" overlay (mobile) */
+    --text-script: 2.125rem; /* 34px — handwritten "curious" in the hero (mobile) */
     --text-script--line-height: 2.3125rem; /* 37px */
     --text-script--letter-spacing: -0.04em;
-    --text-script-lg: 3.125rem; /* 50px — "curious" overlay (desktop) */
-    --text-script-lg--line-height: 2.3125rem; /* 37px in Figma on both sizes */
+    --text-script-lg: 3.125rem; /* 50px — "curious" (desktop) */
+    --text-script-lg--line-height: 2.3125rem; /* 37px on both sizes */
     --text-script-lg--letter-spacing: -0.04em;
     --text-caption-xl: 0.875rem; /* 14px */
     --text-small-xl: 1rem; /* 16px */
@@ -86,8 +86,8 @@
     --text-display-xl: 3.5rem; /* 56px */
     --text-display-xl--line-height: 3.875rem; /* 62px */
     --text-script-xl: 3.625rem; /* 58px */
-    --text-script-xl--line-height: 2.6875rem; /* 43px — keeps -lg's 37/50 ratio;
-       smaller crops the gradient (background-clip paints only inside the box) */
+    --text-script-xl--line-height: 2.3125rem; /* 37px at every size; the word
+       renders inline, so it must stay below the display line-height to not open the line */
     --text-script-xl--letter-spacing: -0.04em;
 
     /* ---------- Spacing ---------- */
@@ -153,7 +153,7 @@
     );
 }
 
-/* Gradient-filled text, e.g. the "curious" overlay */
+/* Gradient-filled text, e.g. the hero's handwritten "curious" */
 @utility text-gradient-accent {
     background-image: var(--gradient-accent);
     background-clip: text;
