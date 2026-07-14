@@ -95,12 +95,6 @@ export const Route = createRootRoute({
 				crossOrigin: "anonymous",
 			},
 			{
-				rel: "preload",
-				as: "image",
-				href: "/polaroid.jpg",
-				fetchPriority: "high",
-			},
-			{
 				rel: "icon",
 				type: "image/svg+xml",
 				href: "/favicon.svg",
