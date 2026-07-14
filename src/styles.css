@@ -190,7 +190,7 @@
     }
 
     .card-with-background-media:hover .card-background-media,
-    .card-with-background-media:focus-within .card-background-media {
+    .card-with-background-media:has(:focus-visible) .card-background-media {
         opacity: 1;
     }
 }

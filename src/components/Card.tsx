@@ -87,7 +87,7 @@ export function Card({
 					</a>
 					<ArrowRightIcon
 						aria-hidden="true"
-						className="text-[#a7a7a7] transition-[color,translate] duration-300 ease-out-cubic group-focus-within:translate-x-1 group-focus-within:text-paper group-hover:translate-x-1 group-hover:text-paper"
+						className="text-[#a7a7a7] transition-[color,translate] duration-300 ease-out-cubic group-has-focus-visible:translate-x-1 group-has-focus-visible:text-paper group-hover:translate-x-1 group-hover:text-paper"
 					/>
 				</span>
 			)}

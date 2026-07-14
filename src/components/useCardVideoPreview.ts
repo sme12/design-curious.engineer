@@ -66,10 +66,17 @@ export function useCardVideoPreview(enabled: boolean) {
 		syncPlayback();
 	}, [syncPlayback]);
 
-	const handleFocus = useCallback(() => {
-		isFocusWithin.current = true;
-		syncPlayback();
-	}, [syncPlayback]);
+	const handleFocus = useCallback(
+		(event: FocusEvent<HTMLElement>) => {
+			// Mouse clicks focus the card link too; only keyboard-visible focus
+			// should hold the preview open (mirrors :focus-visible in CSS).
+			if (!event.target.matches(":focus-visible")) return;
+
+			isFocusWithin.current = true;
+			syncPlayback();
+		},
+		[syncPlayback],
+	);
 
 	const handleBlur = useCallback(
 		(event: FocusEvent<HTMLElement>) => {
