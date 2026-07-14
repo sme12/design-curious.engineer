@@ -69,7 +69,7 @@
     --text-small: 0.875rem; /* 14px — nav, footer, buttons */
     --text-small--line-height: 1rem;
     --text-body: 1rem; /* 16px — body copy, handwritten headlines */
-    --text-body--line-height: 1.3125rem; /* 21px */
+    --text-body--line-height: 1.5rem; /* 24px — 1.5 ratio */
     --text-title: 1.375rem; /* 22px — project card titles (mobile) */
     --text-title-lg: 1.5rem; /* 24px — project card titles (desktop) */
     --text-display: 2rem; /* 32px — hero heading (mobile) */
@@ -86,7 +86,7 @@
     --text-small-xl: 1rem; /* 16px */
     --text-small-xl--line-height: 1.125rem;
     --text-body-xl: 1.125rem; /* 18px */
-    --text-body-xl--line-height: 1.5rem; /* 24px */
+    --text-body-xl--line-height: 1.6875rem; /* 27px — 1.5 ratio */
     --text-title-xl: 1.625rem; /* 26px */
     --text-display-xl: 3.5rem; /* 56px */
     --text-display-xl--line-height: 3.875rem; /* 62px */
