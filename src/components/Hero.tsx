@@ -16,7 +16,7 @@ export function Hero() {
 						<br />
 						engineer
 					</p>
-					<Polaroid className="mt-6 md:-top-11 md:absolute md:left-101.25 md:mt-0 md:rotate-[7.55deg] 2xl:-top-16 2xl:right-24 2xl:left-auto" />
+					<Polaroid className="mt-6 md:-top-11 md:absolute md:left-101.25 md:mt-0 md:rotate-[7.55deg] 2xl:-top-16 2xl:right-0 2xl:left-auto" />
 					<div className="mt-8 flex items-center gap-4 md:mt-12.5 md:gap-3.5 2xl:mt-15">
 						<CopyEmailButton className="order-1 md:order-0" />
 						<div className="flex items-center gap-4 md:gap-3.5">

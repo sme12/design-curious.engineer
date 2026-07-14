@@ -94,11 +94,11 @@
     /* Default 4px scale covers most of the page (gap-1/-2/-4, p-6, header py-10…);
        named exceptions: */
     --spacing-gutter: 1.5rem; /* 24px — page side padding (mobile) */
-    --spacing-section: 8.125rem; /* 130px — vertical section padding (desktop) */
+    --spacing-section: 5.75rem; /* 92px — vertical section padding (desktop) */
 
     /* ---------- Layout widths ---------- */
     --container-content: 40rem; /* 640px — centered content column (desktop), e.g. max-w-content */
-    --container-content-xl: 60rem; /* 960px — content column on wide screens (2xl) */
+    --container-content-xl: 50rem; /* 800px — content column on wide screens (2xl) */
 
     /* ---------- Radii ---------- */
     --radius-photo: 3px; /* polaroid frame & picture window */
