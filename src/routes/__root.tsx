@@ -3,9 +3,8 @@ import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 
 const SITE_URL = "https://design-curious.engineer";
-const TITLE = "Vitalii Sazanov — design-curious engineer";
-const DESCRIPTION =
-	"Hi, I'm Vitalii — a design-curious engineer. Lead developer at Kraftvaerk by day, studying exceptional UIs by night & weekends. Greetings from Finland.";
+const TITLE = "Vitalii's Website";
+const DESCRIPTION = "Hi, I'm Vitalii — a design-curious engineer";
 
 export const Route = createRootRoute({
 	head: () => ({

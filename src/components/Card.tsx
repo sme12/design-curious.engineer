@@ -69,9 +69,9 @@ export function Card({
 			<h3 className="z-10 font-semibold text-accent text-title md:text-title-lg 2xl:text-title-xl">
 				{title}
 			</h3>
-			<p className="z-10 text-body text-paper-muted 2xl:text-body-xl">
+			<div className="z-10 flex flex-col gap-3 text-body text-paper-muted 2xl:text-body-xl">
 				{children}
-			</p>
+			</div>
 			{href && (
 				<span className="z-10 flex w-full items-center justify-end gap-2">
 					<a

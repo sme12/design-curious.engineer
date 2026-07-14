@@ -19,14 +19,20 @@ export function ByNight() {
 							backgroundVideo={PREVIEW_25600}
 							badge="Study"
 							cta="have a look"
-							href="https://25600.design"
+							href="https://github.com/sme12/25600/"
 							title="25600.design"
 						>
-							Reverse-engineering, recreating, and studying exceptional UIs
-							built with uncommon craft and care.
+							<p>
+								Reverse-engineering and rebuilding UIs crafted with exceptional
+								taste, to understand what makes them work.
+							</p>
+							<p>
+								Named after Figma’s maximum zoom level — 25,600% is as close as
+								you can get to the details.
+							</p>
 						</Card>
 						<Card badge="Soon" title="New Project">
-							A new project is cooking!
+							<p>A new project is cooking!</p>
 						</Card>
 					</div>
 				</div>
