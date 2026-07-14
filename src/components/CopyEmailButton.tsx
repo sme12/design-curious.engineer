@@ -34,7 +34,7 @@ export function CopyEmailButton({ className = "" }: { className?: string }) {
 		<span className={`relative inline-flex ${className}`}>
 			<button
 				aria-label={`Copy email address: ${EMAIL}`}
-				className="group btn btn-solid gap-1 2xl:text-small-xl"
+				className="group btn btn-solid gap-1 md:pr-3.25 2xl:text-small-xl"
 				onBlur={() => setCopied(false)}
 				onClick={copyEmail}
 				onMouseLeave={() => setCopied(false)}
