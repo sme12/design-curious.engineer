@@ -28,11 +28,11 @@ export function Polaroid({ className = "" }: { className?: string }) {
 	return (
 		<figure
 			ref={cardRef}
-			className={`flex h-82.25 w-63.5 flex-col rounded-photo bg-paper p-3.5 shadow-polaroid md:h-87 md:w-67.25 2xl:h-104.5 2xl:w-80.75 2xl:p-4.25 ${className}`}
+			className={`flex h-82.25 w-63.5 flex-col rounded-photo-frame bg-paper p-3.5 shadow-polaroid md:h-87 md:w-67.25 2xl:h-104.5 2xl:w-80.75 2xl:rounded-photo-frame-xl 2xl:p-4.25 ${className}`}
 		>
 			<div
 				ref={frameRef}
-				className="relative h-60.25 overflow-hidden rounded-photo bg-film md:h-63.75 2xl:h-76.5"
+				className="relative h-60.25 overflow-hidden rounded-photo bg-film md:h-63.75 2xl:h-76.5 2xl:rounded-photo-xl"
 			>
 				<canvas
 					ref={canvasRef}
@@ -42,7 +42,7 @@ export function Polaroid({ className = "" }: { className?: string }) {
 				/>
 				<div
 					aria-hidden="true"
-					className="pointer-events-none absolute inset-0 rounded-photo inset-shadow-photo"
+					className="pointer-events-none absolute inset-0 rounded-photo inset-shadow-photo 2xl:rounded-photo-xl"
 				/>
 				<noscript>
 					<style>{"[data-word] { --p: 125%; }"}</style>

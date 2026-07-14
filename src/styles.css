@@ -106,14 +106,17 @@
     --container-content-xl: 50rem; /* 800px — content column on wide screens (2xl) */
 
     /* ---------- Radii ---------- */
-    --radius-photo: 3px; /* polaroid frame & picture window */
+    --radius-photo: 4px; /* polaroid picture window */
+    --radius-photo-frame: 6px; /* polaroid outer frame */
+    --radius-photo-xl: 6px; /* picture window on wide screens (2xl) */
+    --radius-photo-frame-xl: 8px; /* outer frame on wide screens (2xl) */
     --radius-badge: 6px; /* card status badge */
     --radius-card: 16px; /* project cards */
     --radius-pill: 25px; /* email button, social icon buttons */
 
     /* ---------- Shadows ---------- */
     --shadow-polaroid: 0 0 41.5px 0 rgb(0 0 0 / 0.4);
-    --inset-shadow-photo: inset 0 0 5.8px 0 rgb(0 0 0 / 0.3);
+    --inset-shadow-photo: inset 0 0 7px 0 rgb(0 0 0 / 0.16);
 
     /* ---------- Easing ---------- */
     --ease-out-cubic: cubic-bezier(
