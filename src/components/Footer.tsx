@@ -14,7 +14,7 @@ export function Footer() {
 						<BouncingUnderlineLink
 							href="https://github.com/sme12/design-curious.engineer"
 							leading={
-								<GitHubIcon className="inline-block size-4 align-text-bottom mx-1 mb-0.5 2xl:mb-1" />
+								<GitHubIcon className="inline-block size-4 align-text-bottom mx-0.5 mb-0.5 2xl:mb-1" />
 							}
 							rel="noopener"
 							target="_blank"

@@ -8,9 +8,11 @@ type BouncingUnderlineLinkProps = Omit<
 > & {
 	href: string;
 	leading?: ReactNode;
+	bounceHeight?: number;
 };
 
 export function BouncingUnderlineLink({
+	bounceHeight,
 	children,
 	className = "",
 	href,
@@ -29,12 +31,15 @@ export function BouncingUnderlineLink({
 			return;
 		}
 
+		// Scale the hop to the line box so tight line-heights don't overlap the text
+		const hop = bounceHeight ?? (line.parentElement?.offsetHeight ?? 24) * 0.1;
+
 		anim.current?.cancel();
 		anim.current = animate([
-			[line, { y: -2.5 }, { duration: 0.12, ease: "easeOut" }],
+			[line, { y: -hop }, { duration: 0.12, ease: "easeOut" }],
 			[line, { y: 0 }, { type: "spring", stiffness: 550, damping: 9 }],
 		]);
-	}, []);
+	}, [bounceHeight]);
 
 	useEffect(() => () => anim.current?.cancel(), []);
 
@@ -61,7 +66,7 @@ export function BouncingUnderlineLink({
 				{children}
 				<span
 					aria-hidden="true"
-					className="absolute inset-x-0 bottom-0 h-px bg-line"
+					className="absolute inset-x-0 bottom-0 h-px bg-ink-hover"
 					ref={underlineRef}
 				/>
 			</span>
