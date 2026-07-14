@@ -18,8 +18,8 @@ export function CopyEmailButton({ className = "" }: { className?: string }) {
 
 	useEffect(() => () => clearTimeout(toastTimer.current), []);
 
-	const copyEmail = () => {
-		copyText(EMAIL);
+	const copyEmail = async () => {
+		if (!(await copyText(EMAIL))) return;
 		setCopied(true);
 		haptic.trigger("success");
 		setToastVisible(true);

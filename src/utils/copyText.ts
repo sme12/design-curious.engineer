@@ -1,9 +1,13 @@
 // Clipboard API exists only in secure contexts — absent over plain http,
 // e.g. LAN dev on a phone
-export function copyText(text: string) {
+export async function copyText(text: string): Promise<boolean> {
 	if (navigator.clipboard) {
-		void navigator.clipboard.writeText(text);
-		return;
+		try {
+			await navigator.clipboard.writeText(text);
+			return true;
+		} catch {
+			// fall through to the execCommand fallback
+		}
 	}
 	const textarea = document.createElement("textarea");
 	textarea.value = text;
@@ -13,6 +17,12 @@ export function copyText(text: string) {
 	document.body.append(textarea);
 	textarea.select();
 	textarea.setSelectionRange(0, text.length);
-	document.execCommand("copy");
+	let copied = false;
+	try {
+		copied = document.execCommand("copy");
+	} catch {
+		copied = false;
+	}
 	textarea.remove();
+	return copied;
 }
