@@ -38,7 +38,6 @@ export function CopyEmailButton({ className = "" }: { className?: string }) {
 				onBlur={() => setCopied(false)}
 				onClick={copyEmail}
 				onMouseLeave={() => setCopied(false)}
-				title="Copy email address"
 				type="button"
 			>
 				{EMAIL}
