@@ -7,11 +7,11 @@ export function Footer() {
 		<footer>
 			<div className="mx-auto flex max-w-content flex-col gap-6 px-gutter pt-12 pb-9 text-small md:flex-row md:items-baseline md:justify-between md:px-0 md:py-20 2xl:max-w-content-xl 2xl:text-small-xl">
 				<div className="space-y-2 py-3.5">
-					<p className="text-ink-hover">
+					<p className="text-ink-muted">
 						Designed and built by Vitalii Sazanov, 2026
 					</p>
 					<p>
-						<span className="text-ink-hover">Opensourced on </span>
+						<span className="text-ink-muted">Opensourced on </span>
 						<BouncingUnderlineLink
 							href="https://github.com/sme12/design-curious.engineer"
 							leading={

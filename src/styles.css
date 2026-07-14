@@ -35,11 +35,16 @@
 
 @theme {
     /* ---------- Colors ---------- */
-    /* Ink — dark text on the light sections */
-    --color-ink: #121212; /* body-font-color */
-    --color-ink-secondary: #262626; /* footer links; dark-section gradient end */
-    --color-ink-tertiary: #313131; /* footer credit line; dark-section gradient start */
-    --color-ink-hover: #565656;
+    /* Ink — text on the light sections */
+    --color-ink: #444444; /* body-font-color */
+    --color-ink-secondary: #525252; /* footer links */
+    --color-ink-tertiary: #5c5c5c; /* email pill label */
+    --color-ink-muted: #6b6b6b; /* footer credit line */
+    --color-ink-hover: #767676; /* hover states only */
+
+    /* Surface — dark section backgrounds */
+    --color-surface: #313131; /* dark-section gradient start */
+    --color-surface-deep: #262626; /* gradient end; torn mobile edges, toast */
 
     /* Paper — light text & surfaces on the dark sections */
     --color-paper: #f5f5f5; /* hero text, polaroid frame, email pill */
@@ -128,7 +133,11 @@
         var(--color-accent) 60%
     );
     /* Pencil-grey fill of the polaroid caption */
-    --gradient-pencil: linear-gradient(181.56deg, #565656 58.4%, #bcbcbc 85.6%);
+    --gradient-pencil: linear-gradient(
+        181.56deg,
+        var(--color-ink-muted) 58.4%,
+        #bcbcbc 85.6%
+    );
     /* Torn-paper edge tiles */
     --mask-torn-tile: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 12"%3E%3Cpath d="M384 0V9.3916L355.771 12L332.93 9.3916L322.37 12L297.158 9.3916L261.388 12L233.589 9.3916L213.979 12H170.021L150.411 9.3916L122.613 12L86.8418 9.3916L61.6299 12L51.0703 9.3916L28.2285 12L0 9.3916V0H384Z"/%3E%3C/svg%3E');
     --mask-torn-tile-t: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 12"%3E%3Cg transform="matrix(1 0 0 -1 0 12)"%3E%3Cpath d="M384 0V8.40039L365.124 5.40039L337.618 10.7998L324.135 8.40039L318.202 10.7998L307.955 8.40039L285.304 10.7998L256.18 8.40039L238.921 10.7998L212.494 8.40039L199.551 12L192 10.7998L184.449 12L171.506 8.40039L145.079 10.7998L127.82 8.40039L98.6963 10.7998L76.0449 8.40039L65.7979 10.7998L59.8652 8.40039L46.3818 10.7998L18.876 5.40039L0 8.40039V0H384Z"/%3E%3C/g%3E%3C/svg%3E');
@@ -136,20 +145,20 @@
        uses the same stops as a radial from the center) */
     --gradient-surface: linear-gradient(
         180deg,
-        var(--color-ink-tertiary),
-        var(--color-ink-secondary)
+        var(--color-surface),
+        var(--color-surface-deep)
     );
     --gradient-surface-radial: radial-gradient(
         50% 50% at 50% 50%,
-        var(--color-ink-tertiary),
-        var(--color-ink-secondary)
+        var(--color-surface),
+        var(--color-surface-deep)
     );
     /* Softens background media into the surrounding dark card surface. */
     --gradient-media-vignette: radial-gradient(
         ellipse at center,
         transparent 30%,
-        color-mix(in srgb, var(--color-ink-secondary) 35%, transparent) 65%,
-        var(--color-ink-secondary) 100%
+        color-mix(in srgb, var(--color-surface-deep) 35%, transparent) 65%,
+        var(--color-surface-deep) 100%
     );
 }
 

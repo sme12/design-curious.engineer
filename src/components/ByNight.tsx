@@ -47,11 +47,11 @@ export function ByNight() {
 			</div>
 			<div
 				aria-hidden="true"
-				className="mask-torn-t -left-3 absolute top-3 h-9 w-[calc(100%+48px)] origin-top-left rotate-[atan2(-24px,100vw)] bg-ink-secondary md:hidden"
+				className="mask-torn-t -left-3 absolute top-3 h-9 w-[calc(100%+48px)] origin-top-left rotate-[atan2(-24px,100vw)] bg-surface-deep md:hidden"
 			/>
 			<div
 				aria-hidden="true"
-				className="mask-torn-b -left-3 absolute top-[calc(100%-24px)] h-9 w-[calc(100%+48px)] origin-top-left rotate-[atan2(-24px,100vw)] bg-ink-secondary md:hidden"
+				className="mask-torn-b -left-3 absolute top-[calc(100%-24px)] h-9 w-[calc(100%+48px)] origin-top-left rotate-[atan2(-24px,100vw)] bg-surface-deep md:hidden"
 			/>
 		</section>
 	);
