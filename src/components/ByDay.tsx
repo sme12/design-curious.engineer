@@ -23,23 +23,17 @@ export function ByDay() {
 						>
 							Kraftvaerk
 						</BouncingUnderlineLink>
-						, helping prominent companies across the Nordics{" "}
-						<strong className="font-semibold">grow digitally</strong>.
+						, helping prominent companies across the Nordics grow digitally.
 					</p>
 					<p className="text-body 2xl:text-body-xl">
-						I tackle complex problems at the{" "}
-						<strong className="font-semibold">
-							intersection of design and engineering
-						</strong>
-						, bringing <span className="font-hand font-medium">curiosity</span>,
+						I tackle complex problems at the intersection of design and
+						engineering, bringing{" "}
+						<span className="font-hand font-medium">curiosity</span>,
 						uncommon care, and my full commitment.
 					</p>
 					<p className="text-body 2xl:text-body-xl">
-						There’s a good chance I’ve helped shape the{" "}
-						<strong className="font-semibold">
-							seamless digital experiences
-						</strong>{" "}
-						you’ve had with some of your{" "}
+						There’s a good chance I’ve helped shape the seamless digital
+						experiences you’ve had with some of your{" "}
 						<BouncingUnderlineLink
 							href="https://www.kraftvaerk.com/cases/"
 							rel="noreferrer"
