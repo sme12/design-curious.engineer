@@ -14,7 +14,18 @@ export function ByNight() {
 					<HandHeading className="text-paper">
 						by night &amp; weekends
 					</HandHeading>
-					<div className="mt-10 flex flex-col gap-11.5 md:mt-0 2xl:gap-14">
+					<div className="mt-10 flex flex-col gap-10 md:mt-0 2xl:gap-12">
+						<div className="space-y-6 text-pretty 2xl:space-y-8">
+							<p className="text-body text-paper-muted 2xl:text-body-xl">
+								They say turning your hobby into a job kills the hobby. Well,
+								mine survived. I still spend my evenings and weekends on
+								personal projects, learning, and experimentation.
+							</p>
+							<p className="text-body text-paper-muted 2xl:text-body-xl">
+								Here's what I'm currently{" "}
+								<strong className="font-semibold">nerding out</strong> about:
+							</p>
+						</div>
 						<Card
 							backgroundVideo={PREVIEW_25600}
 							badge="Study"
@@ -30,9 +41,6 @@ export function ByNight() {
 								Named after Figma’s maximum zoom level — 25,600% is as close as
 								you can get to the details.
 							</p>
-						</Card>
-						<Card badge="Soon" title="New Project">
-							<p>A new project is cooking!</p>
 						</Card>
 					</div>
 				</div>
