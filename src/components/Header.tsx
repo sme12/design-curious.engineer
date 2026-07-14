@@ -19,14 +19,6 @@ export function Header() {
 							soon
 						</span>
 					</span>
-					<a
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper lowercase"
-						href="/cv.pdf"
-						target="_blank"
-						rel="noopener"
-					>
-						Download CV
-					</a>
 				</nav>
 			</div>
 		</header>

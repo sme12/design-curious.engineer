@@ -30,14 +30,6 @@ export function Footer() {
 							soon
 						</span>
 					</span>
-					<a
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-ink-hover lowercase"
-						href="/cv.pdf"
-						target="_blank"
-						rel="noopener"
-					>
-						Download cv
-					</a>
 				</nav>
 			</div>
 		</footer>
