@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { BouncingUnderlineLink } from "./BouncingUnderlineLink";
 import { GitHubIcon } from "./icons";
 
@@ -25,12 +24,12 @@ export function Footer() {
 					</p>
 				</div>
 				<nav className="flex items-center md:justify-end gap-6 text-ink-secondary">
-					<Link
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-ink-hover lowercase"
-						to="/about"
-					>
-						About
-					</Link>
+					<span className="inline-flex items-center gap-1.5">
+						<span className="text-ink-muted lowercase">About</span>
+						<span className="inline-flex items-center self-stretch rounded-badge bg-black/5 px-1 font-semibold text-[9px] text-ink-muted/80 uppercase leading-none tracking-wide">
+							soon
+						</span>
+					</span>
 					<a
 						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-ink-hover lowercase"
 						href="/cv.pdf"

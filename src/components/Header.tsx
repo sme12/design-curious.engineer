@@ -13,12 +13,12 @@ export function Header() {
 					</Link>
 				</h1>
 				<nav className="flex items-center gap-6">
-					<Link
-						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper lowercase"
-						to="/about"
-					>
-						About
-					</Link>
+					<span className="inline-flex items-center gap-1.5">
+						<span className="text-paper-muted/60 lowercase">About</span>
+						<span className="inline-flex items-center self-stretch rounded-badge bg-paper/10 px-1 font-semibold text-[9px] text-paper-muted/50 uppercase leading-none tracking-wide">
+							soon
+						</span>
+					</span>
 					<a
 						className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper lowercase"
 						href="/cv.pdf"
