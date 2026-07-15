@@ -85,6 +85,8 @@
     --text-caption-xl: 0.875rem; /* 14px */
     --text-small-xl: 1rem; /* 16px */
     --text-small-xl--line-height: 1.125rem;
+    --text-btn-xl: 0.9375rem; /* 15px — email CTA button */
+    --text-btn-xl--line-height: 1rem;
     --text-body-xl: 1.125rem; /* 18px */
     --text-body-xl--line-height: 1.6875rem; /* 27px — 1.5 ratio */
     --text-title-xl: 1.625rem; /* 26px */
@@ -180,15 +182,15 @@
 
 @utility btn {
     /* press: mouse squeezes down, touch pops up (Apple-style) */
-    @apply inline-flex cursor-pointer items-center justify-center rounded-pill border border-paper transition-[color,background-color,scale] duration-200 ease-out-cubic active:scale-98 pointer-coarse:active:scale-104;
+    @apply inline-flex h-11 cursor-pointer items-center justify-center rounded-pill border border-paper transition-[color,background-color,scale] duration-200 ease-out-cubic active:scale-98 pointer-coarse:active:scale-104;
 }
 
 @utility btn-solid {
-    @apply bg-paper px-4 py-2.75 font-medium text-ink text-small hover:bg-white;
+    @apply bg-paper px-4 font-medium text-ink text-small hover:bg-white;
 }
 
 @utility btn-icon {
-    @apply p-2.25 text-paper hover:bg-paper/10;
+    @apply w-11 text-paper hover:bg-paper/10;
 }
 
 .card-background-media {
