@@ -109,10 +109,6 @@ export const Route = createRootRoute({
 				sizes: "180x180",
 				href: "/apple-touch-icon.png",
 			},
-			{
-				rel: "manifest",
-				href: "/manifest.json",
-			},
 		],
 	}),
 	shellComponent: RootDocument,
