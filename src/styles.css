@@ -58,6 +58,9 @@
     /* Lines & borders */
     --color-line: #626262; /* project card border */
 
+    /* ---------- Breakpoints ---------- */
+    --breakpoint-xs: 30rem; /* 480px — email CTA switches from compact to icon'd while still stretching */
+
     /* ---------- Fonts ---------- */
     --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
     --font-hand: 'Shantell Sans', 'Segoe Print', cursive;
@@ -186,7 +189,7 @@
 }
 
 @utility btn-solid {
-    @apply bg-paper px-4 font-medium text-ink text-small hover:bg-white;
+    @apply bg-paper px-3 md:px-4 font-medium text-ink text-small hover:bg-white;
 }
 
 @utility btn-icon {
@@ -304,6 +307,6 @@
 
     body {
         margin: 0;
-        @apply bg-white font-sans text-ink antialiased;
+        @apply bg-paper font-sans text-ink antialiased;
     }
 }
