@@ -5,7 +5,7 @@ import { Polaroid } from "./Polaroid";
 export function Hero() {
 	return (
 		<section className="relative overflow-x-clip">
-			<div className="clip-angle-b bg-(image:--gradient-surface) pt-18.5 pb-16 md:mask-torn-b md:[clip-path:none] md:pt-39.5 md:pb-25 2xl:pt-47 2xl:pb-30">
+			<div className="clip-angle-b bg-(image:--gradient-surface) pt-18.5 pb-16 md:mask-torn-b md:[clip-path:none] md:pt-28 md:pb-25 2xl:pt-34 2xl:pb-30">
 				<div className="relative mx-auto max-w-content px-gutter md:px-0 2xl:max-w-content-xl">
 					<p className="whitespace-nowrap text-display text-paper md:text-display-lg 2xl:text-display-xl">
 						Hi, I'm Vitalii —
