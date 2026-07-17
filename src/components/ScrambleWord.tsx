@@ -36,9 +36,23 @@ export function ScrambleWord({
 			return;
 		}
 		const letters = Array.from(wrap.children) as HTMLElement[];
+		const chars = [...children];
+
+		// Background tabs throttle timers, so a pulse can land while the last
+		// one is still mid-flicker — reset to the real letters first, or a
+		// scramble glyph gets captured as "original" and sticks forever.
+		for (const id of timers.current) {
+			window.clearTimeout(id);
+			window.clearInterval(id);
+		}
+		for (const [index, letter] of letters.entries()) {
+			letter.textContent = chars[index] ?? "";
+			letter.classList.remove("font-pixel", "font-normal", "text-center");
+			letter.style.removeProperty("width");
+		}
 
 		timers.current = letters.flatMap((letter, index) => {
-			const original = letter.textContent ?? "";
+			const original = chars[index] ?? "";
 			let swap: number | undefined;
 
 			const start = window.setTimeout(
@@ -74,7 +88,7 @@ export function ScrambleWord({
 
 			return [start];
 		});
-	}, []);
+	}, [children]);
 
 	usePulse((children.length - 1) * STAGGER + SCRAMBLE_DURATION, pulse);
 

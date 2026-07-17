@@ -48,7 +48,12 @@ export function PulseGroup({ children }: { children: ReactNode }) {
 		}
 
 		const tick = () => {
-			if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			// Hidden tabs throttle timers into a burst on return — don't queue
+			// pulses nobody sees
+			if (
+				document.hidden ||
+				matchMedia("(prefers-reduced-motion: reduce)").matches
+			) {
 				return;
 			}
 			let at = 0;
@@ -66,6 +71,16 @@ export function PulseGroup({ children }: { children: ReactNode }) {
 			timeouts.current = [];
 		};
 
+		// A tick schedules words a couple seconds ahead — drop what's queued
+		// when the tab hides, or a word starts animating in a tab that isn't
+		// rendering and comes back suspended mid-flight.
+		const onVisibilityChange = () => {
+			if (document.hidden) {
+				clearPending();
+			}
+		};
+		document.addEventListener("visibilitychange", onVisibilityChange);
+
 		let interval: number | undefined;
 		const observer = new IntersectionObserver(([entry]) => {
 			if (entry.isIntersecting) {
@@ -78,6 +93,7 @@ export function PulseGroup({ children }: { children: ReactNode }) {
 		observer.observe(wrap);
 
 		return () => {
+			document.removeEventListener("visibilitychange", onVisibilityChange);
 			observer.disconnect();
 			window.clearInterval(interval);
 			clearPending();

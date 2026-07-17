@@ -36,6 +36,11 @@ export function ShimmerWord({
 			return;
 		}
 		const letters = Array.from(wrap.children) as HTMLElement[];
+		// Hidden tabs suspend Motion animations mid-flight; cancel any stale
+		// ones so they release color and y before the new run claims them.
+		for (const anim of anims.current) {
+			anim.cancel();
+		}
 		const ink = getComputedStyle(wrap).color;
 		anims.current = letters.flatMap((letter, index) => {
 			const at = index * STAGGER;
