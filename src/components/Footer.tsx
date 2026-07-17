@@ -4,8 +4,8 @@ import { GitHubIcon } from "./icons";
 export function Footer() {
 	return (
 		<footer>
-			<div className="mx-auto flex max-w-content flex-col gap-6 px-gutter pt-12 pb-9 text-small md:flex-row md:items-baseline md:justify-between md:px-0 md:py-16 2xl:max-w-content-xl 2xl:text-small-xl">
-				<div className="space-y-2 py-3.5">
+			<div className="mx-auto max-w-content px-gutter pt-8 pb-6 text-small md:px-0 md:py-10 2xl:max-w-content-xl 2xl:text-small-xl">
+				<div className="flex flex-col gap-2 md:flex-row md:items-baseline md:justify-between">
 					<p className="text-ink-muted">
 						Designed and built by Vitalii Sazanov, 2026
 					</p>
