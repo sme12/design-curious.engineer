@@ -4,7 +4,7 @@ import appCss from "../styles.css?url";
 
 const SITE_URL = "https://design-curious.engineer";
 const TITLE = "Vitalii's Website";
-const DESCRIPTION = "Hi, I'm Vitalii — a design-curious engineer";
+const DESCRIPTION = "Vitalii Sazanov — a design-curious engineer";
 
 export const Route = createRootRoute({
 	head: () => ({
