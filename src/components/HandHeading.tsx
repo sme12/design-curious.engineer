@@ -11,7 +11,7 @@ export function HandHeading({
 		<h2
 			className={`flex w-42.75 flex-col gap-1 font-hand font-semibold text-body italic 2xl:w-48 2xl:text-body-xl ${className}`}
 		>
-			<span>{children}</span>
+			<span className="whitespace-nowrap">{children}</span>
 			<svg
 				aria-hidden="true"
 				className="h-1 w-42.5 text-accent 2xl:w-47.75"
