@@ -30,10 +30,15 @@ export function ByDay() {
 					</p>
 					<p className="text-body 2xl:text-body-xl">
 						<PulseGroup>
-							I tackle complex problems right at the intersection of{" "}
+							I tackle complex problems at the intersection of{" "}
 							<ShimmerWord className="font-semibold">design</ShimmerWord> and{" "}
-							<ScrambleWord className="font-semibold">engineering</ScrambleWord>
-							, bringing curiosity, uncommon care, and my full commitment.
+							<span className="whitespace-nowrap">
+								<ScrambleWord className="font-semibold">
+									engineering
+								</ScrambleWord>
+								,
+							</span>{" "}
+							bringing curiosity, uncommon care, and my full commitment.
 						</PulseGroup>
 					</p>
 					<p className="text-body 2xl:text-body-xl">
