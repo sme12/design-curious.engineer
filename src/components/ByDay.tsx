@@ -1,5 +1,8 @@
 import { BouncingUnderlineLink } from "./BouncingUnderlineLink";
 import { HandHeading } from "./HandHeading";
+import { PulseGroup } from "./PulseGroup";
+import { ScrambleWord } from "./ScrambleWord";
+import { ShimmerWord } from "./ShimmerWord";
 
 export function ByDay() {
 	return (
@@ -26,10 +29,12 @@ export function ByDay() {
 						, helping prominent companies across the Nordics grow digitally.
 					</p>
 					<p className="text-body 2xl:text-body-xl">
-						I tackle complex problems at the intersection of design and
-						engineering, bringing{" "}
-						<span className="font-hand font-medium">curiosity</span>,
-						uncommon care, and my full commitment.
+						<PulseGroup>
+							I tackle complex problems right at the intersection of{" "}
+							<ShimmerWord className="font-semibold">design</ShimmerWord> and{" "}
+							<ScrambleWord className="font-semibold">engineering</ScrambleWord>
+							, bringing curiosity, uncommon care, and my full commitment.
+						</PulseGroup>
 					</p>
 					<p className="text-body 2xl:text-body-xl">
 						There’s a good chance I’ve helped shape the seamless digital

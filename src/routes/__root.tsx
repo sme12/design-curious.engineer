@@ -94,6 +94,15 @@ export const Route = createRootRoute({
 				href: "/fonts/shantell-sans-medium.woff2",
 				crossOrigin: "anonymous",
 			},
+			// Only used by the scramble effect, which first fires ~7s in — but
+			// without a preload the first flicker would flash fallback mono
+			{
+				rel: "preload",
+				as: "font",
+				type: "font/woff2",
+				href: "/fonts/geist-pixel-square.woff2",
+				crossOrigin: "anonymous",
+			},
 			{
 				rel: "icon",
 				type: "image/svg+xml",
