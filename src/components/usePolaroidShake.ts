@@ -1,26 +1,23 @@
 import { animate } from "motion";
 import { type RefObject, useCallback, useEffect, useRef } from "react";
 
-// Shake knobs: [degrees, seconds] — a continuous train of wrist flicks:
-// vigorous at first, tapering off with a lazier cadence toward the settle
+// Shake knobs: [degrees, seconds] — a short burst of wrist flicks: vigorous
+// at first, tapering off with a lazier cadence toward the settle. Kept brief
+// so the card is still by the time the photo visibly starts developing
+// (see START_DELAY in usePolaroidDevelop), with only a slight overlap.
 const FLICKS: [deg: number, at: number][] = [
 	[0, 0],
-	[-7, 0.14],
-	[8, 0.28],
-	[-6.5, 0.42],
-	[7, 0.56],
-	[-5.5, 0.7],
-	[6.5, 0.85],
-	[-6, 1.0],
-	[5.5, 1.15],
-	[-4.5, 1.31],
-	[4, 1.47],
-	[-3, 1.64],
-	[2, 1.81],
-	[-1, 1.96],
-	[0, 2.1],
+	[-7, 0.1],
+	[8, 0.2],
+	[-6.5, 0.3],
+	[6.5, 0.4],
+	[-5, 0.5],
+	[3.5, 0.6],
+	[-2, 0.69],
+	[0, 0.78],
 ];
 const GRIP_SHIFT = 1.3; // px of sideways drift per degree — fakes a pivot at the grip
+const TOUCH_SCALE = 0.6; // gentler flick amplitude on touch devices
 
 const DURATION = FLICKS[FLICKS.length - 1][1];
 
@@ -39,11 +36,15 @@ export function usePolaroidShake(cardRef: RefObject<HTMLElement | null>) {
 			return Promise.resolve();
 		}
 
+		// Touch devices get a gentler shake — the card fills more of a small
+		// screen, so the full desktop amplitude reads as violent there
+		const scale = matchMedia("(pointer: coarse)").matches ? TOUCH_SCALE : 1;
+
 		anim.current = animate(
 			card,
 			{
-				rotate: FLICKS.map(([deg]) => deg),
-				x: FLICKS.map(([deg]) => deg * GRIP_SHIFT),
+				rotate: FLICKS.map(([deg]) => deg * scale),
+				x: FLICKS.map(([deg]) => deg * scale * GRIP_SHIFT),
 			},
 			{
 				duration: DURATION,
