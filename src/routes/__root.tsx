@@ -5,6 +5,7 @@ import appCss from "../styles.css?url";
 const SITE_URL = "https://design-curious.engineer";
 const TITLE = "Vitalii's Website";
 const DESCRIPTION = "Vitalii Sazanov — a design-curious engineer";
+const SOCIAL_IMAGE = `${SITE_URL}/og-image-v2.png`;
 
 export const Route = createRootRoute({
 	head: () => ({
@@ -45,7 +46,7 @@ export const Route = createRootRoute({
 			},
 			{
 				property: "og:image",
-				content: `${SITE_URL}/og-image.png`,
+				content: SOCIAL_IMAGE,
 			},
 			{
 				property: "og:image:width",
@@ -69,7 +70,7 @@ export const Route = createRootRoute({
 			},
 			{
 				name: "twitter:image",
-				content: `${SITE_URL}/og-image.png`,
+				content: SOCIAL_IMAGE,
 			},
 		],
 		links: [
