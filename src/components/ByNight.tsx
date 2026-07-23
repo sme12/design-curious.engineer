@@ -30,7 +30,7 @@ export function ByNight() {
 							backgroundVideo={PREVIEW_25600}
 							badge="Study"
 							cta="have a look"
-							href="https://github.com/sme12/25600/"
+							href="https://www.25600.design/"
 							title="25600.design"
 						>
 							<p>
