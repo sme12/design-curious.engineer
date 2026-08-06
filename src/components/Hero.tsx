@@ -5,7 +5,7 @@ import { Polaroid } from "./Polaroid";
 export function Hero() {
 	return (
 		<section className="relative overflow-x-clip">
-			<div className="clip-angle-b bg-(image:--gradient-surface) pt-18.5 pb-16 md:mask-torn-b md:[clip-path:none] md:pt-28 md:pb-25 2xl:pt-34 2xl:pb-30">
+			<div className="clip-angle-b bg-(image:--gradient-surface) pt-18.5 pb-16 md:mask-torn-b md:[clip-path:none] md:pt-30 md:pb-25 2xl:pt-35 2xl:pb-30">
 				<div className="relative mx-auto max-w-content px-gutter md:px-0 2xl:max-w-content-xl">
 					<p className="whitespace-nowrap text-display text-paper md:text-display-lg 2xl:text-display-xl">
 						Hi, I'm Vitalii —
@@ -16,7 +16,7 @@ export function Hero() {
 						<br />
 						engineer
 					</p>
-					<Polaroid className="mt-6 md:-top-11 md:absolute md:left-101.25 md:mt-0 md:rotate-[7.55deg] 2xl:-top-16 2xl:right-0 2xl:left-auto" />
+					<Polaroid className="mt-6 md:-top-3 md:absolute md:left-108 md:mt-0 md:rotate-[7.55deg] 2xl:-top-5.5 2xl:right-0 2xl:left-auto" />
 					<div className="mt-8 flex items-center gap-3 md:mt-12.5 md:gap-3.5 2xl:mt-15">
 						<CopyEmailButton className="order-1 flex-1 sm:flex-initial md:order-0" />
 						<div className="flex items-center gap-3 md:gap-3.5">
