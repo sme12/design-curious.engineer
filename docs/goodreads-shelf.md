@@ -106,7 +106,7 @@ Constraints inherited from the feed:
 ```ts
 type Book = {
     id: string; // Goodreads book_id, stable, e.g. "41793"
-    title: string; // alt text and hover, never rendered as text
+    title: string; // alt text and accessible name, never rendered as text
     author: string; // retained, not rendered
     rating: number; // 0–5, retained, not rendered
     cover: string | null; // "/covers/41793.webp"
@@ -229,10 +229,12 @@ acceptable.
 **Data access.** A plain module import of the JSON. No server function, no
 runtime fetch, no `await` in the loader. Server-rendered as part of `/about`.
 
-**Layout.** Covers only — no title, author, or rating as text. Four columns at
-every breakpoint, on cells of a fixed 2:3 ratio, with each cover bottom-aligned
-inside its cell and narrowed (never cropped) if its own ratio is taller than the
-cell.
+**Layout.** Covers only — no title, author, or rating as text. Three columns
+below `md` and four from `md` up, on cells of a fixed 2:3 ratio, with each cover
+bottom-aligned inside its cell and narrowed (never cropped) if its own ratio is
+taller than the cell. Three on phones because four across 390px puts a cover
+under 80px, which is below the size at which the title on a cover can be read —
+and the shelf is meant to be read, not to be texture.
 
 **The planks.** Each row of books stands on a shelf: a thin slab built in CSS 3D
 by [`ShelfPlank.tsx`](../src/components/ShelfPlank.tsx), styled in `styles.css`.
@@ -249,10 +251,38 @@ the grid is no longer auto-filling:
 - **Rows have to be a uniform height.** Covers are bottom-aligned rather than
   top-aligned, since the bottom edge is now a contact line.
 
+Two column counts means two row counts, and the server can't know which one the
+browser will pick. The component renders the *larger* count — the narrow
+layout's — and the surplus planks carry `md:hidden`, so they leave the grid
+entirely at the breakpoint where their rows stop existing. The plank grid sizes
+its tracks with `auto-rows-fr` rather than an explicit `repeat()`, so the rows
+that survive split the height evenly on their own and the row count never has to
+be written down a second time.
+
 One custom property, `--shelf-depth`, is the plank's front-to-back size and the
 only number that changes across breakpoints: the row gap and the plank's
 placement are both derived from it, since the projected geometry of the tipped
 slab is a fixed multiple of its depth.
+
+**The finish is dark.** The shelf started life light gray — a `#e3e3e3` surface
+over a `#464646`–`#9c9c9c` edge — which put the brightest thing on the page
+underneath the books rather than in them. It's graphite now: `#6b6b6b` falling
+to `#494949` across the surface, over a `#1a1a1a`–`#3b3b3b` edge. Same lighting,
+same shading, moved down the scale. Two parts of it had to change shape rather
+than value to stay that way:
+
+- **The edge tracks the surface by ratio, not by offset.** On the light plank
+  the lip sat 37 steps below the front of the surface; carrying that difference
+  down puts the bottom of the edge below black. The ratio is the physical
+  relationship anyway — a vertical face turned away from the key light keeps a
+  *fraction* of it, it doesn't lose a fixed amount — so the ramp is now the old
+  ramp's proportions, 0.36 to 0.81 of the surface's front stop.
+- **Every white overlay came down.** `rgb(255 255 255 / 0.32)` lifts `#e3e3e3`
+  by nine steps and a base this dark by forty-seven, so the alphas that read as
+  satin on the light plank read as wet chrome here; they're set to land roughly
+  the old absolute lift instead. The sweep's troughs went the other way. They
+  were gray — darker than the old base, *lighter* than this one — so they'd have
+  come out as bands of light. They're black now.
 
 **The heading lives inside the component.** If the shelf is empty the component
 returns `null`, taking the heading with it. A heading placed on the About page
@@ -338,17 +368,45 @@ underneath it. It doesn't — `.book` carries `perspective`, not `preserve-3d`, 
 a book that is dimmed *and* mid-turn (which happens whenever you move from one
 book straight to the next) still renders its page block in 3D.
 
-**Interaction.** The whole card links to `book.link` on Goodreads.
+**Interaction.** The whole card links to `book.link` on Goodreads. No `title`
+attribute: the browser tooltip is unstyleable, arrives on its own schedule,
+never appears on touch, and can't be reached from the keyboard — it was
+duplicating the accessible name for the one group of users who already had it.
+The title is not surfaced on tap either; tapping opens the full Goodreads
+record, and a tap-to-reveal state would compete with the link for the same
+gesture.
 
-- Pointer devices: title on hover.
-- Touch devices: no hover exists, and the title is deliberately not surfaced —
-  tapping opens the full Goodreads record instead. A tap-to-reveal state would
-  compete with the link for the same gesture.
+**Accessibility.**
 
-**Accessibility.** `alt={title}` on every cover — real alt text, never `alt=""`.
-This is the only path to the title for screen readers, for touch users, and for
-any cover that fails to load, so it is load-bearing rather than decorative. The
-hover title is a `title` attribute on top of that, not instead of it.
+- **The link names itself.** An `aria-label` on the anchor — the title, then
+  _"on Goodreads (opens in a new tab)"_. The link's entire content is a
+  picture, so the name is
+  stated once, in one place, rather than assembled from the cover's `alt` plus a
+  visually-hidden tail — it comes out the same whether the image loads, and the
+  same for the books that have no cover at all.
+- **Covers keep real `alt` text** — `alt={title}`, never `alt=""`, even though
+  the link is labelled and the `alt` is therefore not what gets announced. A
+  cover that fails to load should still say which book it was.
+- **The focus ring is the cell's**, not the link's — see below.
+
+**The focus ring.** `outline` on `.book-slot` via `:has(.book:focus-visible)`,
+with the link's own ring turned off. Two reasons, and they're the same two that
+put the hover on the cell:
+
+- **The link is the thing that turns.** A ring on it gets dragged through the
+  rotation and out over the shelf with the book, at the one moment you need a
+  fixed mark of where you are. The cell doesn't move, so the ring doesn't
+  either: the book steps forward out of a box that stays put.
+- **The cell is the only consistent rectangle.** Covers run 0.62–0.80
+  wide-to-tall, so a ring drawn round the link is a different size and shape on
+  every book and a row of them doesn't line up. Every cell is the same 2:3 box
+  on the same baseline.
+
+It is written out — `2px solid var(--focus-ring-color)`, `outline-offset: 2px` —
+rather than the `outline-style: auto` the rest of the site uses. Chrome's auto
+ring follows ink overflow, and this element has plenty of it: the `::before`
+hover pad reaching into both column gaps, and the book's cast pool hanging below
+the baseline. Auto wraps all of that and comes out an L.
 
 **Images.** `loading="lazy"`, with explicit `width`/`height` from the WebP to
 avoid layout shift.

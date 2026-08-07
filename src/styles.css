@@ -335,52 +335,75 @@
     border-radius: 4px;
 }
 
+/* Dark finish. The shading is the same shelf as before — same ramp curve, same
+   falloff across the face, same light coming from the back — moved down the
+   scale, not flattened. Two things had to change shape rather than value to
+   keep it that way, both of them because contrast on a dark base doesn't work
+   the way it does on a light one:
+
+   The face and the edge no longer sit a fixed distance apart. Light-plank, the
+   lip ran 37 steps below the front of the surface; carrying that offset down
+   would put the bottom of the edge below black. It's the ratio that's physical
+   anyway — the edge faces away from the light, it doesn't lose a fixed amount
+   of it — so the ramp is now the old ramp's proportions (0.36 to 0.81 of the
+   face's front stop) rather than its differences.
+
+   And every white overlay came down hard. A 0.32 white over #e3e3e3 lifts it
+   nine steps; over a base this dark it lifts it forty-seven, so the alphas that
+   read as satin on the light plank read as wet chrome here. They're set to land
+   roughly the old absolute lift instead. The sweep's troughs went the other
+   way: they were gray, which was darker than the old base and is lighter than
+   this one, so they'd have come out as bands of light. They're black now. */
+
 /* Thickness: stacked copies of the slab pushed deeper with translateZ, so the
    sliver of each one that escapes the copy in front of it draws the front
    edge. Dark at the bottom, lighter toward the lip — a vertical edge faces
    away from the light. */
-.shelf-layer-1 { background: #464646; transform: translateZ(-5px); }
-.shelf-layer-2 { background: #4e4e4e; transform: translateZ(-4.3px); }
-.shelf-layer-3 { background: #575757; transform: translateZ(-3.6px); }
-.shelf-layer-4 { background: #616161; transform: translateZ(-2.8px); }
-.shelf-layer-5 { background: #6c6c6c; transform: translateZ(-2.1px); }
-.shelf-layer-6 { background: #797979; transform: translateZ(-1.4px); }
-.shelf-layer-7 { background: #898989; transform: translateZ(-0.8px); }
-.shelf-layer-8 { background: #9c9c9c; transform: translateZ(-0.35px); }
+.shelf-layer-1 { background: #1a1a1a; transform: translateZ(-5px); }
+.shelf-layer-2 { background: #1d1d1d; transform: translateZ(-4.3px); }
+.shelf-layer-3 { background: #212121; transform: translateZ(-3.6px); }
+.shelf-layer-4 { background: #242424; transform: translateZ(-2.8px); }
+.shelf-layer-5 { background: #292929; transform: translateZ(-2.1px); }
+.shelf-layer-6 { background: #2e2e2e; transform: translateZ(-1.4px); }
+.shelf-layer-7 { background: #343434; transform: translateZ(-0.8px); }
+.shelf-layer-8 { background: #3b3b3b; transform: translateZ(-0.35px); }
 
-/* Top face: light-gray base with a back-to-front falloff, plus inset shadows
-   for edge occlusion. */
+/* Top face: graphite base with a back-to-front falloff, plus inset shadows for
+   edge occlusion. The falloff keeps its old step sizes — the surface loses the
+   same amount of light on its way to the lip as it always did. The occlusion
+   insets are pure black rather than #262626, which is no longer darker than
+   what it's shading, at alphas that hold their old depth. */
 .shelf-face {
     transform: translateZ(0);
     background: linear-gradient(
         180deg,
-        #e3e3e3 0%,
-        #dddddd 40%,
-        #d5d5d5 70%,
-        #cbcbcb 90%,
-        #c1c1c1 100%
+        #6b6b6b 0%,
+        #656565 40%,
+        #5d5d5d 70%,
+        #535353 90%,
+        #494949 100%
     );
     box-shadow:
-        inset 0 1px 3px rgb(255 255 255 / 0.5),
-        inset 0 -1px 2px rgb(38 38 38 / 0.14),
-        inset 0 -5px 10px rgb(38 38 38 / 0.06),
-        inset 10px 0 20px rgb(38 38 38 / 0.05),
-        inset -10px 0 20px rgb(38 38 38 / 0.05);
+        inset 0 1px 3px rgb(255 255 255 / 0.18),
+        inset 0 -1px 2px rgb(0 0 0 / 0.24),
+        inset 0 -5px 10px rgb(0 0 0 / 0.1),
+        inset 10px 0 20px rgb(0 0 0 / 0.09),
+        inset -10px 0 20px rgb(0 0 0 / 0.09);
 }
 
-/* Faint diagonal satin sweep: alternating soft bright bands and gray troughs.
+/* Faint diagonal satin sweep: alternating soft bright bands and dark troughs.
    Raise the alphas for a glossier finish. */
 .shelf-sweep {
     transform: translateZ(0.2px);
     background: linear-gradient(
         105deg,
-        rgb(99 99 99 / 0.1) 0%,
+        rgb(0 0 0 / 0.1) 0%,
         rgb(255 255 255 / 0) 22%,
-        rgb(255 255 255 / 0.28) 38%,
-        rgb(114 114 114 / 0.07) 55%,
-        rgb(255 255 255 / 0.22) 72%,
+        rgb(255 255 255 / 0.1) 38%,
+        rgb(0 0 0 / 0.07) 55%,
+        rgb(255 255 255 / 0.08) 72%,
         rgb(255 255 255 / 0) 86%,
-        rgb(99 99 99 / 0.1) 100%
+        rgb(0 0 0 / 0.1) 100%
     );
 }
 
@@ -389,7 +412,7 @@
     transform: translateZ(0.4px);
     background: radial-gradient(
         130% 100% at 42% 0%,
-        rgb(255 255 255 / 0.32) 0%,
+        rgb(255 255 255 / 0.15) 0%,
         rgb(255 255 255 / 0) 60%
     );
 }
@@ -468,6 +491,8 @@
 
 .book:focus-visible {
     --book-turn: translate3d(0, -4px, 44px) rotateY(-25deg);
+    /* The ring is the cell's, below. */
+    outline: none;
 }
 
 /* What you're hovering is the grid cell, not the cover. Two gaps sit between
@@ -494,8 +519,29 @@
     }
 }
 
+/* The focus ring belongs to the cell, not to the link inside it. Two reasons,
+   and they're the same two that put the hover on the cell:
+
+   The link is the thing that turns. A ring on it is dragged through the
+   rotation and out over the shelf with the book, which is the one moment you
+   need a fixed mark of where you are. The cell doesn't move, so the ring
+   doesn't either — the book steps forward out of a box that stays put.
+
+   And the cell is the only consistent rectangle here. Covers run from 0.62 to
+   0.80 wide-to-tall, so a ring drawn round the link is a different size and
+   shape on every book, and a row of them doesn't line up. Every cell is the
+   same 2:3 box on the same baseline.
+
+   Written out rather than `outline-style: auto`, which is what the rest of the
+   site uses: Chrome's auto ring follows ink overflow, and this element has
+   plenty — the ::before hover pad reaching into both column gaps, the book's
+   cast pool hanging below the baseline. Auto wraps all of it and comes out an
+   L. An explicit outline is just the border box. */
 .book-slot:has(.book:focus-visible) {
     z-index: 20;
+    border-radius: 5px;
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: 2px;
 }
 
 /* One book comes forward into the light, so the rest of the shelf falls back

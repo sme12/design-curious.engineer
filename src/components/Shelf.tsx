@@ -13,6 +13,11 @@ const SHELF_DATA: Record<ShelfSlug, Book[]> = {
 // Fixed rather than auto-filling, so the row count is known at render time and
 // each row can be handed a plank. An auto-fill grid decides its columns in the
 // browser, which leaves the planks with nothing to line up against.
+//
+// Three across on phones rather than four: at 390px four columns puts a cover
+// under 80px, which is below the point where a title on a cover is still
+// legible — and the shelf is a thing you read, not a texture.
+const COLUMNS_NARROW = 3;
 const COLUMNS = 4;
 
 // Every cell is a 2:3 box, which is what keeps the rows a uniform height and
@@ -55,10 +60,14 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 
 	// One plank per row of books, the last one included even where it carries a
 	// single title — a shelf runs the length of the wall either way.
-	const plankRows = Array.from(
-		{ length: Math.ceil(books.length / COLUMNS) },
-		(_, index) => index + 1,
-	);
+	//
+	// Fewer columns means more rows, so the narrow layout needs the most planks
+	// and the wide one hides the surplus. Rendering the larger count and dropping
+	// the extras in CSS keeps this a single server-rendered tree: the breakpoint
+	// is the browser's to decide, and nothing here can know it.
+	const narrowRows = Math.ceil(books.length / COLUMNS_NARROW);
+	const wideRows = Math.ceil(books.length / COLUMNS);
+	const plankRows = Array.from({ length: narrowRows }, (_, index) => index);
 
 	return (
 		<section>
@@ -75,12 +84,13 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 			<div className="mt-6 pb-[calc(0.16*var(--shelf-depth)+8px)] [--book-gap:0.5rem] [--shelf-depth:57px] md:[--book-gap:0.75rem] md:[--shelf-depth:72px] 2xl:mt-7 2xl:[--book-gap:1rem] 2xl:[--shelf-depth:90px]">
 				<div className="relative">
 					{/* Covers are deliberately small: the content column is 405px at
-					    md, so four across leaves ~92px cards, and the covers Goodreads
-					    serves top out around 380px wide — comfortably above 2x.
+					    md, so four across leaves ~92px cards (three across a 390px
+					    phone leaves ~109px), and the covers Goodreads serves top out
+					    around 380px wide — comfortably above 2x.
 					    z-10 puts the books in front of the planks: they stand halfway
 					    back on the surface, so each one has to hide the bit of shelf
 					    behind it. */}
-					<ul className="shelf-rows relative z-10 grid grid-cols-4 gap-x-(--book-gap)">
+					<ul className="shelf-rows relative z-10 grid grid-cols-3 gap-x-(--book-gap) md:grid-cols-4">
 						{books.map((book) => (
 							// The cell is a fixed 2:3 box the cover sits at the bottom of.
 							// Rows have to be a uniform height for the planks to land, and
@@ -95,6 +105,12 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 								    off the shelf. It pivots on its base, so it stays standing
 								    on the plank rather than lifting off it. */}
 								<a
+									// The link's whole content is a picture, so it has to name
+									// itself. Said once, here, rather than assembled from the
+									// cover's alt plus a visually-hidden tail: this is the
+									// accessible name whether or not the image exists, whether
+									// or not there is a cover at all.
+									aria-label={`${book.title} on Goodreads (opens in a new tab)`}
 									className="book relative mx-auto block rounded-xs"
 									href={book.link}
 									rel="noreferrer"
@@ -109,10 +125,6 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 										} as CSSProperties
 									}
 									target="_blank"
-									// Pointer devices get the title on hover. Touch devices get
-									// nothing extra — tapping opens the full Goodreads record,
-									// and a tap-to-reveal would compete for the same gesture.
-									title={book.title}
 								>
 									{/* The pool the book casts on the plank once it lifts.
 									    Outside the body, so it stays flat on the shelf while
@@ -120,6 +132,9 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 									<span className="book-cast" />
 									<span className="book-body">
 										{book.cover ? (
+											// Kept as real alt text rather than alt="" even though
+											// the link is labelled: a cover that fails to load
+											// should still say which book it was.
 											<img
 												alt={book.title}
 												className="h-auto w-full rounded-xs shadow-book"
@@ -138,9 +153,6 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 										    until the turn brings it round. */}
 										<span className="book-edge" />
 									</span>
-									<span className="sr-only">
-										{" on Goodreads (opens in a new tab)"}
-									</span>
 								</a>
 							</li>
 						))}
@@ -148,16 +160,24 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 					{/* The planks ride in a second grid behind the first. Same rows,
 					    same gap, so every row's bottom edge is a shelf line — and the
 					    books keep a list to themselves. Slightly wider than the books,
-					    the way a real shelf overshoots what stands on it. */}
+					    the way a real shelf overshoots what stands on it.
+
+					    auto-rows-fr rather than an explicit template: the rows that
+					    exist are the planks that weren't hidden, and they split the
+					    height evenly either way, so the row count never has to be
+					    written down twice. */}
 					<div
 						aria-hidden="true"
-						className="shelf-rows pointer-events-none absolute -inset-x-1.5 top-0 bottom-0 grid"
-						style={{
-							gridTemplateRows: `repeat(${plankRows.length}, 1fr)`,
-						}}
+						className="shelf-rows pointer-events-none absolute -inset-x-1.5 top-0 bottom-0 grid auto-rows-fr"
 					>
 						{plankRows.map((row) => (
-							<div className="relative" key={row}>
+							// The rows only the narrow layout has leave the grid entirely
+							// once there are four columns — display:none, so they take
+							// their grid track with them.
+							<div
+								className={row < wideRows ? "relative" : "relative md:hidden"}
+								key={row}
+							>
 								<ShelfPlank />
 							</div>
 						))}
