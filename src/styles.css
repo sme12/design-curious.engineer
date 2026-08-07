@@ -551,14 +551,21 @@
 
    No filter at rest — the rule only exists while something is hovered — which
    keeps the resting shelf exactly what it was, and keeps every book off the
-   compositor until it has a reason to be there. */
+   compositor until it has a reason to be there.
+
+   The plant goes with the books and not with the planks: it's a thing standing
+   on the shelf, and the brightest green on the page staying lit while every
+   cover around it drops is the plant taking over the row. Its shadow stays
+   where it is — the light moved, the pot didn't. */
 @media (hover: hover) {
-    .shelf-rows:has(.book-slot:hover) .book-slot:not(:hover) .book {
+    .shelf-rows:has(.book-slot:hover) .book-slot:not(:hover) .book,
+    .shelf-rows:has(.book-slot:hover) .shelf-plant {
         filter: brightness(0.64) saturate(0.85);
     }
 }
 
-.shelf-rows:has(.book:focus-visible) .book:not(:focus-visible) {
+.shelf-rows:has(.book:focus-visible) .book:not(:focus-visible),
+.shelf-rows:has(.book:focus-visible) .shelf-plant {
     filter: brightness(0.64) saturate(0.85);
 }
 
@@ -682,10 +689,115 @@
         );
 }
 
+/* ---------- The plant ----------
+   What stands in the last row where the books ran out. Sized off the row's
+   height rather than given a width of its own, so it grows with the shelf at
+   every breakpoint the way the covers do — and so it stays the same size
+   against the books whatever the cell it's centred in is worth.
+
+   A fifth taller than the books, which is what a pot this size is next to a
+   paperback: it comes to about a book's width across the pot, and the leaves
+   spread past that into air the shelf has going spare anyway. It's the leaf
+   tips that overhang the cell, and they're the sparsest part of it — a plant
+   sized to fit inside a 2:3 box reads as a sprig in a cup.
+
+   The file is trimmed to the plant, so its bottom edge is the bottom of the
+   pot: the cell's `items-end` is the whole of standing it on the shelf. */
+/* One cell over from wherever the books stopped, to the middle of what's left:
+   half a cell and half a gap for every free cell past the first. 50% is the
+   cell's own width, which is the only place a column measurement is available
+   without writing the grid down twice.
+
+   The default is in the var() rather than a declaration of its own. Tailwind's
+   utilities are layered and this file isn't, so an unlayered --plant-gap here
+   would beat the [--plant-gap:n] class that's meant to set it, at every
+   breakpoint, forever. */
+.shelf-plant-slot {
+    transform: translateX(
+        calc((var(--plant-gap, 1) - 1) * (50% + 0.5 * var(--book-gap)))
+    );
+}
+
+/* The plant's own box: taller than its cell, and out of flow so that nothing
+   above follows it there. In flow it contributes its full height to the row,
+   the row grows to fit it, and every book in that row is left hanging off the
+   top of a plank that dropped away from them.
+
+   The ratio is the file's, so the height is the only measurement here and the
+   width comes off it. */
+.shelf-plant-stand {
+    position: absolute;
+    left: 50%;
+    /* Forward of the books rather than in line with them. They stand halfway
+       back on the plank, which is where a row of things packed against a wall
+       stands; a plant is put down on the shelf, and it lands nearer the middle
+       of the surface. That's the whole of it — the pot sits a little further
+       down the plank's depth, and its shadow, which is its child, comes with
+       it. Measured off --shelf-depth, since what it's moving across is the
+       plank's surface and nothing else. */
+    bottom: calc(-0.06 * var(--shelf-depth));
+    /* A little taller than the books, or as tall as the shelf above will allow,
+       whichever is less. What it can grow into is the row gap (0.5 x depth +
+       7px) minus the part of it the plank above already hangs into (0.16 x
+       depth of front lip), less a few pixels so the leaves clear it rather than
+       meet it. Both terms move with the breakpoint and they don't move together
+       — the covers grow faster than the planks do — so which one binds depends
+       on the viewport. The cap ignores the drop above, which only ever buys
+       more room at the top; it's a guard, and a guard should read low. */
+    height: min(108%, calc(100% + 0.34 * var(--shelf-depth) - 5px));
+    aspect-ratio: 400 / 421;
+    transform: translateX(-50%);
+}
+
+.shelf-plant {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: filter 340ms var(--ease-out-cubic);
+}
+
+/* The pot's contact shadow. The books get theirs from --shadow-book, which is
+   a box-shadow and so needs a box to hang off; a pot is round, so this is the
+   same shadow drawn as the shape that actually casts it — and drawn where that
+   shape actually touches.
+
+   Which is not the bottom of the picture. The pot's base is an ellipse, so the
+   only part of it standing on the baseline is the front of the curve; its sides
+   meet the shelf a way up the image, at 92% of the height. A shadow hung off
+   the bottom edge instead sits under the lowest point and leaves daylight in
+   the two corners where the base curves away — and daylight under a pot is a
+   pot in the air. These numbers are that ellipse, measured off the file:
+   54% of the width, centred 4% up from the bottom.
+
+   Weighted forward, since the light is at the back of the shelf, and behind the
+   plant rather than over it: an absolutely positioned child paints above its
+   in-flow siblings otherwise, which puts the shadow on top of the pot. */
+.shelf-plant-cast {
+    position: absolute;
+    z-index: -1;
+    bottom: -5%;
+    left: 18%;
+    width: 64%;
+    height: 18%;
+    /* Concentric with that ellipse rather than weighted forward, which it looks
+       like anyway: the pot is standing on the back half. The front half is the
+       whole of what shows, and it runs out just short of the front lip — the
+       plank has 0.16 x depth of surface in front of the row to catch it, and
+       the pot has already spent a third of that standing further forward. */
+    background: radial-gradient(
+        50% 50% at 50% 50%,
+        rgb(0 0 0 / 0.62) 0%,
+        rgb(0 0 0 / 0.28) 44%,
+        transparent 78%
+    );
+    filter: blur(3px);
+}
+
 @media (prefers-reduced-motion: reduce) {
     .book,
     .book-body,
-    .book-cast {
+    .book-cast,
+    .shelf-plant {
         transition: none;
     }
 }

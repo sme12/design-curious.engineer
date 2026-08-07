@@ -24,6 +24,32 @@ const COLUMNS = 4;
 // lets the planks be positioned off nothing but percentages.
 const CELL_RATIO = 2 / 3;
 
+// A shelf that ends mid-row ends in a hole, so the last row gets a plant. Two
+// free slots is the threshold: with one, the plant is wedged against the last
+// book and the row just reads as full — the gap is what makes it a shelf with
+// room on it rather than a grid that ran out of books.
+const PLANT_MIN_GAP = 2;
+
+// The plant keeps a book's cell — one column, 2:3 — and slides right to the
+// middle of the empty stretch, rather than taking a cell as wide as the stretch
+// is. A cell that wide has no height a book agrees with: the row is sized by
+// its contents, so a plant measured against its own cell ends up setting the
+// row height and lifting every book in the row off the plank.
+//
+// How far it slides is the only thing the layout has to say, and it says it as
+// a number of free cells. Written out per count because Tailwind only generates
+// the class names it can read in the source, and an interpolated one isn't
+// there to be read.
+const PLANT_GAP_NARROW: Record<number, string> = {
+	2: "[--plant-gap:2]",
+	3: "[--plant-gap:3]",
+};
+const PLANT_GAP_WIDE: Record<number, string> = {
+	2: "md:[--plant-gap:2]",
+	3: "md:[--plant-gap:3]",
+	4: "md:[--plant-gap:4]",
+};
+
 // Covers run from 0.62 to 0.80 wide-to-tall. At the full column width the tall
 // ones would outgrow the cell and push the row — and the shelf line — down, so
 // narrow those until they fit; the rest keep the column. Nothing is cropped.
@@ -68,6 +94,24 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 	const narrowRows = Math.ceil(books.length / COLUMNS_NARROW);
 	const wideRows = Math.ceil(books.length / COLUMNS);
 	const plankRows = Array.from({ length: narrowRows }, (_, index) => index);
+
+	// Same split for the plant: how much of the last row is left over depends on
+	// how many columns there are, so each layout counts its own free slots and
+	// the plant is hidden in whichever one hasn't got the room. Since it only
+	// appears where two slots are free, it always drops into an existing hole —
+	// it can never push the shelf onto another row.
+	const narrowGap = narrowRows * COLUMNS_NARROW - books.length;
+	const wideGap = wideRows * COLUMNS - books.length;
+	const showsNarrow = narrowGap >= PLANT_MIN_GAP;
+	const showsWide = wideGap >= PLANT_MIN_GAP;
+	const plantCell = [
+		showsNarrow ? "block" : "hidden",
+		showsWide ? "md:block" : "md:hidden",
+		showsNarrow && PLANT_GAP_NARROW[narrowGap],
+		showsWide && PLANT_GAP_WIDE[wideGap],
+	]
+		.filter(Boolean)
+		.join(" ");
 
 	return (
 		<section>
@@ -156,6 +200,32 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 								</a>
 							</li>
 						))}
+						{(showsNarrow || showsWide) && (
+							// A book's cell — same column, same 2:3, same baseline — slid
+							// across to the middle of the free stretch. Out of the
+							// accessibility tree entirely: it says nothing about the shelf
+							// that the list of titles doesn't, and an empty item in a list
+							// of books is worse than no item at all.
+							<li
+								aria-hidden="true"
+								className={`shelf-plant-slot relative aspect-2/3 ${plantCell}`}
+							>
+								{/* The plant's own box, so the shadow has something the
+								    size of the plant to be a percentage of rather than
+								    the cell, which is a book's width and a book's ratio. */}
+								<span className="shelf-plant-stand">
+									<span className="shelf-plant-cast" />
+									<img
+										alt=""
+										className="shelf-plant"
+										height={421}
+										loading="lazy"
+										src="/plant.webp"
+										width={400}
+									/>
+								</span>
+							</li>
+						)}
 					</ul>
 					{/* The planks ride in a second grid behind the first. Same rows,
 					    same gap, so every row's bottom edge is a shelf line — and the

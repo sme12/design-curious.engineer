@@ -176,6 +176,9 @@ Two committed directories:
   `public/`, never served.
 - `public/covers/{book_id}.webp` — resized, quality 80, served.
 
+The plant follows the same split but is not synced — see
+[The plant asset](#the-plant-asset).
+
 Rules:
 
 - **Source URL:** take `book_large_image_url` and strip the `._SX###_` /
@@ -207,6 +210,28 @@ Keeping the raws means the WebP target size can change later without going back
 to Goodreads — editions get delisted and those URLs rot. Since covers are the
 entire visual, a redesign at a different card size is a re-encode, not a
 re-fetch.
+
+### The plant asset
+
+Not part of the sync — a one-off, kept in the same two places a cover is:
+`assets/plant-raw.png` (the original, outside `public/`, never served) and
+`public/plant.webp` (400px wide, quality 72, 35KB, the same width covers are
+resized to).
+
+The original arrived on a flat blue backdrop, `rgb(2 170 253)`. Cutting it out
+was a chroma key rather than a threshold on any one channel:
+
+- **Alpha ramps on distance from the key colour**, 45 to 150. The ceiling stays
+  well under the nearest foreground colour — the cream pot sits ~216 away — or
+  the pot itself starts getting treated as a blend and comes out orange.
+- **Edge pixels are unmixed, not just faded.** An edge pixel is `α·F + (1−α)·K`
+  with a known `K`, so `F` is recoverable; without that step the whole silhouette
+  keeps a blue rim.
+- **Then despilled**, blue capped at the larger of red and green: nothing in a
+  potted plant is bluer than both.
+- **A final rim pass** neutralises what survives at the matte edge — cyan, which
+  is blue as strong as green with both above red. Dark leaves are green with red
+  low too, but their blue sits far under their green, so they don't match.
 
 ### Cover resolution
 
@@ -258,6 +283,59 @@ entirely at the breakpoint where their rows stop existing. The plank grid sizes
 its tracks with `auto-rows-fr` rather than an explicit `repeat()`, so the rows
 that survive split the height evenly on their own and the row count never has to
 be written down a second time.
+
+**The plant.** A shelf that ends mid-row ends in a hole, so the last row gets a
+potted plant — `public/plant.webp`, standing on the same line the books stand
+on, in the middle of whatever the books left over.
+
+- **Two free slots is the threshold.** With one, the plant is wedged against the
+  last book and the row just reads as full; the gap left beside it is what makes
+  it a shelf with room on it rather than a grid that ran out of books.
+- **Each layout counts its own leftovers**, the same split as the planks: 14
+  books leave two free cells at four columns and one at three, so the plant is
+  `hidden md:block`. It can never push the shelf onto another row — it only ever
+  appears where a hole already exists.
+- **It keeps a book's cell and slides across it**, rather than taking a cell as
+  wide as the free stretch. Half a cell and half a gap for every free cell past
+  the first, as a `translateX` on the `<li>`, where `50%` is the column width —
+  the only place a column measurement is available without writing the grid down
+  a second time. A cell spanning the stretch would be the obvious way to centre
+  it and is the wrong shape: the rows are sized by their contents, so a plant
+  measured against a cell that wide sets the row height itself and lifts every
+  book in the row off its plank. The count comes in as `[--plant-gap:n]`, whose
+  default lives in the `var()` and not in a declaration: `styles.css` is
+  unlayered and Tailwind's utilities aren't, so a fallback written as a rule
+  here would beat the class that's meant to override it, at every breakpoint.
+- **Its own box is out of flow** for the same reason. The plant is taller than
+  the books; in flow, that height goes into sizing the row and the plank drops
+  away from the books again.
+- **It stands further forward than the books do**, by `0.06 × --shelf-depth`,
+  which puts the pot near the middle of the plank's surface rather than in line
+  with the covers. The books are packed against the back of the shelf, which is
+  where a row of books goes; a plant is something put down on it. Measured off
+  the depth because what it's moving across is the plank's surface.
+- **A little taller than the books, or as tall as the shelf above allows.**
+  `min(108%, …)`, where the second term is the row gap less the part of it the
+  plank above hangs into (`0.34 × --shelf-depth`) and a few pixels of air. The
+  covers grow faster across breakpoints than the planks do, so which term binds
+  changes with the viewport; the cap is what keeps the leaves off the underside
+  of the next shelf at every width. It is also the ceiling on how big the plant
+  can get — somewhere around 120%, it has nowhere left to go.
+- **It's `aria-hidden`, with `alt=""`.** It says nothing about the shelf that
+  the list of titles doesn't, and an empty item in a list of books is worse than
+  no item at all.
+- **It dims with the books, not with the planks.** It's a thing standing on the
+  shelf, and the brightest green on the page staying lit while every cover
+  around it drops is the plant taking over the row. Its shadow doesn't dim: the
+  light moved, the pot didn't.
+- **Its contact shadow is drawn on the pot's footprint**, not hung off the
+  bottom of the picture. The pot's base is an ellipse, so the only part of it
+  touching the baseline is the front of the curve; the sides meet the shelf 8%
+  of the way up the file. A shadow under the lowest point alone leaves daylight
+  in the two corners where the base curves away, and daylight under a pot is a
+  pot in the air. The numbers — 54% of the width, centred 4% up — are measured
+  off the file. It sits behind the plant rather than over it (`z-index: -1`):
+  an absolutely positioned child paints above its in-flow siblings otherwise.
 
 One custom property, `--shelf-depth`, is the plank's front-to-back size and the
 only number that changes across breakpoints: the row gap and the plank's
