@@ -190,8 +190,9 @@ Rules:
   re-encoded from the raw on every run, so changing `COVER_WIDTH` takes effect
   without going back to Goodreads.
 - **Resize by width only.** Never crop, never force an aspect ratio. Covers vary
-  from squarish to tall, and cropping to a uniform box slices titles off. Cards
-  align to the top of the row instead.
+  from squarish to tall, and cropping to a uniform box slices titles off. The
+  grid takes them at their own proportions and lines their bottoms up on the
+  shelf instead.
 - **Never upscale.** See [Cover resolution](#cover-resolution).
 - **Missing cover:** if the URL contains `nophoto`, or the download 404s, or
   neither URL yields a decodable image, no file is written and `cover` is
@@ -215,9 +216,10 @@ them yields the same image. Covers are therefore stored at native size rather
 than upscaled into fake resolution.
 
 The practical consequence: a 200px-wide card renders at roughly 1.25–1.9x, not
-2x. The current draft grid uses ~100px cards, where every cover is comfortably
-above 2x. Any design landing on materially larger cards should decide whether
-that softness is acceptable.
+2x. Four columns puts cards at ~92px in the 405px content column and ~120px on
+wide screens, where even the narrowest cover in the shelf still clears 2x. Any
+design landing on materially larger cards should decide whether that softness is
+acceptable.
 
 ## Frontend
 
@@ -227,9 +229,30 @@ that softness is acceptable.
 **Data access.** A plain module import of the JSON. No server function, no
 runtime fetch, no `await` in the loader. Server-rendered as part of `/about`.
 
-**Layout.** Covers only — no title, author, or rating as text. Auto-filling grid,
-aligned to the top of each row so varying cover heights don't force a crop.
-Visual design is still a draft; see [Deferred](#deferred).
+**Layout.** Covers only — no title, author, or rating as text. Four columns at
+every breakpoint, on cells of a fixed 2:3 ratio, with each cover bottom-aligned
+inside its cell and narrowed (never cropped) if its own ratio is taller than the
+cell.
+
+**The planks.** Each row of books stands on a shelf: a thin slab built in CSS 3D
+by [`ShelfPlank.tsx`](../src/components/ShelfPlank.tsx), styled in `styles.css`.
+The planks live in a second grid overlaid on the list — same rows, same row gap
+— so the list stays a plain list of books and the shelves stay decoration
+(`aria-hidden`).
+
+Two things follow from wanting books to *rest* on something, and both are why
+the grid is no longer auto-filling:
+
+- **The column count has to be known at render time.** An auto-filling grid
+  decides its columns in the browser, which leaves the component unable to say
+  how many rows — and therefore how many planks — there are.
+- **Rows have to be a uniform height.** Covers are bottom-aligned rather than
+  top-aligned, since the bottom edge is now a contact line.
+
+One custom property, `--shelf-depth`, is the plank's front-to-back size and the
+only number that changes across breakpoints: the row gap and the plank's
+placement are both derived from it, since the projected geometry of the tipped
+slab is a fixed multiple of its depth.
 
 **The heading lives inside the component.** If the shelf is empty the component
 returns `null`, taking the heading with it. A heading placed on the About page

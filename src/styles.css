@@ -130,6 +130,12 @@
 
     /* ---------- Shadows ---------- */
     --shadow-polaroid: 0 0 41.5px 0 rgb(0 0 0 / 0.4);
+    /* A book on a shelf: a tight line where it meets the surface, then a soft
+       cast forward onto it. Both are pulled in with a negative spread so the
+       shadow falls in front of the book and not up the wall behind it — the
+       plank's own shading puts the key light at the back. */
+    --shadow-book:
+        0 1px 2px -0.5px rgb(0 0 0 / 0.7), 0 7px 9px -2px rgb(0 0 0 / 0.55);
     --inset-shadow-photo: inset 0 0 7px 0 rgb(0 0 0 / 0.16);
 
     /* ---------- Easing ---------- */
@@ -285,6 +291,141 @@
         #000 calc(var(--p) - 18%),
         transparent var(--p)
     );
+}
+
+/* ---------- Bookshelf planks ----------
+   One plank per row of books: a thin slab in CSS 3D, tipped away from the
+   camera so its top surface foreshortens to a bright line and its front edge
+   catches the light. The books stand at the back of that surface.
+
+   Everything is driven by --shelf-depth, the plank's front-to-back size, set
+   per breakpoint on the grid in Shelf.tsx. At 72deg the tipped slab projects to
+   roughly a third of that depth, centred on the scene box — so parking the
+   scene's middle on the row's bottom edge stands the books halfway back on the
+   surface rather than on its far rim. The half of the plank behind them is
+   covered by the books themselves, which is why the list is painted over the
+   planks and not under them. */
+/* Roughly a fifth of the gap is the plank hanging below the books it carries;
+   the rest is air. The coefficient is under 1 so that deepening the planks
+   spends most of itself on surface rather than on pushing the rows apart. */
+.shelf-rows {
+    row-gap: calc(0.5 * var(--shelf-depth) + 7px);
+}
+
+.shelf-scene {
+    position: absolute;
+    top: calc(100% - 0.5 * var(--shelf-depth));
+    right: 0;
+    left: 0;
+    height: var(--shelf-depth);
+    perspective: 900px;
+    perspective-origin: 50% 30%;
+}
+
+.shelf-slab {
+    position: absolute;
+    inset: 0;
+    transform: rotateX(72deg);
+    transform-style: preserve-3d;
+}
+
+.shelf-slab > * {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+}
+
+/* Thickness: stacked copies of the slab pushed deeper with translateZ, so the
+   sliver of each one that escapes the copy in front of it draws the front
+   edge. Dark at the bottom, lighter toward the lip — a vertical edge faces
+   away from the light. */
+.shelf-layer-1 { background: #464646; transform: translateZ(-5px); }
+.shelf-layer-2 { background: #4e4e4e; transform: translateZ(-4.3px); }
+.shelf-layer-3 { background: #575757; transform: translateZ(-3.6px); }
+.shelf-layer-4 { background: #616161; transform: translateZ(-2.8px); }
+.shelf-layer-5 { background: #6c6c6c; transform: translateZ(-2.1px); }
+.shelf-layer-6 { background: #797979; transform: translateZ(-1.4px); }
+.shelf-layer-7 { background: #898989; transform: translateZ(-0.8px); }
+.shelf-layer-8 { background: #9c9c9c; transform: translateZ(-0.35px); }
+
+/* Top face: light-gray base with a back-to-front falloff, plus inset shadows
+   for edge occlusion. */
+.shelf-face {
+    transform: translateZ(0);
+    background: linear-gradient(
+        180deg,
+        #e3e3e3 0%,
+        #dddddd 40%,
+        #d5d5d5 70%,
+        #cbcbcb 90%,
+        #c1c1c1 100%
+    );
+    box-shadow:
+        inset 0 1px 3px rgb(255 255 255 / 0.5),
+        inset 0 -1px 2px rgb(38 38 38 / 0.14),
+        inset 0 -5px 10px rgb(38 38 38 / 0.06),
+        inset 10px 0 20px rgb(38 38 38 / 0.05),
+        inset -10px 0 20px rgb(38 38 38 / 0.05);
+}
+
+/* Faint diagonal satin sweep: alternating soft bright bands and gray troughs.
+   Raise the alphas for a glossier finish. */
+.shelf-sweep {
+    transform: translateZ(0.2px);
+    background: linear-gradient(
+        105deg,
+        rgb(99 99 99 / 0.1) 0%,
+        rgb(255 255 255 / 0) 22%,
+        rgb(255 255 255 / 0.28) 38%,
+        rgb(114 114 114 / 0.07) 55%,
+        rgb(255 255 255 / 0.22) 72%,
+        rgb(255 255 255 / 0) 86%,
+        rgb(99 99 99 / 0.1) 100%
+    );
+}
+
+/* Off-center key-light reflection near the back. */
+.shelf-sheen {
+    transform: translateZ(0.4px);
+    background: radial-gradient(
+        130% 100% at 42% 0%,
+        rgb(255 255 255 / 0.32) 0%,
+        rgb(255 255 255 / 0) 60%
+    );
+}
+
+/* Shadow the plank drops on the section behind it, hung off the front lip:
+   0.66 x depth is where that lip lands in the scene box, so the shadow starts
+   there whatever the plank's depth. Two layers, because one gradient can only
+   be one softness — a tight core directly under the lip, and a wide pool that
+   spreads and fades as it falls away from it. The mask keeps the ends from
+   stopping square, and the whole thing is blurred once on top. */
+.shelf-cast {
+    position: absolute;
+    top: calc(0.66 * var(--shelf-depth) + 1px);
+    right: -2%;
+    left: -2%;
+    height: calc(0.4 * var(--shelf-depth) + 6px);
+    background:
+        linear-gradient(
+            180deg,
+            rgb(0 0 0 / 0.55) 0%,
+            rgb(0 0 0 / 0.2) 24%,
+            transparent 48%
+        ),
+        radial-gradient(
+            74% 88% at 50% 4%,
+            rgb(0 0 0 / 0.3) 0%,
+            transparent 72%
+        );
+    mask-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        #000 6%,
+        #000 94%,
+        transparent 100%
+    );
+    filter: blur(4px);
 }
 
 @layer base {
