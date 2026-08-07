@@ -428,6 +428,222 @@
     filter: blur(4px);
 }
 
+/* ---------- Books ----------
+   A cover is a flat picture until you can see the book has pages. On hover it
+   turns on its vertical axis and steps forward off the shelf, which opens up
+   its right-hand side — so there has to be something there. `book-edge` is that
+   side: a strip as wide as the book is thick, hinged on the cover's right edge
+   and folded a quarter turn backwards, so it runs from the front cover to where
+   the back one would be. Folded flat it has no width on screen and costs
+   nothing; the turn is the whole reveal.
+
+   The book pivots on its bottom edge and the camera sits low, both to keep it
+   standing on the plank — a book that rotates about its middle lifts off the
+   shelf and floats. */
+.book {
+    perspective: 620px;
+    perspective-origin: 50% 70%;
+    --book-turn: none;
+    transition: filter 340ms var(--ease-out-cubic);
+}
+
+.book-body {
+    display: block;
+    position: relative;
+    transform-origin: 50% 100%;
+    transform-style: preserve-3d;
+    transform: var(--book-turn);
+    transition: transform 340ms var(--ease-out-cubic);
+}
+
+/* Forward on Z rather than scaled: the perspective does the growing, so the
+   book reads as coming toward you off the shelf instead of inflating in place.
+   Held in a variable because the hover half of it is gated on a real pointer
+   and the focus half can't be. */
+@media (hover: hover) {
+    .book-slot:hover .book {
+        --book-turn: translate3d(0, -4px, 44px) rotateY(-25deg);
+    }
+}
+
+.book:focus-visible {
+    --book-turn: translate3d(0, -4px, 44px) rotateY(-25deg);
+}
+
+/* What you're hovering is the grid cell, not the cover. Two gaps sit between
+   one cover and the next: the column gap, and the slack either side of a cover
+   narrow enough to not fill its cell — and crossing either of them un-hovers
+   everything, so sliding along a row flashes the whole shelf back to full
+   brightness between books. The cell closes the second gap. ::before closes the
+   first, reaching half the column gap out on each side so neighbouring targets
+   meet exactly rather than overlapping.
+
+   Transparent, and drawn before the anchor, so the link still takes the clicks
+   over the cover itself. The row gap is deliberately left open: that one is
+   shelf, and there's no flicker to fix in a move nothing is chasing across. */
+.book-slot::before {
+    content: '';
+    position: absolute;
+    inset: 0 calc(-0.5 * var(--book-gap));
+}
+
+/* In front of its neighbours once it turns — it now overlaps them. */
+@media (hover: hover) {
+    .book-slot:hover {
+        z-index: 20;
+    }
+}
+
+.book-slot:has(.book:focus-visible) {
+    z-index: 20;
+}
+
+/* One book comes forward into the light, so the rest of the shelf falls back
+   out of it. Scoped to the row list rather than the page, so a shelf only dims
+   its own books. Brightness alone reads as a grey wash over covers this
+   saturated, so a little colour comes out with the light.
+
+   No filter at rest — the rule only exists while something is hovered — which
+   keeps the resting shelf exactly what it was, and keeps every book off the
+   compositor until it has a reason to be there. */
+@media (hover: hover) {
+    .shelf-rows:has(.book-slot:hover) .book-slot:not(:hover) .book {
+        filter: brightness(0.64) saturate(0.85);
+    }
+}
+
+.shelf-rows:has(.book:focus-visible) .book:not(:focus-visible) {
+    filter: brightness(0.64) saturate(0.85);
+}
+
+/* The planks go with them, or the brightest thing on a shelf full of dimmed
+   books is the furniture. They dim less far: they're one continuous surface
+   running under the hovered book as well as the rest, so they can't go as dark
+   as the books without cutting the one book that's meant to stand in the light
+   off from what it's standing on. The plank grid is the ul's next sibling. */
+@media (hover: hover) {
+    .shelf-rows:has(.book-slot:hover) + .shelf-rows {
+        filter: brightness(0.82);
+    }
+}
+
+.shelf-rows:has(.book:focus-visible) + .shelf-rows {
+    filter: brightness(0.82);
+}
+
+.shelf-rows + .shelf-rows {
+    transition: filter 340ms var(--ease-out-cubic);
+}
+
+/* The pool the lifted book casts on the plank. A separate blurred element and
+   not a second box-shadow on the cover, for two reasons: box-shadow can't be
+   composited, so animating one repaints the book every frame — inside a
+   rotating preserve-3d element, which is where that gets expensive — and a
+   shadow on the cover turns with the cover, when a pool on a shelf should stay
+   on the shelf. Only opacity and transform move here, so the blur is painted
+   once and the animation stays on the compositor.
+
+   The resting shadow is still `--shadow-book` on the cover itself, untouched
+   and never transitioned: that one is the book's own contact line and belongs
+   to the book, so it should travel with it. */
+.book-cast {
+    position: absolute;
+    z-index: -1;
+    /* Sized off the plank, not off the book. What's in front of the book is
+       shelf, and the shelf is 0.16 x depth of surface below the row's baseline
+       before the front lip — so a pool measured as a share of the *cover* runs
+       straight off the edge on wide screens, where the covers grow faster than
+       the planks do. This way it lands on the surface at every breakpoint. */
+    right: -8%;
+    bottom: calc(-0.16 * var(--shelf-depth) + 3px);
+    left: -8%;
+    /* Stops 3px short of the lip, which the 2.5px blur then spends: a pool that
+       reaches the edge of the shelf spills off it. */
+    height: calc(0.16 * var(--shelf-depth) - 3px);
+    /* Weighted to the top rather than centred: the book's base sits at the top
+       of this box, so the dark end has to be near there — a pool centred on the
+       contact line spends its core behind the cover and only clears it where it
+       has already faded out. Same reason .shelf-cast is built this way.
+
+       It ramps *in* over the first quarter instead of starting at full strength.
+       The top of this box is a hard boundary, so a gradient that opens at its
+       darkest cuts a straight line across the plank everywhere the book isn't
+       standing over it — which, since the book leans left off its own footprint,
+       is most of it. */
+    background: linear-gradient(
+        180deg,
+        rgb(0 0 0 / 0.1) 0%,
+        rgb(0 0 0 / 0.44) 26%,
+        rgb(0 0 0 / 0.16) 60%,
+        transparent 88%
+    );
+    /* Without this the ends stop square and the pool reads as a smudge rather
+       than as something cast by a book. */
+    mask-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        #000 22%,
+        #000 78%,
+        transparent 100%
+    );
+    filter: blur(2.5px);
+    opacity: 0;
+    /* Grows down and out from the contact line, which is the one part of it
+       that shouldn't move. */
+    transform-origin: 50% 0;
+    transform: scale(0.72, 0.6);
+    transition:
+        opacity 340ms var(--ease-out-cubic),
+        transform 340ms var(--ease-out-cubic);
+}
+
+/* Wider than it is taller, and nudged the way the book leans: the turn brings
+   the left edge forward, so the pool goes with it. */
+.book-slot:hover .book-cast,
+.book:focus-visible .book-cast {
+    opacity: 1;
+    transform: translate(-2%, 0) scale(1.12, 1);
+}
+
+/* The page block. 0% is the back of the book and 100% the front: the light and
+   the open air are both at the front, so it darkens as it goes back, with a
+   line at either end where the covers overhang it. The repeating stops are the
+   page edges — the turn foreshortens them to well under half their width, so
+   they're spaced wide enough here to survive it as grain rather than mush.
+   Inset a hair top and bottom, the way a text block sits inside its covers. */
+.book-edge {
+    position: absolute;
+    top: 1px;
+    right: 0;
+    bottom: 1px;
+    width: var(--book-thickness, 14%);
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgb(116 100 72 / 0.32) 0 0.5px,
+            rgb(255 255 255 / 0) 0.5px 2.4px
+        ),
+        linear-gradient(
+            90deg,
+            #8f8674 0%,
+            #cabfa8 16%,
+            #f1ebdf 44%,
+            #e4dccb 74%,
+            #b9af99 94%,
+            #8a8170 100%
+        );
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .book,
+    .book-body,
+    .book-cast {
+        transition: none;
+    }
+}
+
 @layer base {
     /* :where() keeps specificity at (0,1,0) even after the minifier merges
        this list into :is(), so the outline:none overrides below still win */

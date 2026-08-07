@@ -258,6 +258,86 @@ slab is a fixed multiple of its depth.
 returns `null`, taking the heading with it. A heading placed on the About page
 would survive an empty shelf and orphan itself above nothing.
 
+**The turn.** On hover the book rotates on its vertical axis and moves toward
+the camera, which opens up its right-hand side — so `.book-edge` is there to be
+found: a strip as wide as the book is thick, hinged on the cover's right edge
+and folded a quarter turn backwards. Edge-on it projects to nothing, so at rest
+the shelf renders exactly as it did before, and one element covers the whole
+effect.
+
+- The book pivots on its **bottom edge**, and the perspective origin sits low,
+  so it stays standing on the plank. Rotating about the middle lifts it off.
+- It steps forward on **Z rather than scaling up** — the perspective does the
+  growing, so it reads as coming toward you off the shelf instead of inflating
+  in place.
+- Thickness is a **percentage of the cover's own width**, so the page block is
+  the right size at every breakpoint with no second set of numbers. The value
+  per book is a hash of its Goodreads id: Goodreads gives us no page count, and
+  a shelf where every book is the same thickness reads as a pattern rather than
+  as books.
+- The hover half is gated behind `@media (hover: hover)`; `:focus-visible` gets
+  the same turn, so keyboard users see the book they're on.
+
+**What you hover is the cell, not the cover** — `.book-slot`, the `<li>`, with a
+`::before` reaching half the column gap out on either side. Two gaps sit between
+one cover and the next: the column gap itself, and the slack either side of a
+cover too narrow to fill its cell (which is most of them — see `coverWidth`).
+With the hover on the cover, crossing either one un-hovers everything, and
+sliding along a row flashes the whole shelf back to full brightness between
+books. The cell closes the second gap and the `::before` closes the first,
+reaching *exactly* half the gap so neighbouring targets meet rather than overlap.
+The pseudo-element is transparent and is drawn before the anchor, so the link
+still takes the clicks over the cover.
+
+The gap is a variable, `--book-gap`, set per breakpoint next to `--shelf-depth`
+and fed to the grid — the hover target has to be widened by the same number the
+grid is spaced by, and there should only be one of it.
+
+The **row** gap is deliberately left open. That one is shelf, not a seam between
+neighbours, and there's no flicker to fix in a movement nothing is chasing across.
+
+**Two shadows, and why one of them isn't a `box-shadow`.** The resting shadow is
+`--shadow-book` on the cover, and it is never animated: it's the book's own
+contact line, so it belongs to the book and should travel with it. The pool the
+lifted book casts on the plank is a separate blurred element, `.book-cast`,
+sitting outside the rotating body. Animating a `box-shadow` instead would repaint
+the book every frame — a shadow can't be composited — and inside a rotating
+`preserve-3d` element that flickers. Only `opacity` and `transform` move on the
+cast, so the blur is painted once. It's also the correct geometry: a shadow on
+the cover turns with the cover, when a pool on a shelf should stay on the shelf.
+It's weighted toward its own top edge, since a pool centred on the contact line
+spends its dark core behind the cover and only clears it where it has already
+faded — but it ramps *in* over the first quarter rather than opening at full
+strength, because the top of the box is a hard boundary and the book only stands
+over part of it.
+
+The cast is sized off `--shelf-depth`, not off the cover. What's in front of the
+book is *shelf*, and the surface between the book's baseline and the front lip
+is `0.16 × depth`. Measured as a share of the cover instead, the pool runs off
+the front of the plank on wide screens, where the covers grow faster than the
+planks do. Its ends are masked for the same reason `.shelf-cast`'s are: a
+gradient that stops square reads as a smudge.
+
+**The rest of the shelf steps back.** While one book is hovered, every other
+book takes `filter: brightness(0.64) saturate(0.85)`, and the planks take
+`brightness(0.82)`. Two things worth knowing about it:
+
+- The rule is written as `.shelf-rows:has(.book-slot:hover) .book-slot:not(:hover)
+  .book`, so **nothing carries a filter at rest**. That keeps the resting shelf
+  byte-for-byte what it was, and keeps every book off the compositor until it has
+  a reason to be there. Scoping to `.shelf-rows` rather than the page means a
+  shelf only ever dims its own books.
+- The planks dim, but **less far**. They're one continuous surface running under
+  the hovered book as well as the rest, so taking them as dark as the books would
+  cut the one book meant to stand in the light off from what it's standing on.
+  Leaving them undimmed is worse still: the brightest thing on a shelf full of
+  dimmed books ends up being the furniture.
+
+A `filter` on `.book` sounds like it should flatten the `preserve-3d` body
+underneath it. It doesn't — `.book` carries `perspective`, not `preserve-3d`, and
+a book that is dimmed *and* mid-turn (which happens whenever you move from one
+book straight to the next) still renders its page block in 3D.
+
 **Interaction.** The whole card links to `book.link` on Goodreads.
 
 - Pointer devices: title on hover.
