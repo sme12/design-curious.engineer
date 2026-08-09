@@ -57,8 +57,13 @@ export function About() {
 
 				    The picture is out of flow, or its own height would size the row
 				    and the row would size it back. Anchored to the bottom, because
-				    the box is the frame and the wire above it belongs outside. */}
-				<span className="about-wallpicture pointer-events-none hidden md:block md:justify-self-center md:self-stretch">
+				    the box is the frame and the wire above it belongs outside.
+
+				    It takes pointer events, unlike most decoration, because it has a
+				    hover — see .about-wallpicture in styles.css. The box is the frame
+				    only, but the wire is a child of it and overflows the top, so
+				    hovering the wire counts too. */}
+				<span className="about-wallpicture hidden md:block md:justify-self-center md:self-stretch">
 					<span className="about-wallpicture-cast" />
 					<img
 						alt=""
@@ -78,8 +83,12 @@ export function About() {
 				    exactly — this asset is cropped to the instrument with nothing
 				    spare, so there is no wire to hang over an edge. The shadow, drawn
 				    off a traced silhouette, see .about-guitar-cast, measures itself
-				    against that same box. */}
-				<span className="about-guitar pointer-events-none hidden md:block md:justify-self-center md:self-stretch">
+				    against that same box — hover included, where both grow.
+
+				    Which means its hover area is the instrument's bounding box, air
+				    in the crook of the body and all. Nothing else is near enough for
+				    that to be in anybody's way. */}
+				<span className="about-guitar hidden md:block md:justify-self-center md:self-stretch">
 					<span className="about-guitar-cast" />
 					<img
 						alt=""

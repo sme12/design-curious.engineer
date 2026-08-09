@@ -292,48 +292,131 @@
         transparent var(--p)
     );
 }
+/* ---------- The two pictures on the about page ----------
+   Both hang on the same wall, and on hover both come off it towards you: a
+   little bigger, a little higher, and — the part that sells it — a shadow that
+   grows and softens with them. Depth here is a shadow's job. Scale alone reads
+   as a picture inflating in place, because a picture that got nearer would have
+   moved away from the wall behind it, and the shadow is the only thing on
+   screen that knows where that wall is.
+
+   So the caster's own scale is deliberately the smaller of the two moves. The
+   shadow steps further out from under it, spreads wider than the frame does,
+   and blurs by more than double — which is what the gap between a thing and
+   the surface behind it does to the shadow it casts.
+
+   The pair of them share the variables below and differ only in numbers: the
+   guitar's shadow starts further out and softer, since it hangs proud of the
+   wall on a hook and the framed picture sits nearly flat against it. */
+.about-wallpicture,
 .about-guitar {
     position: relative;
+    /* Set at rest as well as on hover so the two states stack the same way:
+       any value but `none` here opens a stacking context, and switching one on
+       and off under an element whose shadow lives at z-index -1 is a change in
+       paint order halfway through a transition. */
+    translate: 0 0;
+    scale: 1;
+    transition:
+        translate 340ms var(--ease-out-cubic),
+        scale 340ms var(--ease-out-cubic);
+}
+
+/* Both halves of the query earn their place. A hover that sticks is worse than
+   no hover on a touch screen, and this one has nothing to say — it isn't
+   feedback on anything, just a picture pretending to be nearer. Which is also
+   why reduced motion turns it off outright rather than snapping to the hovered
+   state the way an interactive element would: with the movement gone there is
+   nothing left of it worth landing on. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .about-wallpicture:hover,
+    .about-guitar:hover {
+        translate: 0 -0.5rem;
+        scale: 1.025;
+    }
+}
+
+/* What the shadows have in common. Each one reads these; hovering the picture
+   is what moves them. */
+.about-wallpicture-cast,
+.about-guitar-cast {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    translate: var(--cast-offset) var(--cast-offset);
+    /* On top of the caster's, since this element is inside it — the two
+       multiply, and the shadow ends up the wider of the two. */
+    scale: var(--cast-grow);
+    transition:
+        translate 340ms var(--ease-out-cubic),
+        scale 340ms var(--ease-out-cubic),
+        filter 340ms var(--ease-out-cubic),
+        background-color 340ms var(--ease-out-cubic);
+}
+
+.about-guitar {
     aspect-ratio: 400 / 1193;
 }
 
 .about-guitar-cast {
     --cast-offset: 0.5rem;
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    translate: var(--cast-offset) var(--cast-offset);
+    --cast-blur: 0.625rem;
+    --cast-grow: 1;
+    --cast-alpha: 0.26;
     /* The blur is here and the mask is on the child, in that order on purpose.
        An element is filtered first and masked second, so the two on one element
        would blur a plain rectangle and then cut a hard-edged guitar out of it.
        Masking below and blurring here runs it the other way round, and the
        penumbra is free to spread past the silhouette's edge. */
-    filter: blur(0.625rem);
+    filter: blur(var(--cast-blur));
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .about-guitar:hover .about-guitar-cast {
+        --cast-offset: 1.125rem;
+        --cast-blur: 1.375rem;
+        --cast-grow: 1.05;
+        --cast-alpha: 0.3;
+    }
 }
 
 .about-guitar-cast::before {
     content: '';
     display: block;
     height: 100%;
-    background: rgb(0 0 0 / 0.26);
+    background: rgb(0 0 0 / var(--cast-alpha));
     mask-image: url('/guitar-shadow.svg');
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
+    transition: background-color 340ms var(--ease-out-cubic);
 }
 
 .about-wallpicture {
-    position: relative;
     aspect-ratio: 400 / 601;
 }
 
 .about-wallpicture-cast {
     --cast-offset: 0.3125rem;
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    translate: var(--cast-offset) var(--cast-offset);
-    background: rgb(0 0 0 / 0.26);
-    filter: blur(0.3125rem);
+    --cast-blur: 0.3125rem;
+    --cast-grow: 1;
+    --cast-alpha: 0.26;
+    background: rgb(0 0 0 / var(--cast-alpha));
+    filter: blur(var(--cast-blur));
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .about-wallpicture:hover .about-wallpicture-cast {
+        --cast-offset: 0.625rem;
+        --cast-blur: 0.8125rem;
+        --cast-grow: 1.03;
+        /* Lighter than at rest, and the only one of the two that goes that way.
+           This shadow is a solid rectangle the size of the frame, so spreading
+           it puts a lot more ink on the wall than spreading a guitar-shaped one
+           does — and a shadow cast from further off is softer *and* fainter,
+           since the same darkness is spread over more of the wall. Holding the
+           alpha would have read as the frame getting heavier as it lifted. */
+        --cast-alpha: 0.2;
+    }
 }
 
 /* ---------- Bookshelf planks ----------
