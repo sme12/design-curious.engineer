@@ -1,6 +1,5 @@
-import { animate } from "motion";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
-import { useCallback, useEffect, useRef } from "react";
+import { useUnderlineBounce } from "./useUnderlineBounce";
 
 type BouncingUnderlineLinkProps = Omit<
 	ComponentPropsWithoutRef<"a">,
@@ -21,27 +20,7 @@ export function BouncingUnderlineLink({
 	onMouseEnter,
 	...props
 }: BouncingUnderlineLinkProps) {
-	const underlineRef = useRef<HTMLSpanElement>(null);
-	const anim = useRef<ReturnType<typeof animate>>(undefined);
-
-	// Hop toward the text, then spring back down with a little overshoot
-	const bounceUnderline = useCallback(() => {
-		const line = underlineRef.current;
-		if (!line || matchMedia("(prefers-reduced-motion: reduce)").matches) {
-			return;
-		}
-
-		// Scale the hop to the line box so tight line-heights don't overlap the text
-		const hop = bounceHeight ?? (line.parentElement?.offsetHeight ?? 24) * 0.1;
-
-		anim.current?.cancel();
-		anim.current = animate([
-			[line, { y: -hop }, { duration: 0.12, ease: "easeOut" }],
-			[line, { y: 0 }, { type: "spring", stiffness: 550, damping: 9 }],
-		]);
-	}, [bounceHeight]);
-
-	useEffect(() => () => anim.current?.cancel(), []);
+	const { bounce, underlineRef } = useUnderlineBounce(bounceHeight);
 
 	return (
 		<a
@@ -51,13 +30,13 @@ export function BouncingUnderlineLink({
 			onFocus={(event) => {
 				onFocus?.(event);
 				if (!event.defaultPrevented) {
-					bounceUnderline();
+					bounce();
 				}
 			}}
 			onMouseEnter={(event) => {
 				onMouseEnter?.(event);
 				if (!event.defaultPrevented) {
-					bounceUnderline();
+					bounce();
 				}
 			}}
 		>

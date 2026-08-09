@@ -1,3 +1,4 @@
+import { GITHUB_URL, LINKEDIN_URL, X_URL } from "../config/contact";
 import { CopyEmailButton } from "./CopyEmailButton";
 import { GitHubIcon, LinkedInIcon, XIcon } from "./icons";
 import { Polaroid } from "./Polaroid";
@@ -23,7 +24,7 @@ export function Hero() {
 							<a
 								aria-label="GitHub"
 								className="btn btn-icon"
-								href="https://github.com/sme12"
+								href={GITHUB_URL}
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -32,7 +33,7 @@ export function Hero() {
 							<a
 								aria-label="LinkedIn"
 								className="btn btn-icon"
-								href="https://www.linkedin.com/in/vitalii-sazanov/"
+								href={LINKEDIN_URL}
 								target="_blank"
 								rel="noreferrer"
 							>
@@ -41,7 +42,7 @@ export function Hero() {
 							<a
 								aria-label="X (Twitter)"
 								className="btn btn-icon"
-								href="https://x.com/vitalii_sazanov"
+								href={X_URL}
 								target="_blank"
 								rel="noreferrer"
 							>

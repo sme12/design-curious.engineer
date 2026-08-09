@@ -1,4 +1,8 @@
 import { useRef } from "react";
+import { LINKEDIN_URL, X_URL } from "../config/contact";
+import { BouncingUnderlineLink } from "./BouncingUnderlineLink";
+import { CopyEmailLink } from "./CopyEmailLink";
+import { LinkedInIcon, XIcon } from "./icons";
 import { useGuitarNote } from "./useGuitarNote";
 
 // Broken into lines by hand: the note is set to its own width out in the page
@@ -42,14 +46,18 @@ export function About() {
 				<div className="space-y-6 text-pretty md:col-span-2 2xl:space-y-8">
 					<p className="text-body 2xl:text-body-xl">
 						Hey! My name is Vitalii (Vitaly, Vitaliy, Виталий). I live in
-						Finland with my wife Lena, and our dog, Rudy.
+						Finland with my wife, Lena, and our dog, Rudy.
+					</p>
+					<p className="text-body 2xl:text-body-xl">
+						So, how did I end up making websites for a living? It's a bit of a
+						story.
 					</p>
 					<p className="text-body 2xl:text-body-xl">
 						I got into computers early on as a kid, but through the wrong door.
 						While everyone around me was either playing games or writing
 						"programs," I was tinkering with Photoshop and Macromedia Flash, and
 						writing HTML and CSS in Notepad. If you remember the 2000s, you
-						probably remember websites full of Flash animation, scrolling
+						probably remember websites full of Flash animations, scrolling
 						marquee text, and blinking GIFs everywhere. Those were pretty much
 						the kinds of websites I was making at the time.
 					</p>
@@ -229,7 +237,7 @@ export function About() {
 						I didn't take the hobby too seriously, though, because it didn't
 						look nearly as cool as what "real" hackers were doing in the movies,
 						and kids want to be cool. So eventually, I switched hobbies and
-						started a punk band instead. I spent 10 years playing in a band,
+						started a punk band instead. I spent years playing in a band,
 						putting most of my creative energy into songwriting and leaving my
 						web dev and design passion for occasional updates to the band's
 						website.
@@ -242,14 +250,41 @@ export function About() {
 						and gave it a shot.
 					</p>
 				</div>
-				{/* The ending, across the full measure and under both pictures — the
-				    story's two halves have had their column each, and this is the line
-				    that puts them together. */}
+				{/* The ending and the invitation after it, across the full measure and
+				    under both pictures — the story's two halves have had their column
+				    each, and these are the lines that put them together. */}
 				<p className="text-body text-pretty md:col-span-3 2xl:text-body-xl">
-					Somehow, that favor turned into a long-term career in frontend
-					development. So, after taking a ten-year detour through punk rock, I
-					ended up pretty close to where I started: sitting in front of a
-					computer, moving pixels around, and trying to make websites better.
+					Somehow, that favor turned into a long-term and, so far, pretty
+					successful career in web development. So, after taking a detour
+					through punk rock, I ended up pretty close to where I started:
+					tinkering with design tools, writing code, and moving pixels around.
+					And I've never been happier doing what I love.
+				</p>
+				<p className="text-body text-pretty md:col-span-3 2xl:text-body-xl">
+					If you're also passionate about design and engineering, or think we
+					could work together on something cool, feel free to connect with me on{" "}
+					<BouncingUnderlineLink
+						href={LINKEDIN_URL}
+						leading={
+							<LinkedInIcon className="mx-0.5 inline-block size-4.5 align-text-bottom 2xl:size-5" />
+						}
+						rel="noreferrer"
+						target="_blank"
+					>
+						LinkedIn
+					</BouncingUnderlineLink>
+					,{" "}
+					<BouncingUnderlineLink
+						href={X_URL}
+						leading={
+							<XIcon className="mx-0.5 inline-block size-4.5 align-text-bottom 2xl:size-5" />
+						}
+						rel="noreferrer"
+						target="_blank"
+					>
+						Twitter
+					</BouncingUnderlineLink>
+					, or via <CopyEmailLink />
 				</p>
 			</div>
 		</section>
