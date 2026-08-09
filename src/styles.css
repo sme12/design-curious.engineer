@@ -302,8 +302,10 @@
 
    So the caster's own scale is deliberately the smaller of the two moves. The
    shadow steps further out from under it, spreads wider than the frame does,
-   and blurs by more than double — which is what the gap between a thing and
-   the surface behind it does to the shadow it casts.
+   and softens — which is what the gap between a thing and the surface behind
+   it does to the shadow it casts. How far it goes is held to the size of the
+   lift, though: a shadow that balloons under an element that barely moved
+   stops reading as distance and starts reading as a glow behind a sticker.
 
    The pair of them share the variables below and differ only in numbers: the
    guitar's shadow starts further out and softer, since it hangs proud of the
@@ -391,11 +393,23 @@
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    /* Softer and further out than at rest, but not by much more than the
+       guitar itself moved. The silhouette is the constraint the frame doesn't
+       have: the neck is only a few dozen pixels across, and a penumbra is paid
+       out of both sides of whatever casts it, so past a certain radius the
+       blur is spending more of the neck's ink outside its own outline than it
+       leaves within. The shadow doesn't so much darken a neck as sit near one.
+       Keeping the blur inside the narrowest part of the shape is what lets it
+       stay a guitar.
+
+       Which is also why the alpha holds where it rests instead of taking the
+       4% the frame's takes for its extra area. This shape grows by the same
+       4%, but it has already given up more than that to the blur running off
+       its edges, so the honest discount was spent before it got here. */
     .about-guitar:hover .about-guitar-cast {
-        --cast-offset: 1.125rem;
-        --cast-blur: 1.375rem;
-        --cast-grow: 1.05;
-        --cast-alpha: 0.3;
+        --cast-offset: 0.75rem;
+        --cast-blur: 0.875rem;
+        --cast-grow: 1.02;
     }
 }
 
@@ -454,17 +468,26 @@
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    /* Offset and blur move by the same 5px, because both of them are the gap
+       between the frame and the wall wearing different hats — one is how far
+       the light throws the shadow sideways, the other is how wide the edge of
+       the light source smears it — and a single lift cannot change one without
+       changing the other in step. Which is also why these two deltas match the
+       guitar's to within a pixel: the two objects lift by the same 8px, so the
+       same amount is added to each. What differs is where they start, and that
+       is the whole difference between a frame sitting nearly flat on the wall
+       and an instrument hanging off a hook. */
     .about-wallpicture:hover .about-wallpicture-cast {
         --cast-offset: 0.625rem;
-        --cast-blur: 0.8125rem;
-        --cast-grow: 1.03;
-        /* Lighter than at rest, and the only one of the two that goes that way.
-           This shadow is a solid rectangle the size of the frame, so spreading
-           it puts a lot more ink on the wall than spreading a guitar-shaped one
-           does — and a shadow cast from further off is softer *and* fainter,
-           since the same darkness is spread over more of the wall. Holding the
-           alpha would have read as the frame getting heavier as it lifted. */
-        --cast-alpha: 0.2;
+        --cast-blur: 0.625rem;
+        --cast-grow: 1.02;
+        /* Exactly the drop the extra area pays for and no more: the shadow
+           covers 1.02² ≈ 4% more wall, so the ink covering it thins by the
+           same 4%. That is the whole of the honest discount — a lift spreads
+           the light an object blocks, it never destroys any, and it certainly
+           never blocks more. Anything past this point is no longer the frame
+           moving, it is the room's lighting changing to suit it. */
+        --cast-alpha: 0.25;
     }
 }
 
