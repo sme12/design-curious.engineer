@@ -292,6 +292,49 @@
         transparent var(--p)
     );
 }
+.about-guitar {
+    position: relative;
+    aspect-ratio: 400 / 1193;
+}
+
+.about-guitar-cast {
+    --cast-offset: 0.5rem;
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    translate: var(--cast-offset) var(--cast-offset);
+    /* The blur is here and the mask is on the child, in that order on purpose.
+       An element is filtered first and masked second, so the two on one element
+       would blur a plain rectangle and then cut a hard-edged guitar out of it.
+       Masking below and blurring here runs it the other way round, and the
+       penumbra is free to spread past the silhouette's edge. */
+    filter: blur(0.625rem);
+}
+
+.about-guitar-cast::before {
+    content: '';
+    display: block;
+    height: 100%;
+    background: rgb(0 0 0 / 0.26);
+    mask-image: url('/guitar-shadow.svg');
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+}
+
+.about-wallpicture {
+    position: relative;
+    aspect-ratio: 400 / 601;
+}
+
+.about-wallpicture-cast {
+    --cast-offset: 0.3125rem;
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    translate: var(--cast-offset) var(--cast-offset);
+    background: rgb(0 0 0 / 0.26);
+    filter: blur(0.3125rem);
+}
 
 /* ---------- Bookshelf planks ----------
    One plank per row of books: a thin slab in CSS 3D, tipped away from the
@@ -359,14 +402,38 @@
    sliver of each one that escapes the copy in front of it draws the front
    edge. Dark at the bottom, lighter toward the lip — a vertical edge faces
    away from the light. */
-.shelf-layer-1 { background: #1a1a1a; transform: translateZ(-5px); }
-.shelf-layer-2 { background: #1d1d1d; transform: translateZ(-4.3px); }
-.shelf-layer-3 { background: #212121; transform: translateZ(-3.6px); }
-.shelf-layer-4 { background: #242424; transform: translateZ(-2.8px); }
-.shelf-layer-5 { background: #292929; transform: translateZ(-2.1px); }
-.shelf-layer-6 { background: #2e2e2e; transform: translateZ(-1.4px); }
-.shelf-layer-7 { background: #343434; transform: translateZ(-0.8px); }
-.shelf-layer-8 { background: #3b3b3b; transform: translateZ(-0.35px); }
+.shelf-layer-1 {
+    background: #1a1a1a;
+    transform: translateZ(-5px);
+}
+.shelf-layer-2 {
+    background: #1d1d1d;
+    transform: translateZ(-4.3px);
+}
+.shelf-layer-3 {
+    background: #212121;
+    transform: translateZ(-3.6px);
+}
+.shelf-layer-4 {
+    background: #242424;
+    transform: translateZ(-2.8px);
+}
+.shelf-layer-5 {
+    background: #292929;
+    transform: translateZ(-2.1px);
+}
+.shelf-layer-6 {
+    background: #2e2e2e;
+    transform: translateZ(-1.4px);
+}
+.shelf-layer-7 {
+    background: #343434;
+    transform: translateZ(-0.8px);
+}
+.shelf-layer-8 {
+    background: #3b3b3b;
+    transform: translateZ(-0.35px);
+}
 
 /* Top face: graphite base with a back-to-front falloff, plus inset shadows for
    edge occlusion. The falloff keeps its old step sizes — the surface loses the
@@ -436,11 +503,7 @@
             rgb(0 0 0 / 0.2) 24%,
             transparent 48%
         ),
-        radial-gradient(
-            74% 88% at 50% 4%,
-            rgb(0 0 0 / 0.3) 0%,
-            transparent 72%
-        );
+        radial-gradient(74% 88% at 50% 4%, rgb(0 0 0 / 0.3) 0%, transparent 72%);
     mask-image: linear-gradient(
         90deg,
         transparent 0%,

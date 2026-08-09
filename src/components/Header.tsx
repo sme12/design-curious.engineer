@@ -3,20 +3,16 @@ import { Link } from "@tanstack/react-router";
 import { TornSurface } from "./TornSurface";
 
 export function Header({ standalone = false }: { standalone?: boolean }) {
-	// On the frontpage the wordmark is the page's h1; elsewhere the page owns
-	// its own h1 and the wordmark is just a mark.
-	const Wordmark = standalone ? "p" : "h1";
-
 	const row = (
 		<div className="mx-auto flex max-w-content items-center justify-between px-gutter py-6 text-paper-muted text-small md:px-0 md:py-10 2xl:max-w-content-xl 2xl:text-small-xl">
-			<Wordmark>
+			<h1>
 				<Link
 					className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper lowercase"
 					to="/"
 				>
 					Vitalii Sazanov
 				</Link>
-			</Wordmark>
+			</h1>
 			<nav className="flex items-center gap-6">
 				<Link
 					activeProps={{ className: "text-paper" }}

@@ -25,7 +25,7 @@ export function Bookshelf() {
 						See everything I read, including the books I hope will not only make
 						me a better professional but also a better person, on my{" "}
 						<BouncingUnderlineLink
-							className="text-paper hover:text-paper-muted"
+							className="text-paper hover:text-white"
 							href="https://www.goodreads.com/user/show/107695305-vitalii"
 							rel="noreferrer"
 							target="_blank"
