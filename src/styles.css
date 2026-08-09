@@ -354,6 +354,25 @@
         background-color 340ms var(--ease-out-cubic);
 }
 
+/* The slot is the grid item; the guitar is the picture inside it. Splitting the
+   two buys somewhere to hang the margin note where the guitar's hover can't
+   drag it around. The slot takes the stretch the guitar used to — the row's
+   height, the track's width — and is a grid of its own, so the guitar inside
+   is sized by the rules it was sized by before, one level down: stretched to
+   its parent's height, and centred rather than stretched across, which is what
+   leaves the aspect ratio below driving the width off that height instead of
+   the other way round.
+
+   The grid itself is a utility on the element rather than a declaration here,
+   so that the `hidden` beside it still counts: everything in this file is
+   unlayered and Tailwind's utilities are not, and an unlayered rule wins over
+   a layered one whatever either one's specificity. A `display` here would beat
+   `hidden` and put the guitar back on phones. */
+.about-guitar-slot {
+    position: relative;
+    justify-items: center;
+}
+
 .about-guitar {
     aspect-ratio: 400 / 1193;
 }
@@ -389,6 +408,36 @@
     mask-size: 100% 100%;
     mask-repeat: no-repeat;
     transition: background-color 340ms var(--ease-out-cubic);
+}
+
+/* ---------- The note in the guitar's margin ----------
+   A handwritten aside, out in the page margin to the left of the instrument
+   and pointed back at it by a drawn arrow. Both are put on the page on hover,
+   a line at a time — useGuitarNote does the timing — so the resting state
+   below is the whole thing at nothing.
+
+   Its right edge is the track's left edge, and it grows leftward from there.
+   Which makes the air the centred guitar leaves in its own track double as the
+   gap between the arrow's tip and the body, and means the note itself is
+   living in the page margin: no part of it is in the column's way, and nothing
+   in the column has to make room. max-content, because the line breaks are
+   written by hand below and the box should be whatever the longest of them
+   comes to.
+
+   It waits for xl for the room to do that. The content column stops growing at
+   md, so the margin either side is what the window has spare — around 60px at
+   md, and not until 1280px is it wide enough to hold the note with air left
+   over. Below that the choice is between a note pressed against the edge of
+   the window and no note, and no note is the better one. */
+.about-guitar-note {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    width: max-content;
+    opacity: 0;
+    /* It is a caption, it is over nothing, and the only thing worth hovering
+       out here is the guitar it belongs to. */
+    pointer-events: none;
 }
 
 .about-wallpicture {
