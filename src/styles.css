@@ -124,12 +124,25 @@
     --radius-photo-frame: 6px; /* polaroid outer frame */
     --radius-photo-xl: 6px; /* picture window on wide screens (2xl) */
     --radius-photo-frame-xl: 8px; /* outer frame on wide screens (2xl) */
+    /* The PicturePopover frame. No -xl pair, unlike the two above: that frame
+       goes from a 48px window to a 56px one at 2xl, and a corner this tight
+       reads the same at both — rounding it further would just start eating the
+       picture. */
+    --radius-photo-mini: 2px; /* its picture window */
+    --radius-photo-frame-mini: 3px; /* its outer frame */
     --radius-badge: 6px; /* card status badge */
     --radius-card: 16px; /* project cards */
     --radius-pill: 25px; /* email button, social icon buttons */
 
     /* ---------- Shadows ---------- */
     --shadow-polaroid: 0 0 41.5px 0 rgb(0 0 0 / 0.4);
+    /* The same card at thumbnail size, and not the same shadow scaled down.
+       The big polaroid's is ambient and offset by nothing — it sits in the
+       middle of a section with room around it, so it reads as lit from
+       everywhere. This one pops over a line of text and needs to look like it
+       is resting just above the page, which is a drop: short, offset down, and
+       tight enough not to grey the words it covers. */
+    --shadow-polaroid-mini: 0 2px 8px 0 rgb(0 0 0 / 0.25);
     /* A book on a shelf: a tight line where it meets the surface, then a soft
        cast forward onto it. Both are pulled in with a negative spread so the
        shadow falls in front of the book and not up the wall behind it — the
@@ -292,6 +305,75 @@
         transparent var(--p)
     );
 }
+/* ---------- PicturePopover ----------
+   A dotted underline, and a snapshot of the thing being named.
+
+   The line is painted rather than bordered or decorated. text-decoration sits
+   on the alphabetic baseline while the solid underline in BouncingUnderlineLink
+   is a span at the bottom of its label box, so a paragraph with one of each
+   would show two underlines at two heights; this is the same span in the same
+   box, which is the only way they line up. And a 1px dotted *border* draws
+   square dots at whatever spacing the browser fancies, where the gap here wants
+   to be twice the dot — sparse enough that dotted reads as dotted at body size
+   rather than as a slightly broken solid rule. */
+.picture-popover-underline {
+    background-image: repeating-linear-gradient(
+        to right,
+        var(--color-ink-hover) 0 1px,
+        transparent 1px 3px
+    );
+}
+
+/* Focus lands on the word, not the button box around it — same treatment, and
+   for the same reason, as .bouncing-underline-link further down. */
+.picture-popover-trigger:focus-visible {
+    outline: none;
+}
+
+.picture-popover-trigger:focus-visible .picture-popover-label {
+    outline: auto 1px var(--focus-ring-color);
+    outline-offset: 3px;
+}
+
+/* The frame rests a few degrees off square, the way the polaroid's caption and
+   the guitar's note do — it is a photograph lying on the page rather than a
+   panel the page drew, and nothing hand-placed lands level.
+
+   It grows out of the word: origin at the bottom edge, because the frame sits
+   above its trigger, so the corner nearest the word is the one that stays put.
+
+   The rest angle is a variable and repeats in the hidden state because these
+   are one transform. Written as a bare rotate at rest and a translate-and-scale
+   on entry, the entry rule would drop the rotation and the frame would twist
+   those four degrees on every open. */
+.picture-popover-frame {
+    --picture-popover-tilt: -4deg;
+    transform: rotate(var(--picture-popover-tilt));
+    transform-origin: bottom center;
+    transition:
+        opacity 160ms ease-out,
+        transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.picture-popover-frame[data-starting-style],
+.picture-popover-frame[data-ending-style] {
+    opacity: 0;
+    transform: translateY(4px) scale(0.85) rotate(var(--picture-popover-tilt));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .picture-popover-frame {
+        transition: opacity 120ms ease-out;
+    }
+
+    /* Still tilted — that is where the thing lives, not something it does on
+       the way in. Only the travel goes. */
+    .picture-popover-frame[data-starting-style],
+    .picture-popover-frame[data-ending-style] {
+        transform: rotate(var(--picture-popover-tilt));
+    }
+}
+
 /* ---------- The guitar on the about page ----------
    It hangs on a wall, and on hover it comes off it towards you: a little
    bigger, a little higher, and — the part that sells it — a shadow that grows

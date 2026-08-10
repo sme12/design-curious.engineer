@@ -3,6 +3,7 @@ import { LINKEDIN_URL, X_URL } from "../config/contact";
 import { BouncingUnderlineLink } from "./BouncingUnderlineLink";
 import { CopyEmailLink } from "./CopyEmailLink";
 import { LinkedInIcon, XIcon } from "./icons";
+import { PicturePopover } from "./PicturePopover";
 import { useGuitarNote } from "./useGuitarNote";
 
 // Broken into lines by hand: the note is set to its own width out in the page
@@ -51,7 +52,18 @@ export function About() {
 						    still for, and the brackets stay upright since they belong to
 						    the sentence rather than to the names. */}
 						Hey! My name is Vitalii (<i>Vitaly, Vitaliy, Виталий</i>). I live in
-						Finland with my wife, Lena, and our dog, Rudy.
+						Finland with my wife,{" "}
+						<PicturePopover
+							alt="Lena and me, with a Moomin drawn on the wall behind us"
+							src="/lena.webp"
+							trailing=","
+						>
+							Lena
+						</PicturePopover>{" "}
+						and our dog,{" "}
+						<PicturePopover alt="Rudy, our dog" src="/rudy.webp" trailing=".">
+							Rudy
+						</PicturePopover>
 					</p>
 					<p className="text-body 2xl:text-body-xl">
 						So, how did I end up making websites for a living? It's a bit of a
@@ -235,10 +247,16 @@ export function About() {
 							movies
 						</BouncingUnderlineLink>
 						, and kids want to be cool. So eventually, I switched hobbies and
-						started a punk band instead. I spent years playing in a band,
-						putting most of my creative energy into songwriting and leaving my
-						web dev and design passion for occasional updates to the band's
-						website.
+						started a{" "}
+						<PicturePopover
+							alt="Me on stage with my band, playing a gold-top Les Paul in the smoke. Photo by Alex Mikhaltsov."
+							src="/band.webp"
+						>
+							punk band
+						</PicturePopover>{" "}
+						instead. I spent years playing in a band, putting most of my
+						creative energy into songwriting and leaving my web dev and design
+						passion for occasional updates to the band's website.
 					</p>
 					<p className="text-body 2xl:text-body-xl">
 						Then one day, a friend asked if I knew someone who could help build
