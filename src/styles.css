@@ -122,8 +122,8 @@
     /* ---------- Radii ---------- */
     --radius-photo: 4px; /* polaroid picture window */
     --radius-photo-frame: 6px; /* polaroid outer frame */
-    --radius-photo-xl: 6px; /* picture window on wide screens (2xl) */
-    --radius-photo-frame-xl: 8px; /* outer frame on wide screens (2xl) */
+    --radius-photo-xl: 5px; /* picture window on wide screens (2xl) */
+    --radius-photo-frame-xl: 7px; /* outer frame on wide screens (2xl) */
     /* The PicturePopover frame. No -xl pair, unlike the two above: that frame
        goes from a 48px window to a 56px one at 2xl, and a corner this tight
        reads the same at both — rounding it further would just start eating the
