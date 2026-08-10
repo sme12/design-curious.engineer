@@ -226,8 +226,15 @@ export function About() {
 				<div className="space-y-6 text-pretty md:col-start-2 2xl:space-y-8">
 					<p className="text-body 2xl:text-body-xl">
 						I didn't take the hobby too seriously, though, because it didn't
-						look nearly as cool as what "real" hackers were doing in the movies,
-						and kids want to be cool. So eventually, I switched hobbies and
+						look nearly as cool as what "real" hackers were doing in the{" "}
+						<BouncingUnderlineLink
+							href="https://www.imdb.com/list/ls000393956/"
+							rel="noreferrer"
+							target="_blank"
+						>
+							movies
+						</BouncingUnderlineLink>
+						, and kids want to be cool. So eventually, I switched hobbies and
 						started a punk band instead. I spent years playing in a band,
 						putting most of my creative energy into songwriting and leaving my
 						web dev and design passion for occasional updates to the band's
@@ -237,7 +244,14 @@ export function About() {
 						Then one day, a friend asked if I knew someone who could help build
 						a website for his company. I didn't know anyone but myself. A
 						company website felt like serious business compared to a band's
-						website, so I brushed up on my knowledge with some YouTube courses
+						website, so I brushed up on my knowledge with some{" "}
+						<BouncingUnderlineLink
+							href="https://www.youtube.com/@OfficialDevTips"
+							rel="noreferrer"
+							target="_blank"
+						>
+							YouTube courses
+						</BouncingUnderlineLink>{" "}
 						and gave it a shot.
 					</p>
 				</div>
