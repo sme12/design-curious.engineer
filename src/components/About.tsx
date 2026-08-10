@@ -22,27 +22,28 @@ export function About() {
 
 	return (
 		<section className="pt-12 pb-15 md:py-section 2xl:py-23">
-			{/* One grid, three rows: copy and the frame, then the guitar and more
-			    copy, then the last paragraph across the whole measure.
+			{/* One grid. The guitar's row is the only one with two things in it —
+			    the instrument in the first column, the copy in the second — and every
+			    other row is a paragraph across both. So the section reads as one
+			    measure of text with a single picture set into the side of it, once,
+			    where the story turns.
 
-			    Three columns to get two mirrored layouts out of one grid. Each block
-			    of copy spans two of them and the picture that isn't beside it takes
-			    the third, so the two halves are the same layout flipped.
+			    The picture column is the other sections' 235px column, split: a real
+			    76px gap and 159px of picture left over — 272px and 196px at 2xl.
+			    Nothing moves by doing that, since the copy in the second column
+			    starts where by day, by night and the bookshelf start theirs. What it
+			    buys is a gap that is a number rather than whatever a picture happens
+			    to leave over, and about what those sections read as, since the air
+			    their headings leave before the text runs 66px to 82px depending on
+			    how long the heading is. 76px is in the middle of that and doesn't
+			    depend on anything.
 
-			    The tracks are the other sections' 235px column, split: a real 76px
-			    gap and 159px of picture column left over — 272px and 196px at 2xl.
-			    Nothing moves by doing that, since a span across two tracks picks up
-			    the gap between them, so the copy still starts and ends where by day,
-			    by night and the bookshelf put theirs. What it buys is a gap that is
-			    a number rather than whatever a picture happens to leave over — the
-			    same on both sides of the section, and about what those sections read
-			    as, since the air their headings leave before the text runs 66px to
-			    82px depending on how long the heading is. 76px is in the middle of
-			    that and doesn't depend on anything.
-
-			    Below md it is one column and the pictures are gone, so the rows are
+			    Below md it is one column and the picture is gone, so the rows are
 			    just the paragraphs, and the row gap is their spacing. */}
-			<div className="mx-auto grid max-w-content gap-y-6 px-gutter md:grid-cols-[159px_1fr_159px] md:items-start md:gap-x-19 md:px-0 2xl:max-w-content-xl 2xl:grid-cols-[196px_1fr_196px] 2xl:gap-y-8">
+			<div className="mx-auto grid max-w-content gap-y-6 px-gutter md:grid-cols-[159px_1fr] md:items-start md:gap-x-19 md:px-0 2xl:max-w-content-xl 2xl:grid-cols-[196px_1fr] 2xl:gap-y-8">
+				{/* The opening, across the full measure. No picture beside it: the
+				    section has one to spare and this is where the story is being set
+				    up, so the lines get the width the closing ones get. */}
 				<div className="space-y-6 text-pretty md:col-span-2 2xl:space-y-8">
 					<p className="text-body 2xl:text-body-xl">
 						Hey! My name is Vitalii (Vitaly, Vitaliy, Виталий). I live in
@@ -62,67 +63,45 @@ export function About() {
 						the kinds of websites I was making at the time.
 					</p>
 				</div>
-				{/* Decorative, and hidden below md: the picture columns are the first
+				{/* Decorative, and hidden below md: the picture column is the first
 				    thing a phone hasn't got room for.
 
-				    self-stretch is the whole sizing story. The row is as tall as the
-				    copy in it — this box has nothing in flow to make it any taller —
-				    so stretching hands the frame the text's height, and the aspect
-				    ratio in .about-wallpicture turns that into its width. Top edge on
-				    the first line, bottom edge on the last, and no size to keep in
-				    step with the copy by hand.
+				    Two boxes rather than one. The slot is the grid item, and it hands
+				    the stretch it gets straight on to the guitar, which is the whole
+				    sizing story: the row is as tall as the copy beside it — neither of
+				    these boxes has anything in flow to make it taller — so stretching
+				    hands the guitar the text's height, and the aspect ratio in
+				    .about-guitar turns that into its width. Top edge on the first
+				    line, bottom edge on the last, and no size to keep in step with the
+				    copy by hand.
 
-				    justify-self-center centres it in its track, and is also what keeps
-				    the track from deciding its width: a grid item stretches across its
+				    Centred rather than stretched across, which is also what keeps the
+				    track from deciding the width: a grid item stretches across its
 				    column given the chance, and a stretched width would leave the
-				    aspect ratio driving the height instead — which is backwards here,
-				    and blows the picture up to the height of a whole page. Since the
-				    height is the text's, the width is whatever it comes to, and a
-				    frame wider than its track overhangs it evenly on both sides.
+				    aspect ratio driving the height instead — backwards here, and it
+				    blows the instrument up to the height of a whole page. Since the
+				    height is the text's, the width is whatever it comes to, and for a
+				    guitar, being a narrow thing in a track cut for a picture, that is
+				    a visible amount of air on either side.
 
-				    The picture is out of flow, or its own height would size the row
-				    and the row would size it back. Anchored to the bottom, because
-				    the box is the frame and the wire above it belongs outside.
+				    What the extra box buys is somewhere to hang the margin note,
+				    below, out of reach of the guitar's hover.
 
-				    It takes pointer events, unlike most decoration, because it has a
-				    hover — see .about-wallpicture in styles.css. The box is the frame
-				    only, but the wire is a child of it and overflows the top, so
-				    hovering the wire counts too. */}
-				<span className="about-wallpicture hidden md:block md:justify-self-center md:self-stretch">
-					<span className="about-wallpicture-cast" />
-					<img
-						alt=""
-						className="absolute bottom-0 left-0 w-full"
-						height={649}
-						loading="lazy"
-						src="/wallpicture.webp"
-						width={400}
-					/>
-				</span>
-				{/* Same rules as the frame above, mirrored, with one box more to them.
-				    The slot is the grid item now, and it hands the stretch it gets
-				    straight on to the guitar — which is sized the way the frame is:
-				    the height of the copy beside it, its own proportion turned into a
-				    width, and centred rather than stretched across, which for a
-				    guitar, being a narrow thing in a track cut for a picture, is a
-				    visible amount of air on either side. What the extra box buys is
-				    somewhere to hang the margin note, below.
-
-				    The picture is out of flow for the same reason as the frame's, and
-				    fills the guitar exactly — this asset is cropped to the instrument
-				    with nothing spare, so there is no wire to hang over an edge. The
-				    shadow, drawn off a traced silhouette, see .about-guitar-cast,
-				    measures itself against that same box — hover included, where both
-				    grow.
+				    The picture is out of flow, or its own height would size the box
+				    and the box would size it back. It fills the guitar exactly — this
+				    asset is cropped to the instrument with nothing spare. The shadow,
+				    drawn off a traced silhouette, see .about-guitar-cast, measures
+				    itself against that same box — hover included, where both grow.
 
 				    Which means its hover area is the instrument's bounding box, air
 				    in the crook of the body and all. Nothing else is near enough for
 				    that to be in anybody's way.
 
-				    A figure, unlike the frame above it: the note is a caption in the
-				    ordinary sense — a line about the picture, by the picture — and
-				    saying so in the markup is what pairs the two for a reader who is
-				    getting the picture described rather than looking at it. */}
+				    A figure, and the only picture in the section: the note is a
+				    caption in the ordinary sense — a line about the picture, by the
+				    picture — and saying so in the markup is what pairs the two for a
+				    reader who is getting the picture described rather than looking at
+				    it. */}
 				<figure className="about-guitar-slot hidden md:grid md:self-stretch">
 					{/* biome-ignore lint/a11y/noStaticElementInteractions: the handlers
 					   only draw a decoration; the note itself is in the tree below */}
@@ -232,7 +211,7 @@ export function About() {
 						</svg>
 					</span>
 				</figure>
-				<div className="space-y-6 text-pretty md:col-span-2 md:col-start-2 2xl:space-y-8">
+				<div className="space-y-6 text-pretty md:col-start-2 2xl:space-y-8">
 					<p className="text-body 2xl:text-body-xl">
 						I didn't take the hobby too seriously, though, because it didn't
 						look nearly as cool as what "real" hackers were doing in the movies,
@@ -253,14 +232,14 @@ export function About() {
 				{/* The ending and the invitation after it, across the full measure and
 				    under both pictures — the story's two halves have had their column
 				    each, and these are the lines that put them together. */}
-				<p className="text-body text-pretty md:col-span-3 2xl:text-body-xl">
+				<p className="text-body text-pretty md:col-span-2 2xl:text-body-xl">
 					Somehow, that favor turned into a long-term and, so far, pretty
 					successful career in web development. So, after taking a detour
 					through punk rock, I ended up pretty close to where I started:
 					tinkering with design tools, writing code, and moving pixels around.
 					And I've never been happier doing what I love.
 				</p>
-				<p className="text-body text-pretty md:col-span-3 2xl:text-body-xl">
+				<p className="text-body text-pretty md:col-span-2 2xl:text-body-xl">
 					If you're also passionate about design and engineering, or think we
 					could work together on something cool, feel free to connect with me on{" "}
 					<BouncingUnderlineLink

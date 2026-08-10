@@ -292,25 +292,24 @@
         transparent var(--p)
     );
 }
-/* ---------- The two pictures on the about page ----------
-   Both hang on the same wall, and on hover both come off it towards you: a
-   little bigger, a little higher, and — the part that sells it — a shadow that
-   grows and softens with them. Depth here is a shadow's job. Scale alone reads
-   as a picture inflating in place, because a picture that got nearer would have
+/* ---------- The guitar on the about page ----------
+   It hangs on a wall, and on hover it comes off it towards you: a little
+   bigger, a little higher, and — the part that sells it — a shadow that grows
+   and softens with it. Depth here is a shadow's job. Scale alone reads as a
+   picture inflating in place, because a picture that got nearer would have
    moved away from the wall behind it, and the shadow is the only thing on
    screen that knows where that wall is.
 
    So the caster's own scale is deliberately the smaller of the two moves. The
-   shadow steps further out from under it, spreads wider than the frame does,
-   and softens — which is what the gap between a thing and the surface behind
-   it does to the shadow it casts. How far it goes is held to the size of the
-   lift, though: a shadow that balloons under an element that barely moved
-   stops reading as distance and starts reading as a glow behind a sticker.
+   shadow steps further out from under it, spreads wider than the instrument
+   does, and softens — which is what the gap between a thing and the surface
+   behind it does to the shadow it casts. How far it goes is held to the size
+   of the lift, though: a shadow that balloons under an element that barely
+   moved stops reading as distance and starts reading as a glow behind a
+   sticker.
 
-   The pair of them share the variables below and differ only in numbers: the
-   guitar's shadow starts further out and softer, since it hangs proud of the
-   wall on a hook and the framed picture sits nearly flat against it. */
-.about-wallpicture,
+   It starts further out and softer than a picture flat against a wall would,
+   since it hangs proud of the wall on a hook. */
 .about-guitar {
     position: relative;
     /* Set at rest as well as on hover so the two states stack the same way:
@@ -331,16 +330,14 @@
    state the way an interactive element would: with the movement gone there is
    nothing left of it worth landing on. */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    .about-wallpicture:hover,
     .about-guitar:hover {
         translate: 0 -0.5rem;
         scale: 1.025;
     }
 }
 
-/* What the shadows have in common. Each one reads these; hovering the picture
-   is what moves them. */
-.about-wallpicture-cast,
+/* The shadow's frame: where it sits and how it animates. The numbers it reads
+   are below; hovering the guitar is what moves them. */
 .about-guitar-cast {
     position: absolute;
     z-index: -1;
@@ -394,18 +391,20 @@
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     /* Softer and further out than at rest, but not by much more than the
-       guitar itself moved. The silhouette is the constraint the frame doesn't
-       have: the neck is only a few dozen pixels across, and a penumbra is paid
-       out of both sides of whatever casts it, so past a certain radius the
-       blur is spending more of the neck's ink outside its own outline than it
-       leaves within. The shadow doesn't so much darken a neck as sit near one.
-       Keeping the blur inside the narrowest part of the shape is what lets it
-       stay a guitar.
+       guitar itself moved. The silhouette is the constraint a rectangle
+       wouldn't have: the neck is only a few dozen pixels across, and a
+       penumbra is paid out of both sides of whatever casts it, so past a
+       certain radius the blur is spending more of the neck's ink outside its
+       own outline than it leaves within. The shadow doesn't so much darken a
+       neck as sit near one. Keeping the blur inside the narrowest part of the
+       shape is what lets it stay a guitar.
 
-       Which is also why the alpha holds where it rests instead of taking the
-       4% the frame's takes for its extra area. This shape grows by the same
-       4%, but it has already given up more than that to the blur running off
-       its edges, so the honest discount was spent before it got here. */
+       Which is also why the alpha holds where it rests rather than thinning to
+       pay for the extra area. The shape grows by about 4% at this scale, and a
+       lift spreads the light an object blocks without destroying any of it —
+       so the ink covering that wider shadow ought to thin by the same 4%. It
+       has already given up more than that to the blur running off its edges,
+       though, so the honest discount was spent before it got here. */
     .about-guitar:hover .about-guitar-cast {
         --cast-offset: 0.75rem;
         --cast-blur: 0.875rem;
@@ -452,43 +451,6 @@
     /* It is a caption, it is over nothing, and the only thing worth hovering
        out here is the guitar it belongs to. */
     pointer-events: none;
-}
-
-.about-wallpicture {
-    aspect-ratio: 400 / 601;
-}
-
-.about-wallpicture-cast {
-    --cast-offset: 0.3125rem;
-    --cast-blur: 0.3125rem;
-    --cast-grow: 1;
-    --cast-alpha: 0.26;
-    background: rgb(0 0 0 / var(--cast-alpha));
-    filter: blur(var(--cast-blur));
-}
-
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-    /* Offset and blur move by the same 5px, because both of them are the gap
-       between the frame and the wall wearing different hats — one is how far
-       the light throws the shadow sideways, the other is how wide the edge of
-       the light source smears it — and a single lift cannot change one without
-       changing the other in step. Which is also why these two deltas match the
-       guitar's to within a pixel: the two objects lift by the same 8px, so the
-       same amount is added to each. What differs is where they start, and that
-       is the whole difference between a frame sitting nearly flat on the wall
-       and an instrument hanging off a hook. */
-    .about-wallpicture:hover .about-wallpicture-cast {
-        --cast-offset: 0.625rem;
-        --cast-blur: 0.625rem;
-        --cast-grow: 1.02;
-        /* Exactly the drop the extra area pays for and no more: the shadow
-           covers 1.02² ≈ 4% more wall, so the ink covering it thins by the
-           same 4%. That is the whole of the honest discount — a lift spreads
-           the light an object blocks, it never destroys any, and it certainly
-           never blocks more. Anything past this point is no longer the frame
-           moving, it is the room's lighting changing to suit it. */
-        --cast-alpha: 0.25;
-    }
 }
 
 /* ---------- Bookshelf planks ----------
