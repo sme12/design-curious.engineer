@@ -37,9 +37,12 @@ export function Header({ standalone = false }: { standalone?: boolean }) {
 		return (
 			// The mobile slant eats 24px off the right edge — on a band this short
 			// that would leave the wordmark sitting on the tear, hence the extra pb.
+			// Solid rather than the surface gradient: over this little height the
+			// gradient is still short of surface-deep where the tear strip — which
+			// is solid surface-deep — starts, and the mismatch reads as a seam.
 			<TornSurface
 				as="header"
-				className="bg-(image:--gradient-surface) pb-6 md:pb-0"
+				className="bg-surface-deep pb-6 md:pb-0"
 				edges="bottom"
 			>
 				{row}
