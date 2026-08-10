@@ -46,7 +46,11 @@ export function About() {
 				    up, so the lines get the width the closing ones get. */}
 				<div className="space-y-6 text-pretty md:col-span-2 2xl:space-y-8">
 					<p className="text-body 2xl:text-body-xl">
-						Hey! My name is Vitalii (Vitaly, Vitaliy, Виталий). I live in
+						{/* i rather than em: these are the same name in other spellings,
+						    not a word said with more weight — which is the one thing i is
+						    still for, and the brackets stay upright since they belong to
+						    the sentence rather than to the names. */}
+						Hey! My name is Vitalii (<i>Vitaly, Vitaliy, Виталий</i>). I live in
 						Finland with my wife, Lena, and our dog, Rudy.
 					</p>
 					<p className="text-body 2xl:text-body-xl">
@@ -58,9 +62,17 @@ export function About() {
 						While everyone around me was either playing games or writing
 						"programs," I was tinkering with Photoshop and Macromedia Flash, and
 						writing HTML and CSS in Notepad. If you remember the 2000s, you
-						probably remember websites full of Flash animations, scrolling
-						marquee text, and blinking GIFs everywhere. Those were pretty much
-						the kinds of websites I was making at the time.
+						probably remember{" "}
+						<BouncingUnderlineLink
+							href="https://www.cameronsworld.net/"
+							rel="noreferrer"
+							target="_blank"
+						>
+							websites
+						</BouncingUnderlineLink>{" "}
+						full of Flash animations, scrolling marquee text, and blinking GIFs
+						everywhere. Those were pretty much the kinds of websites I was
+						making at the time.
 					</p>
 				</div>
 				{/* Decorative, and hidden below md: the picture column is the first
