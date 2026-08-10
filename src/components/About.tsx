@@ -1,8 +1,7 @@
-import { useRef } from "react";
 import { LINKEDIN_URL, X_URL } from "../config/contact";
 import { BouncingUnderlineLink } from "./BouncingUnderlineLink";
 import { CopyEmailLink } from "./CopyEmailLink";
-import { LinkedInIcon, XIcon } from "./icons";
+import { inlineIconClassName, LinkedInIcon, XIcon } from "./icons";
 import { PicturePopover } from "./PicturePopover";
 import { useGuitarNote } from "./useGuitarNote";
 
@@ -18,8 +17,7 @@ const GUITAR_NOTE = [
 ];
 
 export function About() {
-	const guitarNoteRef = useRef<HTMLSpanElement>(null);
-	const guitarNote = useGuitarNote(guitarNoteRef);
+	const guitarNote = useGuitarNote();
 
 	return (
 		<section className="pt-12 pb-15 md:py-section 2xl:py-23">
@@ -160,7 +158,7 @@ export function About() {
 					    timing, .about-guitar-note for where it sits and why it waits
 					    for xl to sit there. */}
 					<span
-						ref={guitarNoteRef}
+						ref={guitarNote.noteRef}
 						aria-hidden="true"
 						className="about-guitar-note hidden text-ink xl:block"
 					>
@@ -288,9 +286,7 @@ export function About() {
 					could work together on something cool, feel free to connect with me on{" "}
 					<BouncingUnderlineLink
 						href={LINKEDIN_URL}
-						leading={
-							<LinkedInIcon className="mx-0.5 inline-block size-4.5 align-text-bottom 2xl:size-5" />
-						}
+						leading={<LinkedInIcon className={inlineIconClassName} />}
 						rel="noreferrer"
 						target="_blank"
 					>
@@ -299,9 +295,7 @@ export function About() {
 					,{" "}
 					<BouncingUnderlineLink
 						href={X_URL}
-						leading={
-							<XIcon className="mx-0.5 inline-block size-4.5 align-text-bottom 2xl:size-5" />
-						}
+						leading={<XIcon className={inlineIconClassName} />}
 						rel="noreferrer"
 						target="_blank"
 					>

@@ -1,5 +1,5 @@
 import { animate } from "motion";
-import { type RefObject, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 // Annotation knobs (seconds)
 const SHAFT_DRAW = 0.5; // the arrow's curve, tail to tip
@@ -32,13 +32,16 @@ function setDrawn(stroke: SVGPathElement, offset: number) {
  * then the words above it, a `[data-line]` at a time, under the same pen wipe
  * the polaroid caption uses (see the `pen-reveal` utility).
  *
- * Returns the pair of handlers the guitar hangs off its pointer events.
+ * Returns the ref for the note itself and the pair of handlers the guitar
+ * hangs off its pointer events — the ref belongs to the hook, as in
+ * useUnderlineBounce, since the caller only passes it back.
  *
  * Nothing happens without a real pointer: a note that appears on tap and then
  * sits there until you tap something else is not the same gesture at all. With
  * reduced motion it appears already written instead.
  */
-export function useGuitarNote(noteRef: RefObject<HTMLElement | null>) {
+export function useGuitarNote() {
+	const noteRef = useRef<HTMLSpanElement>(null);
 	const anims = useRef<ReturnType<typeof animate>[]>([]);
 	const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -120,7 +123,7 @@ export function useGuitarNote(noteRef: RefObject<HTMLElement | null>) {
 		}
 
 		anims.current = running;
-	}, [noteRef, stop]);
+	}, [stop]);
 
 	const hide = useCallback(() => {
 		const note = noteRef.current;
@@ -171,9 +174,9 @@ export function useGuitarNote(noteRef: RefObject<HTMLElement | null>) {
 			stop();
 			clear();
 		}, FADE_OUT * 1000);
-	}, [noteRef, stop]);
+	}, [stop]);
 
 	useEffect(() => stop, [stop]);
 
-	return { show, hide };
+	return { noteRef, show, hide };
 }

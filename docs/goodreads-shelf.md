@@ -44,17 +44,19 @@ All of it lives in [`src/config/shelves.ts`](../src/config/shelves.ts), shared
 by the sync script and the component:
 
 ```ts
-export const SHELVES = [
-    {
-        slug: 'work-reads',
-        heading: 'Books I read to become a better professional',
-    },
-] as const;
+export const SHELVES = [{ slug: 'work-reads' }] as const;
 
 export const EXCLUDED_SHELVES = ['did-not-finish'];
 export const COVER_WIDTH = 400;
 export const GOODREADS_USER_ID = '107695305';
+export const GOODREADS_PROFILE_URL = `https://www.goodreads.com/user/show/${GOODREADS_USER_ID}-vitalii`;
 ```
+
+A shelf is a slug and nothing else. Its heading and the prose around it are
+written in the component, for the reason given under **The heading lives inside
+the component** below. `GOODREADS_PROFILE_URL` is built off the same id the sync
+reads, so the shelf and the link out to it cannot end up pointing at two
+different accounts.
 
 `EXCLUDED_SHELVES` is a named constant because the filter matches a literal
 Goodreads shelf name — see [Failure modes](#failure-modes).
@@ -82,7 +84,10 @@ https://www.goodreads.com/review/list_rss/{user_id}?shelf={slug}
 
 Constraints inherited from the feed:
 
-- **Caps at 100 items per shelf.** The script warns above 90.
+- **Caps at 100 items per shelf.** The script warns above 90 and fails outright
+  at 100, since past the cap the feed stops mentioning the rest of the shelf and
+  the books it left out would be dropped from the JSON and then have their
+  covers deleted as orphans.
 - **Requires the profile and shelf to be public.**
 - **Blocks direct browser requests**, so it is only ever fetched from CI.
 - **An unknown shelf is not an error.** Goodreads ignores the parameter and
@@ -203,8 +208,15 @@ Rules:
 - **Self-healing raws.** If an existing raw stops decoding, it is deleted and
   the book falls back to `cover: null` for that run; the next sync re-fetches
   it. A bad file can't wedge the cache.
+- **Too small to be sharp.** A raw narrower than half `COVER_WIDTH` is logged as
+  a warning and used anyway. It is not retried: for some editions Goodreads has
+  no larger original at any URL, so a re-fetch returns the same pixels. The fix
+  is a better scan saved as `assets/covers-raw/{book_id}.jpg`, which the sync
+  then treats as the cached raw and re-encodes like any other.
 - **Orphan cleanup:** files in both directories whose `book_id` no longer
-  appears in any shelf are deleted.
+  appears in any shelf are deleted — but only files the sync could have written.
+  Book ids are numeric, so anything named otherwise (a `.gitkeep`, a spare scan
+  kept beside the one in use) is left where it is.
 
 Keeping the raws means the WebP target size can change later without going back
 to Goodreads — editions get delisted and those URLs rot. Since covers are the
@@ -242,9 +254,14 @@ than upscaled into fake resolution.
 
 The practical consequence: a 200px-wide card renders at roughly 1.25–1.9x, not
 2x. Four columns puts cards at ~92px in the 405px content column and ~120px on
-wide screens, where even the narrowest cover in the shelf still clears 2x. Any
-design landing on materially larger cards should decide whether that softness is
-acceptable.
+wide screens, where covers in that range still clear 2x. Any design landing on
+materially larger cards should decide whether that softness is acceptable.
+
+Some editions fall well outside that range and there is nothing to be done about
+it from here: *Designing for Emotion* (`12910715`) has a **100×154** original,
+and every sized variant of that URL — `_SX318_`, `_SY475_`, unsuffixed — returns
+the same 100px image. That is the case the width warning exists for; the only
+fix is a better file put in `assets/covers-raw/` by hand.
 
 ## Frontend
 
@@ -502,8 +519,9 @@ solid block, still linked. No broken `<img>` ever ships.
 | Shelf renamed or deleted              | Feed silently returns the **whole library**; the membership check catches it and the script aborts |
 | Shelf empty after filtering           | Component returns `null`; section and heading both absent from `/about`                            |
 | Cover 404, `nophoto`, or undecodable  | `cover: null`, typographic fallback renders; sync continues                                        |
+| Goodreads' largest cover is tiny      | Warning names the file; it renders soft until a better scan is dropped in by hand                  |
 | Sync fails partway through            | Partial artifacts on disk, never committed — CI discards the checkout, locally `git restore .`     |
-| Shelf exceeds 100 books               | Warning logged; oldest silently absent until split into sub-shelves                                |
+| Shelf exceeds 100 books               | Script aborts before writing; split into sub-shelves. Warns from 90 so it doesn't come as a shock  |
 | `did-not-finish` renamed on Goodreads | **Silent.** DNFs reappear on the site. No detection.                                               |
 
 The last row is the known weak point and is accepted as-is: the filter matches a

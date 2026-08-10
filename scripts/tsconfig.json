@@ -1,0 +1,10 @@
+{
+	/* Everything in here runs in Node and none of it is bundled, so this is the
+	   one project with @types/node. The root config covers src/ only, which is
+	   what keeps those globals out of the browser build. */
+	"extends": "../tsconfig.json",
+	"include": ["**/*.ts"],
+	"compilerOptions": {
+		"types": ["node"]
+	}
+}

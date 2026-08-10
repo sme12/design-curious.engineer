@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 
 // Desktop tears the band with a repeating mask; mobile can't, because the band
 // also slants — so the slant is a clip-path and the tear is a rotated strip of
-// surface-deep laid over the seam. Hero and ByNight still inline this pattern;
-// they can move over once it proves out on /about.
+// surface-deep laid over the seam. Every torn band on the site comes through
+// here, so the tear's geometry is written down once.
 const STRIP =
 	"-left-3 absolute h-9 w-[calc(100%+48px)] origin-top-left rotate-[atan2(-24px,100vw)] bg-surface-deep md:hidden";
 

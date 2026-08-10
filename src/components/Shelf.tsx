@@ -40,14 +40,15 @@ const PLANT_MIN_GAP = 2;
 // a number of free cells. Written out per count because Tailwind only generates
 // the class names it can read in the source, and an interpolated one isn't
 // there to be read.
-const PLANT_GAP_NARROW: Record<number, string> = {
-	2: "[--plant-gap:2]",
-	3: "[--plant-gap:3]",
-};
+//
+// The counts that can occur are set by the column math: a last row is short by
+// one less than the column count at most, so three columns leave 0 to 2 free
+// and four leave 0 to 3. Since the plant wants two, narrow has exactly one
+// number to say and wide has two.
+const PLANT_GAP_NARROW = "[--plant-gap:2]";
 const PLANT_GAP_WIDE: Record<number, string> = {
 	2: "md:[--plant-gap:2]",
 	3: "md:[--plant-gap:3]",
-	4: "md:[--plant-gap:4]",
 };
 
 // Covers run from 0.62 to 0.80 wide-to-tall. At the full column width the tall
@@ -105,7 +106,7 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 	const plantCell = [
 		showsNarrow ? "block" : "hidden",
 		showsWide ? "md:block" : "md:hidden",
-		showsNarrow && PLANT_GAP_NARROW[narrowGap],
+		showsNarrow && PLANT_GAP_NARROW,
 		showsWide && PLANT_GAP_WIDE[wideGap],
 	]
 		.filter(Boolean)

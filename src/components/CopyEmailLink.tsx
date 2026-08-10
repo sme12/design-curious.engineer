@@ -1,5 +1,9 @@
 import { EMAIL } from "../config/contact";
-import { CheckIcon, CopyIcon } from "./icons";
+import {
+	BouncingUnderlineLabel,
+	bouncingUnderlineLinkClassName,
+} from "./BouncingUnderlineLink";
+import { CheckIcon, CopyIcon, inlineIconClassName } from "./icons";
 import { useCopyEmail } from "./useCopyEmail";
 import { useUnderlineBounce } from "./useUnderlineBounce";
 
@@ -14,7 +18,7 @@ export function CopyEmailLink({ className = "" }: { className?: string }) {
 		<>
 			<button
 				aria-label={`Copy email address: ${EMAIL}`}
-				className={`bouncing-underline-link cursor-pointer whitespace-nowrap transition-colors duration-200 ease-out-cubic hover:text-ink-hover ${className}`}
+				className={`${bouncingUnderlineLinkClassName} cursor-pointer ${className}`}
 				onClick={copy}
 				onFocus={bounce}
 				onMouseEnter={bounce}
@@ -28,10 +32,7 @@ export function CopyEmailLink({ className = "" }: { className?: string }) {
 				    check takes over once the address has been copied and hands it back
 				    after, cross-faded through a blur rather than swapped, so it reads
 				    as one icon changing its mind rather than two taking turns. */}
-				<span
-					aria-hidden="true"
-					className="relative mx-0.5 inline-block size-4.5 align-text-bottom 2xl:size-5"
-				>
+				<span aria-hidden="true" className={`relative ${inlineIconClassName}`}>
 					<CopyIcon
 						className={`absolute inset-0 size-full transition-[opacity,filter] duration-200 ease-out-cubic ${
 							copied ? "opacity-0 blur-[2px]" : ""
@@ -45,14 +46,9 @@ export function CopyEmailLink({ className = "" }: { className?: string }) {
 				</span>
 				{/* No word space here: the icon leans on the address it copies rather
 				    than floating between "via" and the name. */}
-				<span className="bouncing-underline-link-label relative inline-block">
+				<BouncingUnderlineLabel underlineRef={underlineRef}>
 					{EMAIL}
-					<span
-						aria-hidden="true"
-						className="absolute inset-x-0 bottom-0 h-px bg-ink-hover"
-						ref={underlineRef}
-					/>
-				</span>
+				</BouncingUnderlineLabel>
 			</button>
 			{/* The check is the whole confirmation for anyone looking at it, so
 			    someone who isn't gets told in words. Outside the button: a live

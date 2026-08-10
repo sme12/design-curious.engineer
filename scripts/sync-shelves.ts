@@ -28,8 +28,18 @@ const DATA_DIR = path.join(ROOT, "src/data/shelves");
 const RAW_DIR = path.join(ROOT, "assets/covers-raw");
 const WEBP_DIR = path.join(ROOT, "public/covers");
 
-/** The feed caps at 100 items per shelf; warn before we start losing books. */
+/** Where the feed stops listing a shelf, and where we start saying so. */
+const ITEM_CEILING = 100;
 const ITEM_CEILING_WARNING = 90;
+
+/**
+ * Covers render at 92–135 CSS px, so a raw narrower than this is soft on any
+ * 2x screen. It is a warning rather than a retry because Goodreads genuinely
+ * has no larger original for some editions — re-fetching returns the same
+ * pixels. The fix is a better scan saved as `assets/covers-raw/<book_id>.jpg`,
+ * which findRaw picks up and cleanOrphans leaves alone.
+ */
+const MIN_COVER_WIDTH = COVER_WIDTH / 2;
 
 // Goodreads 403s the default undici user agent.
 const USER_AGENT =
@@ -210,6 +220,15 @@ async function resolveCover(
 		return missing;
 	}
 
+	// Said out loud because nothing else would: a small cover renders, it just
+	// renders soft, and the raw is kept forever — so this is the one moment the
+	// shelf can ask for a better file.
+	if (encoded.info.width < MIN_COVER_WIDTH) {
+		console.warn(
+			`  ! ${id}: cover is only ${encoded.info.width}px wide — Goodreads has nothing larger, replace ${path.relative(ROOT, rawPath)} by hand for a sharp one`,
+		);
+	}
+
 	await writeFile(path.join(WEBP_DIR, `${id}.webp`), encoded.data);
 
 	return {
@@ -244,9 +263,19 @@ async function syncShelf(slug: string): Promise<string[]> {
 		);
 	}
 
-	if (onShelf.length >= ITEM_CEILING_WARNING) {
+	// At the cap the feed has stopped mentioning the rest of the shelf, and a
+	// book it left out would be dropped from the JSON and then have its covers
+	// deleted as orphans — a silent data loss that CI would commit as a success.
+	// Failing the run keeps the last good data on disk.
+	if (items.length >= ITEM_CEILING) {
+		throw new Error(
+			`Feed for "${slug}" returned ${items.length} items — the feed caps at ${ITEM_CEILING}, so anything past that is missing; split the shelf`,
+		);
+	}
+
+	if (items.length >= ITEM_CEILING_WARNING) {
 		console.warn(
-			`  ! ${onShelf.length} items — the feed caps at 100, split the shelf soon`,
+			`  ! ${items.length} items — the feed caps at ${ITEM_CEILING}, split the shelf soon`,
 		);
 	}
 
@@ -299,7 +328,14 @@ async function syncShelf(slug: string): Promise<string[]> {
 async function cleanOrphans(keep: Set<string>) {
 	for (const dir of [RAW_DIR, WEBP_DIR]) {
 		for (const entry of await readdir(dir)) {
-			if (keep.has(path.parse(entry).name)) continue;
+			const name = path.parse(entry).name;
+			if (keep.has(name)) continue;
+
+			// Only ever remove what this script could have written. Book ids are
+			// numeric, so anything else in these directories was put there by a
+			// person — a .gitkeep, or a hand-picked cover kept beside the one
+			// Goodreads serves — and is not ours to delete.
+			if (!/^\d+$/.test(name)) continue;
 
 			await rm(path.join(dir, entry));
 			console.log(

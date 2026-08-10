@@ -1,3 +1,4 @@
+import { GOODREADS_PROFILE_URL } from "../config/shelves";
 import { BouncingUnderlineLink } from "./BouncingUnderlineLink";
 import { HandHeading } from "./HandHeading";
 import { Shelf } from "./Shelf";
@@ -26,7 +27,7 @@ export function Bookshelf() {
 						me a better professional but also a better person, on my{" "}
 						<BouncingUnderlineLink
 							className="text-paper hover:text-white"
-							href="https://www.goodreads.com/user/show/107695305-vitalii"
+							href={GOODREADS_PROFILE_URL}
 							rel="noreferrer"
 							target="_blank"
 						>

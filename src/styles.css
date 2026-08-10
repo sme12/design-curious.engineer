@@ -324,17 +324,6 @@
     );
 }
 
-/* Focus lands on the word, not the button box around it — same treatment, and
-   for the same reason, as .bouncing-underline-link further down. */
-.picture-popover-trigger:focus-visible {
-    outline: none;
-}
-
-.picture-popover-trigger:focus-visible .picture-popover-label {
-    outline: auto 1px var(--focus-ring-color);
-    outline-offset: 3px;
-}
-
 /* The frame rests a few degrees off square, the way the polaroid's caption and
    the guitar's note do — it is a photograph lying on the page rather than a
    panel the page drew, and nothing hand-placed lands level.
@@ -394,6 +383,10 @@
    since it hangs proud of the wall on a hook. */
 .about-guitar {
     position: relative;
+    /* The asset's own proportions. It is the width this turns the stretched
+       height into — see .about-guitar-slot below — so the picture never has a
+       size of its own to keep in step with the copy beside it. */
+    aspect-ratio: 400 / 1193;
     /* Set at rest as well as on hover so the two states stack the same way:
        any value but `none` here opens a stacking context, and switching one on
        and off under an element whose shadow lives at z-index -1 is a change in
@@ -418,30 +411,13 @@
     }
 }
 
-/* The shadow's frame: where it sits and how it animates. The numbers it reads
-   are below; hovering the guitar is what moves them. */
-.about-guitar-cast {
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    translate: var(--cast-offset) var(--cast-offset);
-    /* On top of the caster's, since this element is inside it — the two
-       multiply, and the shadow ends up the wider of the two. */
-    scale: var(--cast-grow);
-    transition:
-        translate 340ms var(--ease-out-cubic),
-        scale 340ms var(--ease-out-cubic),
-        filter 340ms var(--ease-out-cubic),
-        background-color 340ms var(--ease-out-cubic);
-}
-
 /* The slot is the grid item; the guitar is the picture inside it. Splitting the
    two buys somewhere to hang the margin note where the guitar's hover can't
    drag it around. The slot takes the stretch the guitar used to — the row's
    height, the track's width — and is a grid of its own, so the guitar inside
    is sized by the rules it was sized by before, one level down: stretched to
    its parent's height, and centred rather than stretched across, which is what
-   leaves the aspect ratio below driving the width off that height instead of
+   leaves the aspect ratio above driving the width off that height instead of
    the other way round.
 
    The grid itself is a utility on the element rather than a declaration here,
@@ -454,21 +430,31 @@
     justify-items: center;
 }
 
-.about-guitar {
-    aspect-ratio: 400 / 1193;
-}
-
+/* The shadow at rest: where it sits, how far out and how soft, and how it
+   animates. Hovering the guitar is what moves these numbers. */
 .about-guitar-cast {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
     --cast-offset: 0.5rem;
     --cast-blur: 0.625rem;
     --cast-grow: 1;
     --cast-alpha: 0.26;
+    translate: var(--cast-offset) var(--cast-offset);
+    /* On top of the caster's, since this element is inside it — the two
+       multiply, and the shadow ends up the wider of the two. */
+    scale: var(--cast-grow);
     /* The blur is here and the mask is on the child, in that order on purpose.
        An element is filtered first and masked second, so the two on one element
        would blur a plain rectangle and then cut a hard-edged guitar out of it.
        Masking below and blurring here runs it the other way round, and the
        penumbra is free to spread past the silhouette's edge. */
     filter: blur(var(--cast-blur));
+    transition:
+        translate 340ms var(--ease-out-cubic),
+        scale 340ms var(--ease-out-cubic),
+        filter 340ms var(--ease-out-cubic),
+        background-color 340ms var(--ease-out-cubic);
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -1076,11 +1062,17 @@
         outline: none;
     }
 
-    .bouncing-underline-link:focus-visible {
+    /* Focus lands on the word rather than the box around it, for the links and
+       for the popover triggers alike: both are a word in a sentence, and a ring
+       around the whole hit area would be drawn somewhere the reader isn't
+       looking. One rule for the two of them so the ring can't drift apart. */
+    .bouncing-underline-link:focus-visible,
+    .picture-popover-trigger:focus-visible {
         outline: none;
     }
 
-    .bouncing-underline-link:focus-visible .bouncing-underline-link-label {
+    .bouncing-underline-link:focus-visible .bouncing-underline-link-label,
+    .picture-popover-trigger:focus-visible .picture-popover-label {
         outline: auto 1px var(--focus-ring-color);
         outline-offset: 3px;
     }
