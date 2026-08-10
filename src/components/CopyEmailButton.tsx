@@ -1,41 +1,17 @@
-import { useEffect, useRef, useState } from "react";
-import { useWebHaptics } from "web-haptics/react";
-import { copyText } from "../utils/copyText";
+import { EMAIL } from "../config/contact";
 import { CopiedToast } from "./CopiedToast";
 import { CheckIcon, CopyIcon, EnvelopeIcon } from "./icons";
-
-const EMAIL = "vitalii@sazanov.dev";
-const TOAST_DURATION = 2500;
+import { useCopyEmail } from "./useCopyEmail";
 
 export function CopyEmailButton({ className = "" }: { className?: string }) {
-	const [copied, setCopied] = useState(false);
-	const [toastVisible, setToastVisible] = useState(false);
-	const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
-		undefined,
-	);
-	// debug=true also plays web-haptics' audible tick (the haptics.lochie.me sound)
-	const haptic = useWebHaptics({ debug: true });
-
-	useEffect(() => () => clearTimeout(toastTimer.current), []);
-
-	const copyEmail = async () => {
-		if (!(await copyText(EMAIL))) return;
-		setCopied(true);
-		haptic.trigger("success");
-		setToastVisible(true);
-		clearTimeout(toastTimer.current);
-		toastTimer.current = setTimeout(() => {
-			setToastVisible(false);
-			setCopied(false);
-		}, TOAST_DURATION);
-	};
+	const { copied, copy } = useCopyEmail();
 
 	return (
 		<span className={`relative inline-flex ${className}`}>
 			<button
 				aria-label={`Copy email address: ${EMAIL}`}
 				className="group btn btn-solid grow gap-1 xs:px-4 xs:pr-3.25 2xl:text-btn-xl"
-				onClick={copyEmail}
+				onClick={copy}
 				type="button"
 			>
 				{EMAIL}
@@ -64,7 +40,7 @@ export function CopyEmailButton({ className = "" }: { className?: string }) {
 					/>
 				</span>
 			</button>
-			<CopiedToast show={toastVisible} />
+			<CopiedToast show={copied} />
 		</span>
 	);
 }

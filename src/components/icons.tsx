@@ -2,6 +2,13 @@ import type { SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
+// The mark an inline link leads with, mid sentence: cap-height at body size,
+// sitting on the text's own bottom edge with a hair of air either side. Named
+// because the three contact links in About and the address beside them all wear
+// it, and a mark a step off the others reads as a different kind of thing.
+export const inlineIconClassName =
+	"mx-0.5 inline-block size-4.5 align-text-bottom 2xl:size-5";
+
 function Icon(props: IconProps) {
 	return (
 		<svg

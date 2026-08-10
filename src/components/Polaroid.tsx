@@ -52,11 +52,11 @@ export function Polaroid({ className = "" }: { className?: string }) {
 			>
 				<figure
 					ref={cardRef}
-					className="relative flex h-82.25 w-63.5 flex-col rounded-photo-frame bg-paper p-3.5 shadow-polaroid md:h-87 md:w-67.25 2xl:h-104.5 2xl:w-80.75 2xl:rounded-photo-frame-xl 2xl:p-4.25"
+					className="relative flex h-82.25 w-63.5 flex-col rounded-photo-frame bg-paper p-3.5 shadow-polaroid md:h-78.25 md:w-60.5 md:p-3.25 2xl:h-94 2xl:w-72.75 2xl:rounded-photo-frame-xl 2xl:p-3.75"
 				>
 					<div
 						ref={frameRef}
-						className="relative h-60.25 overflow-hidden rounded-photo bg-film md:h-63.75 2xl:h-76.5 2xl:rounded-photo-xl"
+						className="relative h-60.25 overflow-hidden rounded-photo bg-film md:h-57.25 2xl:h-68.75 2xl:rounded-photo-xl"
 					>
 						<canvas
 							ref={canvasRef}

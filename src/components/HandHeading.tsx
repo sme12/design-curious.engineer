@@ -1,14 +1,17 @@
 import type { ReactNode } from "react";
 
 export function HandHeading({
+	as: Tag = "h2",
 	children,
 	className = "",
 }: {
+	/** Section headings are h2; a page whose title lives here uses h1. */
+	as?: "h1" | "h2";
 	children: ReactNode;
 	className?: string;
 }) {
 	return (
-		<h2
+		<Tag
 			className={`flex w-42.75 flex-col gap-1 font-hand font-semibold text-body italic 2xl:w-48 2xl:text-body-xl ${className}`}
 		>
 			<span className="whitespace-nowrap">{children}</span>
@@ -25,6 +28,6 @@ export function HandHeading({
 					fillRule="evenodd"
 				/>
 			</svg>
-		</h2>
+		</Tag>
 	);
 }

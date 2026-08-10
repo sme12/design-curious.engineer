@@ -15,8 +15,8 @@ export function NotFound() {
 						This page is not there yet.
 					</p>
 					<p className="mt-6 text-body text-paper-muted 2xl:text-body-xl">
-						Vitalii might be working on it, or you
-						are just messing with the URL.
+						Vitalii might be working on it, or you are just messing with the
+						URL.
 					</p>
 					<div className="mt-8 md:mt-12.5 2xl:mt-15">
 						<Link className="btn btn-solid" to="/">

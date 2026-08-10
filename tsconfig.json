@@ -1,5 +1,12 @@
 {
-  "include": ["**/*.ts", "**/*.tsx"],
+  /* The browser project, and only that: everything here is bundled and shipped.
+     scripts/ has a config of its own, and vite.config.ts is deliberately out of
+     both — it pulls wrangler, and wrangler pulls undici, which declares a
+     reference to @types/node. One file in the program referencing that library
+     makes `process` and `Buffer` ambient for every other file in it, so keeping
+     the build's own config out is what leaves them undefined in here, where
+     they would typecheck and then throw in the browser. */
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "compilerOptions": {
     "target": "ES2022",
     "jsx": "react-jsx",
@@ -10,6 +17,7 @@
     },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
+    "resolveJsonModule": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",

@@ -122,14 +122,33 @@
     /* ---------- Radii ---------- */
     --radius-photo: 4px; /* polaroid picture window */
     --radius-photo-frame: 6px; /* polaroid outer frame */
-    --radius-photo-xl: 6px; /* picture window on wide screens (2xl) */
-    --radius-photo-frame-xl: 8px; /* outer frame on wide screens (2xl) */
+    --radius-photo-xl: 5px; /* picture window on wide screens (2xl) */
+    --radius-photo-frame-xl: 7px; /* outer frame on wide screens (2xl) */
+    /* The PicturePopover frame. No -xl pair, unlike the two above: that frame
+       goes from a 48px window to a 56px one at 2xl, and a corner this tight
+       reads the same at both — rounding it further would just start eating the
+       picture. */
+    --radius-photo-mini: 2px; /* its picture window */
+    --radius-photo-frame-mini: 3px; /* its outer frame */
     --radius-badge: 6px; /* card status badge */
     --radius-card: 16px; /* project cards */
     --radius-pill: 25px; /* email button, social icon buttons */
 
     /* ---------- Shadows ---------- */
     --shadow-polaroid: 0 0 41.5px 0 rgb(0 0 0 / 0.4);
+    /* The same card at thumbnail size, and not the same shadow scaled down.
+       The big polaroid's is ambient and offset by nothing — it sits in the
+       middle of a section with room around it, so it reads as lit from
+       everywhere. This one pops over a line of text and needs to look like it
+       is resting just above the page, which is a drop: short, offset down, and
+       tight enough not to grey the words it covers. */
+    --shadow-polaroid-mini: 0 2px 8px 0 rgb(0 0 0 / 0.25);
+    /* A book on a shelf: a tight line where it meets the surface, then a soft
+       cast forward onto it. Both are pulled in with a negative spread so the
+       shadow falls in front of the book and not up the wall behind it — the
+       plank's own shading puts the key light at the back. */
+    --shadow-book:
+        0 1px 2px -0.5px rgb(0 0 0 / 0.7), 0 7px 9px -2px rgb(0 0 0 / 0.55);
     --inset-shadow-photo: inset 0 0 7px 0 rgb(0 0 0 / 0.16);
 
     /* ---------- Easing ---------- */
@@ -286,6 +305,750 @@
         transparent var(--p)
     );
 }
+/* ---------- PicturePopover ----------
+   A dotted underline, and a snapshot of the thing being named.
+
+   The line is painted rather than bordered or decorated. text-decoration sits
+   on the alphabetic baseline while the solid underline in BouncingUnderlineLink
+   is a span at the bottom of its label box, so a paragraph with one of each
+   would show two underlines at two heights; this is the same span in the same
+   box, which is the only way they line up. And a 1px dotted *border* draws
+   square dots at whatever spacing the browser fancies, where the gap here wants
+   to be twice the dot — sparse enough that dotted reads as dotted at body size
+   rather than as a slightly broken solid rule. */
+.picture-popover-underline {
+    background-image: repeating-linear-gradient(
+        to right,
+        var(--color-ink-hover) 0 1px,
+        transparent 1px 3px
+    );
+}
+
+/* The frame rests a few degrees off square, the way the polaroid's caption and
+   the guitar's note do — it is a photograph lying on the page rather than a
+   panel the page drew, and nothing hand-placed lands level.
+
+   It grows out of the word: origin at the bottom edge, because the frame sits
+   above its trigger, so the corner nearest the word is the one that stays put.
+
+   The rest angle is a variable and repeats in the hidden state because these
+   are one transform. Written as a bare rotate at rest and a translate-and-scale
+   on entry, the entry rule would drop the rotation and the frame would twist
+   those four degrees on every open. */
+.picture-popover-frame {
+    --picture-popover-tilt: -4deg;
+    transform: rotate(var(--picture-popover-tilt));
+    transform-origin: bottom center;
+    transition:
+        opacity 160ms ease-out,
+        transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.picture-popover-frame[data-starting-style],
+.picture-popover-frame[data-ending-style] {
+    opacity: 0;
+    transform: translateY(4px) scale(0.85) rotate(var(--picture-popover-tilt));
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .picture-popover-frame {
+        transition: opacity 120ms ease-out;
+    }
+
+    /* Still tilted — that is where the thing lives, not something it does on
+       the way in. Only the travel goes. */
+    .picture-popover-frame[data-starting-style],
+    .picture-popover-frame[data-ending-style] {
+        transform: rotate(var(--picture-popover-tilt));
+    }
+}
+
+/* ---------- The guitar on the about page ----------
+   It hangs on a wall, and on hover it comes off it towards you: a little
+   bigger, a little higher, and — the part that sells it — a shadow that grows
+   and softens with it. Depth here is a shadow's job. Scale alone reads as a
+   picture inflating in place, because a picture that got nearer would have
+   moved away from the wall behind it, and the shadow is the only thing on
+   screen that knows where that wall is.
+
+   So the caster's own scale is deliberately the smaller of the two moves. The
+   shadow steps further out from under it, spreads wider than the instrument
+   does, and softens — which is what the gap between a thing and the surface
+   behind it does to the shadow it casts. How far it goes is held to the size
+   of the lift, though: a shadow that balloons under an element that barely
+   moved stops reading as distance and starts reading as a glow behind a
+   sticker.
+
+   It starts further out and softer than a picture flat against a wall would,
+   since it hangs proud of the wall on a hook. */
+.about-guitar {
+    position: relative;
+    /* The asset's own proportions. It is the width this turns the stretched
+       height into — see .about-guitar-slot below — so the picture never has a
+       size of its own to keep in step with the copy beside it. */
+    aspect-ratio: 400 / 1193;
+    /* Set at rest as well as on hover so the two states stack the same way:
+       any value but `none` here opens a stacking context, and switching one on
+       and off under an element whose shadow lives at z-index -1 is a change in
+       paint order halfway through a transition. */
+    translate: 0 0;
+    scale: 1;
+    transition:
+        translate 340ms var(--ease-out-cubic),
+        scale 340ms var(--ease-out-cubic);
+}
+
+/* Both halves of the query earn their place. A hover that sticks is worse than
+   no hover on a touch screen, and this one has nothing to say — it isn't
+   feedback on anything, just a picture pretending to be nearer. Which is also
+   why reduced motion turns it off outright rather than snapping to the hovered
+   state the way an interactive element would: with the movement gone there is
+   nothing left of it worth landing on. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .about-guitar:hover {
+        translate: 0 -0.5rem;
+        scale: 1.025;
+    }
+}
+
+/* The slot is the grid item; the guitar is the picture inside it. Splitting the
+   two buys somewhere to hang the margin note where the guitar's hover can't
+   drag it around. The slot takes the stretch the guitar used to — the row's
+   height, the track's width — and is a grid of its own, so the guitar inside
+   is sized by the rules it was sized by before, one level down: stretched to
+   its parent's height, and centred rather than stretched across, which is what
+   leaves the aspect ratio above driving the width off that height instead of
+   the other way round.
+
+   The grid itself is a utility on the element rather than a declaration here,
+   so that the `hidden` beside it still counts: everything in this file is
+   unlayered and Tailwind's utilities are not, and an unlayered rule wins over
+   a layered one whatever either one's specificity. A `display` here would beat
+   `hidden` and put the guitar back on phones. */
+.about-guitar-slot {
+    position: relative;
+    justify-items: center;
+}
+
+/* The shadow at rest: where it sits, how far out and how soft, and how it
+   animates. Hovering the guitar is what moves these numbers. */
+.about-guitar-cast {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    --cast-offset: 0.5rem;
+    --cast-blur: 0.625rem;
+    --cast-grow: 1;
+    --cast-alpha: 0.26;
+    translate: var(--cast-offset) var(--cast-offset);
+    /* On top of the caster's, since this element is inside it — the two
+       multiply, and the shadow ends up the wider of the two. */
+    scale: var(--cast-grow);
+    /* The blur is here and the mask is on the child, in that order on purpose.
+       An element is filtered first and masked second, so the two on one element
+       would blur a plain rectangle and then cut a hard-edged guitar out of it.
+       Masking below and blurring here runs it the other way round, and the
+       penumbra is free to spread past the silhouette's edge. */
+    filter: blur(var(--cast-blur));
+    transition:
+        translate 340ms var(--ease-out-cubic),
+        scale 340ms var(--ease-out-cubic),
+        filter 340ms var(--ease-out-cubic),
+        background-color 340ms var(--ease-out-cubic);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    /* Softer and further out than at rest, but not by much more than the
+       guitar itself moved. The silhouette is the constraint a rectangle
+       wouldn't have: the neck is only a few dozen pixels across, and a
+       penumbra is paid out of both sides of whatever casts it, so past a
+       certain radius the blur is spending more of the neck's ink outside its
+       own outline than it leaves within. The shadow doesn't so much darken a
+       neck as sit near one. Keeping the blur inside the narrowest part of the
+       shape is what lets it stay a guitar.
+
+       Which is also why the alpha holds where it rests rather than thinning to
+       pay for the extra area. The shape grows by about 4% at this scale, and a
+       lift spreads the light an object blocks without destroying any of it —
+       so the ink covering that wider shadow ought to thin by the same 4%. It
+       has already given up more than that to the blur running off its edges,
+       though, so the honest discount was spent before it got here. */
+    .about-guitar:hover .about-guitar-cast {
+        --cast-offset: 0.75rem;
+        --cast-blur: 0.875rem;
+        --cast-grow: 1.02;
+    }
+}
+
+.about-guitar-cast::before {
+    content: '';
+    display: block;
+    height: 100%;
+    background: rgb(0 0 0 / var(--cast-alpha));
+    mask-image: url('/guitar-shadow.svg');
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    transition: background-color 340ms var(--ease-out-cubic);
+}
+
+/* ---------- The note in the guitar's margin ----------
+   A handwritten aside, out in the page margin to the left of the instrument
+   and pointed back at it by a drawn arrow. Both are put on the page on hover,
+   a line at a time — useGuitarNote does the timing — so the resting state
+   below is the whole thing at nothing.
+
+   Its right edge is the track's left edge, and it grows leftward from there.
+   Which makes the air the centred guitar leaves in its own track double as the
+   gap between the arrow's tip and the body, and means the note itself is
+   living in the page margin: no part of it is in the column's way, and nothing
+   in the column has to make room. max-content, because the line breaks are
+   written by hand below and the box should be whatever the longest of them
+   comes to.
+
+   It waits for xl for the room to do that. The content column stops growing at
+   md, so the margin either side is what the window has spare — around 60px at
+   md, and not until 1280px is it wide enough to hold the note with air left
+   over. Below that the choice is between a note pressed against the edge of
+   the window and no note, and no note is the better one. */
+.about-guitar-note {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    width: max-content;
+    opacity: 0;
+    /* It is a caption, it is over nothing, and the only thing worth hovering
+       out here is the guitar it belongs to. */
+    pointer-events: none;
+}
+
+/* ---------- Bookshelf planks ----------
+   One plank per row of books: a thin slab in CSS 3D, tipped away from the
+   camera so its top surface foreshortens to a bright line and its front edge
+   catches the light. The books stand at the back of that surface.
+
+   Everything is driven by --shelf-depth, the plank's front-to-back size, set
+   per breakpoint on the grid in Shelf.tsx. At 72deg the tipped slab projects to
+   roughly a third of that depth, centred on the scene box — so parking the
+   scene's middle on the row's bottom edge stands the books halfway back on the
+   surface rather than on its far rim. The half of the plank behind them is
+   covered by the books themselves, which is why the list is painted over the
+   planks and not under them. */
+/* Roughly a fifth of the gap is the plank hanging below the books it carries;
+   the rest is air. The coefficient is under 1 so that deepening the planks
+   spends most of itself on surface rather than on pushing the rows apart. */
+.shelf-rows {
+    row-gap: calc(0.5 * var(--shelf-depth) + 7px);
+}
+
+.shelf-scene {
+    position: absolute;
+    top: calc(100% - 0.5 * var(--shelf-depth));
+    right: 0;
+    left: 0;
+    height: var(--shelf-depth);
+    perspective: 900px;
+    perspective-origin: 50% 30%;
+}
+
+.shelf-slab {
+    position: absolute;
+    inset: 0;
+    transform: rotateX(72deg);
+    transform-style: preserve-3d;
+}
+
+.shelf-slab > * {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+}
+
+/* Dark finish. The shading is the same shelf as before — same ramp curve, same
+   falloff across the face, same light coming from the back — moved down the
+   scale, not flattened. Two things had to change shape rather than value to
+   keep it that way, both of them because contrast on a dark base doesn't work
+   the way it does on a light one:
+
+   The face and the edge no longer sit a fixed distance apart. Light-plank, the
+   lip ran 37 steps below the front of the surface; carrying that offset down
+   would put the bottom of the edge below black. It's the ratio that's physical
+   anyway — the edge faces away from the light, it doesn't lose a fixed amount
+   of it — so the ramp is now the old ramp's proportions (0.36 to 0.81 of the
+   face's front stop) rather than its differences.
+
+   And every white overlay came down hard. A 0.32 white over #e3e3e3 lifts it
+   nine steps; over a base this dark it lifts it forty-seven, so the alphas that
+   read as satin on the light plank read as wet chrome here. They're set to land
+   roughly the old absolute lift instead. The sweep's troughs went the other
+   way: they were gray, which was darker than the old base and is lighter than
+   this one, so they'd have come out as bands of light. They're black now. */
+
+/* Thickness: stacked copies of the slab pushed deeper with translateZ, so the
+   sliver of each one that escapes the copy in front of it draws the front
+   edge. Dark at the bottom, lighter toward the lip — a vertical edge faces
+   away from the light. */
+.shelf-layer-1 {
+    background: #1a1a1a;
+    transform: translateZ(-5px);
+}
+.shelf-layer-2 {
+    background: #1d1d1d;
+    transform: translateZ(-4.3px);
+}
+.shelf-layer-3 {
+    background: #212121;
+    transform: translateZ(-3.6px);
+}
+.shelf-layer-4 {
+    background: #242424;
+    transform: translateZ(-2.8px);
+}
+.shelf-layer-5 {
+    background: #292929;
+    transform: translateZ(-2.1px);
+}
+.shelf-layer-6 {
+    background: #2e2e2e;
+    transform: translateZ(-1.4px);
+}
+.shelf-layer-7 {
+    background: #343434;
+    transform: translateZ(-0.8px);
+}
+.shelf-layer-8 {
+    background: #3b3b3b;
+    transform: translateZ(-0.35px);
+}
+
+/* Top face: graphite base with a back-to-front falloff, plus inset shadows for
+   edge occlusion. The falloff keeps its old step sizes — the surface loses the
+   same amount of light on its way to the lip as it always did. The occlusion
+   insets are pure black rather than #262626, which is no longer darker than
+   what it's shading, at alphas that hold their old depth. */
+.shelf-face {
+    transform: translateZ(0);
+    background: linear-gradient(
+        180deg,
+        #6b6b6b 0%,
+        #656565 40%,
+        #5d5d5d 70%,
+        #535353 90%,
+        #494949 100%
+    );
+    box-shadow:
+        inset 0 1px 3px rgb(255 255 255 / 0.18),
+        inset 0 -1px 2px rgb(0 0 0 / 0.24),
+        inset 0 -5px 10px rgb(0 0 0 / 0.1),
+        inset 10px 0 20px rgb(0 0 0 / 0.09),
+        inset -10px 0 20px rgb(0 0 0 / 0.09);
+}
+
+/* Faint diagonal satin sweep: alternating soft bright bands and dark troughs.
+   Raise the alphas for a glossier finish. */
+.shelf-sweep {
+    transform: translateZ(0.2px);
+    background: linear-gradient(
+        105deg,
+        rgb(0 0 0 / 0.1) 0%,
+        rgb(255 255 255 / 0) 22%,
+        rgb(255 255 255 / 0.1) 38%,
+        rgb(0 0 0 / 0.07) 55%,
+        rgb(255 255 255 / 0.08) 72%,
+        rgb(255 255 255 / 0) 86%,
+        rgb(0 0 0 / 0.1) 100%
+    );
+}
+
+/* Off-center key-light reflection near the back. */
+.shelf-sheen {
+    transform: translateZ(0.4px);
+    background: radial-gradient(
+        130% 100% at 42% 0%,
+        rgb(255 255 255 / 0.15) 0%,
+        rgb(255 255 255 / 0) 60%
+    );
+}
+
+/* Shadow the plank drops on the section behind it, hung off the front lip:
+   0.66 x depth is where that lip lands in the scene box, so the shadow starts
+   there whatever the plank's depth. Two layers, because one gradient can only
+   be one softness — a tight core directly under the lip, and a wide pool that
+   spreads and fades as it falls away from it. The mask keeps the ends from
+   stopping square, and the whole thing is blurred once on top. */
+.shelf-cast {
+    position: absolute;
+    top: calc(0.66 * var(--shelf-depth) + 1px);
+    right: -2%;
+    left: -2%;
+    height: calc(0.4 * var(--shelf-depth) + 6px);
+    background:
+        linear-gradient(
+            180deg,
+            rgb(0 0 0 / 0.55) 0%,
+            rgb(0 0 0 / 0.2) 24%,
+            transparent 48%
+        ),
+        radial-gradient(74% 88% at 50% 4%, rgb(0 0 0 / 0.3) 0%, transparent 72%);
+    mask-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        #000 6%,
+        #000 94%,
+        transparent 100%
+    );
+    filter: blur(4px);
+}
+
+/* ---------- Books ----------
+   A cover is a flat picture until you can see the book has pages. On hover it
+   turns on its vertical axis and steps forward off the shelf, which opens up
+   its right-hand side — so there has to be something there. `book-edge` is that
+   side: a strip as wide as the book is thick, hinged on the cover's right edge
+   and folded a quarter turn backwards, so it runs from the front cover to where
+   the back one would be. Folded flat it has no width on screen and costs
+   nothing; the turn is the whole reveal.
+
+   The book pivots on its bottom edge and the camera sits low, both to keep it
+   standing on the plank — a book that rotates about its middle lifts off the
+   shelf and floats. */
+.book {
+    perspective: 620px;
+    perspective-origin: 50% 70%;
+    --book-turn: none;
+    transition: filter 340ms var(--ease-out-cubic);
+}
+
+.book-body {
+    display: block;
+    position: relative;
+    transform-origin: 50% 100%;
+    transform-style: preserve-3d;
+    transform: var(--book-turn);
+    transition: transform 340ms var(--ease-out-cubic);
+}
+
+/* Forward on Z rather than scaled: the perspective does the growing, so the
+   book reads as coming toward you off the shelf instead of inflating in place.
+   Held in a variable because the hover half of it is gated on a real pointer
+   and the focus half can't be. */
+@media (hover: hover) {
+    .book-slot:hover .book {
+        --book-turn: translate3d(0, -4px, 44px) rotateY(-25deg);
+    }
+}
+
+.book:focus-visible {
+    --book-turn: translate3d(0, -4px, 44px) rotateY(-25deg);
+    /* The ring is the cell's, below. */
+    outline: none;
+}
+
+/* What you're hovering is the grid cell, not the cover. Two gaps sit between
+   one cover and the next: the column gap, and the slack either side of a cover
+   narrow enough to not fill its cell — and crossing either of them un-hovers
+   everything, so sliding along a row flashes the whole shelf back to full
+   brightness between books. The cell closes the second gap. ::before closes the
+   first, reaching half the column gap out on each side so neighbouring targets
+   meet exactly rather than overlapping.
+
+   Transparent, and drawn before the anchor, so the link still takes the clicks
+   over the cover itself. The row gap is deliberately left open: that one is
+   shelf, and there's no flicker to fix in a move nothing is chasing across. */
+.book-slot::before {
+    content: '';
+    position: absolute;
+    inset: 0 calc(-0.5 * var(--book-gap));
+}
+
+/* In front of its neighbours once it turns — it now overlaps them. */
+@media (hover: hover) {
+    .book-slot:hover {
+        z-index: 20;
+    }
+}
+
+/* The focus ring belongs to the cell, not to the link inside it. Two reasons,
+   and they're the same two that put the hover on the cell:
+
+   The link is the thing that turns. A ring on it is dragged through the
+   rotation and out over the shelf with the book, which is the one moment you
+   need a fixed mark of where you are. The cell doesn't move, so the ring
+   doesn't either — the book steps forward out of a box that stays put.
+
+   And the cell is the only consistent rectangle here. Covers run from 0.62 to
+   0.80 wide-to-tall, so a ring drawn round the link is a different size and
+   shape on every book, and a row of them doesn't line up. Every cell is the
+   same 2:3 box on the same baseline.
+
+   Written out rather than `outline-style: auto`, which is what the rest of the
+   site uses: Chrome's auto ring follows ink overflow, and this element has
+   plenty — the ::before hover pad reaching into both column gaps, the book's
+   cast pool hanging below the baseline. Auto wraps all of it and comes out an
+   L. An explicit outline is just the border box. */
+.book-slot:has(.book:focus-visible) {
+    z-index: 20;
+    border-radius: 5px;
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: 2px;
+}
+
+/* One book comes forward into the light, so the rest of the shelf falls back
+   out of it. Scoped to the row list rather than the page, so a shelf only dims
+   its own books. Brightness alone reads as a grey wash over covers this
+   saturated, so a little colour comes out with the light.
+
+   No filter at rest — the rule only exists while something is hovered — which
+   keeps the resting shelf exactly what it was, and keeps every book off the
+   compositor until it has a reason to be there.
+
+   The plant goes with the books and not with the planks: it's a thing standing
+   on the shelf, and the brightest green on the page staying lit while every
+   cover around it drops is the plant taking over the row. Its shadow stays
+   where it is — the light moved, the pot didn't. */
+@media (hover: hover) {
+    .shelf-rows:has(.book-slot:hover) .book-slot:not(:hover) .book,
+    .shelf-rows:has(.book-slot:hover) .shelf-plant {
+        filter: brightness(0.64) saturate(0.85);
+    }
+}
+
+.shelf-rows:has(.book:focus-visible) .book:not(:focus-visible),
+.shelf-rows:has(.book:focus-visible) .shelf-plant {
+    filter: brightness(0.64) saturate(0.85);
+}
+
+/* The planks go with them, or the brightest thing on a shelf full of dimmed
+   books is the furniture. They dim less far: they're one continuous surface
+   running under the hovered book as well as the rest, so they can't go as dark
+   as the books without cutting the one book that's meant to stand in the light
+   off from what it's standing on. The plank grid is the ul's next sibling. */
+@media (hover: hover) {
+    .shelf-rows:has(.book-slot:hover) + .shelf-rows {
+        filter: brightness(0.82);
+    }
+}
+
+.shelf-rows:has(.book:focus-visible) + .shelf-rows {
+    filter: brightness(0.82);
+}
+
+.shelf-rows + .shelf-rows {
+    transition: filter 340ms var(--ease-out-cubic);
+}
+
+/* The pool the lifted book casts on the plank. A separate blurred element and
+   not a second box-shadow on the cover, for two reasons: box-shadow can't be
+   composited, so animating one repaints the book every frame — inside a
+   rotating preserve-3d element, which is where that gets expensive — and a
+   shadow on the cover turns with the cover, when a pool on a shelf should stay
+   on the shelf. Only opacity and transform move here, so the blur is painted
+   once and the animation stays on the compositor.
+
+   The resting shadow is still `--shadow-book` on the cover itself, untouched
+   and never transitioned: that one is the book's own contact line and belongs
+   to the book, so it should travel with it. */
+.book-cast {
+    position: absolute;
+    z-index: -1;
+    /* Sized off the plank, not off the book. What's in front of the book is
+       shelf, and the shelf is 0.16 x depth of surface below the row's baseline
+       before the front lip — so a pool measured as a share of the *cover* runs
+       straight off the edge on wide screens, where the covers grow faster than
+       the planks do. This way it lands on the surface at every breakpoint. */
+    right: -8%;
+    bottom: calc(-0.16 * var(--shelf-depth) + 3px);
+    left: -8%;
+    /* Stops 3px short of the lip, which the 2.5px blur then spends: a pool that
+       reaches the edge of the shelf spills off it. */
+    height: calc(0.16 * var(--shelf-depth) - 3px);
+    /* Weighted to the top rather than centred: the book's base sits at the top
+       of this box, so the dark end has to be near there — a pool centred on the
+       contact line spends its core behind the cover and only clears it where it
+       has already faded out. Same reason .shelf-cast is built this way.
+
+       It ramps *in* over the first quarter instead of starting at full strength.
+       The top of this box is a hard boundary, so a gradient that opens at its
+       darkest cuts a straight line across the plank everywhere the book isn't
+       standing over it — which, since the book leans left off its own footprint,
+       is most of it. */
+    background: linear-gradient(
+        180deg,
+        rgb(0 0 0 / 0.1) 0%,
+        rgb(0 0 0 / 0.44) 26%,
+        rgb(0 0 0 / 0.16) 60%,
+        transparent 88%
+    );
+    /* Without this the ends stop square and the pool reads as a smudge rather
+       than as something cast by a book. */
+    mask-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        #000 22%,
+        #000 78%,
+        transparent 100%
+    );
+    filter: blur(2.5px);
+    opacity: 0;
+    /* Grows down and out from the contact line, which is the one part of it
+       that shouldn't move. */
+    transform-origin: 50% 0;
+    transform: scale(0.72, 0.6);
+    transition:
+        opacity 340ms var(--ease-out-cubic),
+        transform 340ms var(--ease-out-cubic);
+}
+
+/* Wider than it is taller, and nudged the way the book leans: the turn brings
+   the left edge forward, so the pool goes with it. */
+.book-slot:hover .book-cast,
+.book:focus-visible .book-cast {
+    opacity: 1;
+    transform: translate(-2%, 0) scale(1.12, 1);
+}
+
+/* The page block. 0% is the back of the book and 100% the front: the light and
+   the open air are both at the front, so it darkens as it goes back, with a
+   line at either end where the covers overhang it. The repeating stops are the
+   page edges — the turn foreshortens them to well under half their width, so
+   they're spaced wide enough here to survive it as grain rather than mush.
+   Inset a hair top and bottom, the way a text block sits inside its covers. */
+.book-edge {
+    position: absolute;
+    top: 1px;
+    right: 0;
+    bottom: 1px;
+    width: var(--book-thickness, 14%);
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+    background:
+        repeating-linear-gradient(
+            90deg,
+            rgb(116 100 72 / 0.32) 0 0.5px,
+            rgb(255 255 255 / 0) 0.5px 2.4px
+        ),
+        linear-gradient(
+            90deg,
+            #8f8674 0%,
+            #cabfa8 16%,
+            #f1ebdf 44%,
+            #e4dccb 74%,
+            #b9af99 94%,
+            #8a8170 100%
+        );
+}
+
+/* ---------- The plant ----------
+   What stands in the last row where the books ran out. Sized off the row's
+   height rather than given a width of its own, so it grows with the shelf at
+   every breakpoint the way the covers do — and so it stays the same size
+   against the books whatever the cell it's centred in is worth.
+
+   A fifth taller than the books, which is what a pot this size is next to a
+   paperback: it comes to about a book's width across the pot, and the leaves
+   spread past that into air the shelf has going spare anyway. It's the leaf
+   tips that overhang the cell, and they're the sparsest part of it — a plant
+   sized to fit inside a 2:3 box reads as a sprig in a cup.
+
+   The file is trimmed to the plant, so its bottom edge is the bottom of the
+   pot: the cell's `items-end` is the whole of standing it on the shelf. */
+/* One cell over from wherever the books stopped, to the middle of what's left:
+   half a cell and half a gap for every free cell past the first. 50% is the
+   cell's own width, which is the only place a column measurement is available
+   without writing the grid down twice.
+
+   The default is in the var() rather than a declaration of its own. Tailwind's
+   utilities are layered and this file isn't, so an unlayered --plant-gap here
+   would beat the [--plant-gap:n] class that's meant to set it, at every
+   breakpoint, forever. */
+.shelf-plant-slot {
+    transform: translateX(
+        calc((var(--plant-gap, 1) - 1) * (50% + 0.5 * var(--book-gap)))
+    );
+}
+
+/* The plant's own box: taller than its cell, and out of flow so that nothing
+   above follows it there. In flow it contributes its full height to the row,
+   the row grows to fit it, and every book in that row is left hanging off the
+   top of a plank that dropped away from them.
+
+   The ratio is the file's, so the height is the only measurement here and the
+   width comes off it. */
+.shelf-plant-stand {
+    position: absolute;
+    left: 50%;
+    /* Forward of the books rather than in line with them. They stand halfway
+       back on the plank, which is where a row of things packed against a wall
+       stands; a plant is put down on the shelf, and it lands nearer the middle
+       of the surface. That's the whole of it — the pot sits a little further
+       down the plank's depth, and its shadow, which is its child, comes with
+       it. Measured off --shelf-depth, since what it's moving across is the
+       plank's surface and nothing else. */
+    bottom: calc(-0.06 * var(--shelf-depth));
+    /* A little taller than the books, or as tall as the shelf above will allow,
+       whichever is less. What it can grow into is the row gap (0.5 x depth +
+       7px) minus the part of it the plank above already hangs into (0.16 x
+       depth of front lip), less a few pixels so the leaves clear it rather than
+       meet it. Both terms move with the breakpoint and they don't move together
+       — the covers grow faster than the planks do — so which one binds depends
+       on the viewport. The cap ignores the drop above, which only ever buys
+       more room at the top; it's a guard, and a guard should read low. */
+    height: min(108%, calc(100% + 0.34 * var(--shelf-depth) - 5px));
+    aspect-ratio: 400 / 421;
+    transform: translateX(-50%);
+}
+
+.shelf-plant {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: filter 340ms var(--ease-out-cubic);
+}
+
+/* The pot's contact shadow. The books get theirs from --shadow-book, which is
+   a box-shadow and so needs a box to hang off; a pot is round, so this is the
+   same shadow drawn as the shape that actually casts it — and drawn where that
+   shape actually touches.
+
+   Which is not the bottom of the picture. The pot's base is an ellipse, so the
+   only part of it standing on the baseline is the front of the curve; its sides
+   meet the shelf a way up the image, at 92% of the height. A shadow hung off
+   the bottom edge instead sits under the lowest point and leaves daylight in
+   the two corners where the base curves away — and daylight under a pot is a
+   pot in the air. These numbers are that ellipse, measured off the file:
+   54% of the width, centred 4% up from the bottom.
+
+   Weighted forward, since the light is at the back of the shelf, and behind the
+   plant rather than over it: an absolutely positioned child paints above its
+   in-flow siblings otherwise, which puts the shadow on top of the pot. */
+.shelf-plant-cast {
+    position: absolute;
+    z-index: -1;
+    bottom: -5%;
+    left: 18%;
+    width: 64%;
+    height: 18%;
+    /* Concentric with that ellipse rather than weighted forward, which it looks
+       like anyway: the pot is standing on the back half. The front half is the
+       whole of what shows, and it runs out just short of the front lip — the
+       plank has 0.16 x depth of surface in front of the row to catch it, and
+       the pot has already spent a third of that standing further forward. */
+    background: radial-gradient(
+        50% 50% at 50% 50%,
+        rgb(0 0 0 / 0.62) 0%,
+        rgb(0 0 0 / 0.28) 44%,
+        transparent 78%
+    );
+    filter: blur(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .book,
+    .book-body,
+    .book-cast,
+    .shelf-plant {
+        transition: none;
+    }
+}
 
 @layer base {
     /* :where() keeps specificity at (0,1,0) even after the minifier merges
@@ -299,11 +1062,17 @@
         outline: none;
     }
 
-    .bouncing-underline-link:focus-visible {
+    /* Focus lands on the word rather than the box around it, for the links and
+       for the popover triggers alike: both are a word in a sentence, and a ring
+       around the whole hit area would be drawn somewhere the reader isn't
+       looking. One rule for the two of them so the ring can't drift apart. */
+    .bouncing-underline-link:focus-visible,
+    .picture-popover-trigger:focus-visible {
         outline: none;
     }
 
-    .bouncing-underline-link:focus-visible .bouncing-underline-link-label {
+    .bouncing-underline-link:focus-visible .bouncing-underline-link-label,
+    .picture-popover-trigger:focus-visible .picture-popover-label {
         outline: auto 1px var(--focus-ring-color);
         outline-offset: 3px;
     }

@@ -2,6 +2,7 @@
   "name": "design-curious.engineer",
   "private": true,
   "type": "module",
+  "packageManager": "npm@11.6.2",
   "imports": {
     "#/*": "./src/*"
   },
@@ -14,9 +15,11 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
+    "sync-shelves": "node scripts/sync-shelves.ts",
     "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
+    "@base-ui/react": "^1.7.0",
     "@cloudflare/vite-plugin": "^1.26.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-router": "latest",
@@ -40,7 +43,9 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "fast-xml-parser": "^5.10.1",
     "jsdom": "^28.1.0",
+    "sharp": "^0.35.3",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",
     "vitest": "^4.1.5",

@@ -20,11 +20,17 @@ npm run dev   # http://localhost:3000
 Other scripts:
 
 ```bash
-npm run build     # production build
-npm run preview   # preview the production build
-npm run test      # vitest
-npm run check     # biome lint + format check
+npm run build          # production build
+npm run preview        # preview the production build
+npm run test           # vitest
+npm run check          # biome lint + format check
+npm run sync-shelves   # refresh the Goodreads shelf data & covers
 ```
+
+## Docs
+
+- [Goodreads shelf](docs/goodreads-shelf.md) — the book covers on `/about`:
+  how the data is synced, and how to run a sync.
 
 ## Deploy
 

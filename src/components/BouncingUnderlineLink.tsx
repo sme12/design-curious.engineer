@@ -1,6 +1,36 @@
-import { animate } from "motion";
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
-import { useCallback, useEffect, useRef } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, Ref } from "react";
+import { useUnderlineBounce } from "./useUnderlineBounce";
+
+// What a link of this kind looks like, kept out of the component because the
+// email button wears it without being a link — the same reason the hop itself
+// lives in useUnderlineBounce. See CopyEmailLink.
+export const bouncingUnderlineLinkClassName =
+	"bouncing-underline-link whitespace-nowrap transition-colors duration-200 ease-out-cubic hover:text-ink-hover";
+
+/**
+ * The label and the rule under it — the part that hops. The rule is a span at
+ * the bottom of the label box rather than a text-decoration so that it can be
+ * moved, and so it lands at the same height as PicturePopover's dotted one; the
+ * label box is what focus outlines, see .bouncing-underline-link in styles.css.
+ */
+export function BouncingUnderlineLabel({
+	children,
+	underlineRef,
+}: {
+	children: ReactNode;
+	underlineRef: Ref<HTMLSpanElement>;
+}) {
+	return (
+		<span className="bouncing-underline-link-label relative inline-block">
+			{children}
+			<span
+				aria-hidden="true"
+				className="absolute inset-x-0 bottom-0 h-px bg-ink-hover"
+				ref={underlineRef}
+			/>
+		</span>
+	);
+}
 
 type BouncingUnderlineLinkProps = Omit<
 	ComponentPropsWithoutRef<"a">,
@@ -21,55 +51,30 @@ export function BouncingUnderlineLink({
 	onMouseEnter,
 	...props
 }: BouncingUnderlineLinkProps) {
-	const underlineRef = useRef<HTMLSpanElement>(null);
-	const anim = useRef<ReturnType<typeof animate>>(undefined);
-
-	// Hop toward the text, then spring back down with a little overshoot
-	const bounceUnderline = useCallback(() => {
-		const line = underlineRef.current;
-		if (!line || matchMedia("(prefers-reduced-motion: reduce)").matches) {
-			return;
-		}
-
-		// Scale the hop to the line box so tight line-heights don't overlap the text
-		const hop = bounceHeight ?? (line.parentElement?.offsetHeight ?? 24) * 0.1;
-
-		anim.current?.cancel();
-		anim.current = animate([
-			[line, { y: -hop }, { duration: 0.12, ease: "easeOut" }],
-			[line, { y: 0 }, { type: "spring", stiffness: 550, damping: 9 }],
-		]);
-	}, [bounceHeight]);
-
-	useEffect(() => () => anim.current?.cancel(), []);
+	const { bounce, underlineRef } = useUnderlineBounce(bounceHeight);
 
 	return (
 		<a
 			{...props}
-			className={`bouncing-underline-link whitespace-nowrap transition-colors duration-200 ease-out-cubic hover:text-ink-hover ${className}`}
+			className={`${bouncingUnderlineLinkClassName} ${className}`}
 			href={href}
 			onFocus={(event) => {
 				onFocus?.(event);
 				if (!event.defaultPrevented) {
-					bounceUnderline();
+					bounce();
 				}
 			}}
 			onMouseEnter={(event) => {
 				onMouseEnter?.(event);
 				if (!event.defaultPrevented) {
-					bounceUnderline();
+					bounce();
 				}
 			}}
 		>
 			{leading && <>{leading} </>}
-			<span className="bouncing-underline-link-label relative inline-block">
+			<BouncingUnderlineLabel underlineRef={underlineRef}>
 				{children}
-				<span
-					aria-hidden="true"
-					className="absolute inset-x-0 bottom-0 h-px bg-ink-hover"
-					ref={underlineRef}
-				/>
-			</span>
+			</BouncingUnderlineLabel>
 		</a>
 	);
 }
