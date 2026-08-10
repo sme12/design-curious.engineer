@@ -42,7 +42,9 @@ export function CopyEmailLink({ className = "" }: { className?: string }) {
 							copied ? "opacity-100" : "opacity-0 blur-[2px]"
 						}`}
 					/>
-				</span>{" "}
+				</span>
+				{/* No word space here: the icon leans on the address it copies rather
+				    than floating between "via" and the name. */}
 				<span className="bouncing-underline-link-label relative inline-block">
 					{EMAIL}
 					<span
