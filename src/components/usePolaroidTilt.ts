@@ -34,22 +34,25 @@ export function usePolaroidTilt({
 		}
 
 		let snapTimeout = 0;
+		let rect = target.getBoundingClientRect();
+		let frame = 0;
+		let pointer: { x: number; y: number } | null = null;
 
-		const onEnter = () => {
-			// Once the settle transition has had time to finish, switch to
-			// untransitioned updates so the tilt tracks the cursor precisely
-			snapTimeout = window.setTimeout(
-				() => wrapper.style.setProperty("transition-duration", "0s"),
-				SETTLE_MS,
-			);
+		// Cached rather than measured per event: the previous frame wrote a
+		// transform to this subtree, so a fresh read here would force a synchronous
+		// relayout on every mousemove — and a card that hasn't scrolled or resized
+		// is still where it was.
+		const measure = () => {
+			rect = target.getBoundingClientRect();
 		};
 
-		const onMove = (e: MouseEvent) => {
-			const { left, top, width, height } = target.getBoundingClientRect();
-			const x = e.clientX - left;
-			const y = e.clientY - top;
-			const tiltX = (y / height - 0.5) * MAX_TILT * 2;
-			const tiltY = (x / width - 0.5) * MAX_TILT * -2;
+		const render = () => {
+			frame = 0;
+			if (!pointer) return;
+			const x = pointer.x - rect.left;
+			const y = pointer.y - rect.top;
+			const tiltX = (y / rect.height - 0.5) * MAX_TILT * 2;
+			const tiltY = (x / rect.width - 0.5) * MAX_TILT * -2;
 			wrapper.style.setProperty(
 				"transform",
 				`perspective(${PERSPECTIVE}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
@@ -60,8 +63,32 @@ export function usePolaroidTilt({
 			);
 		};
 
+		const onEnter = () => {
+			measure();
+			// The page can move under a held cursor, and the rect is viewport-relative
+			window.addEventListener("scroll", measure, { passive: true });
+			window.addEventListener("resize", measure);
+			// Once the settle transition has had time to finish, switch to
+			// untransitioned updates so the tilt tracks the cursor precisely
+			snapTimeout = window.setTimeout(
+				() => wrapper.style.setProperty("transition-duration", "0s"),
+				SETTLE_MS,
+			);
+		};
+
+		const onMove = (e: MouseEvent) => {
+			pointer = { x: e.clientX, y: e.clientY };
+			// Several events can land in one frame; only the last one is worth drawing
+			frame ||= requestAnimationFrame(render);
+		};
+
 		const onLeave = () => {
 			clearTimeout(snapTimeout);
+			cancelAnimationFrame(frame);
+			frame = 0;
+			pointer = null;
+			window.removeEventListener("scroll", measure);
+			window.removeEventListener("resize", measure);
 			wrapper.style.setProperty("transition-duration", `${SETTLE_MS}ms`);
 			wrapper.style.setProperty(
 				"transform",
@@ -74,6 +101,9 @@ export function usePolaroidTilt({
 		target.addEventListener("mouseleave", onLeave);
 		return () => {
 			clearTimeout(snapTimeout);
+			cancelAnimationFrame(frame);
+			window.removeEventListener("scroll", measure);
+			window.removeEventListener("resize", measure);
 			target.removeEventListener("mouseenter", onEnter);
 			target.removeEventListener("mousemove", onMove);
 			target.removeEventListener("mouseleave", onLeave);
