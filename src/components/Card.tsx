@@ -36,7 +36,7 @@ export function Card({
 			ref={cardRef}
 			className={`relative flex flex-col items-start gap-4 rounded-card border border-line px-6 pt-6 pb-7.5 2xl:px-8 2xl:pt-8 2xl:pb-9.5 ${
 				href
-					? "focus-ring-card group transition-[border-color] hover:border-paper-muted"
+					? "focus-ring-card group transition-[border-color] duration-300 ease-out-cubic hover:border-paper-muted"
 					: ""
 			} ${backgroundVideo ? "card-with-background-media overflow-hidden" : ""}`}
 			onBlur={handleBlur}

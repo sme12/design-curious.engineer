@@ -7,7 +7,7 @@ export function Header({ standalone = false }: { standalone?: boolean }) {
 		<div className="mx-auto flex max-w-content items-center justify-between px-gutter py-6 text-paper-muted text-small md:px-0 md:py-10 2xl:max-w-content-xl 2xl:text-small-xl">
 			<h1>
 				<Link
-					className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper lowercase"
+					className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] duration-200 ease-out-cubic hover:text-paper lowercase"
 					to="/"
 				>
 					Vitalii Sazanov
@@ -23,7 +23,7 @@ export function Header({ standalone = false }: { standalone?: boolean }) {
 						className:
 							"text-paper underline decoration-accent decoration-2 underline-offset-4",
 					}}
-					className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-paper lowercase"
+					className="-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] duration-200 ease-out-cubic hover:text-paper lowercase"
 					to="/about"
 				>
 					About

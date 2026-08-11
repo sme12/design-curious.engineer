@@ -4,7 +4,7 @@ import { BouncingUnderlineLink } from "./BouncingUnderlineLink";
 import { GitHubIcon } from "./icons";
 
 const navLinkClassName =
-	"-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] hover:text-ink-hover lowercase";
+	"-mx-3 -my-3.5 inline-flex px-3 py-3.5 transition-[color] duration-200 ease-out-cubic hover:text-ink-hover lowercase";
 
 // Same active rule as the header nav: accent underline for the current route,
 // hover stays color-only so the two states read apart.
