@@ -12,8 +12,9 @@ const COPIED_DURATION = 2500;
 export function useCopyEmail() {
 	const [copied, setCopied] = useState(false);
 	const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-	// debug=true also plays web-haptics' audible tick (the haptics.lochie.me sound)
-	const haptic = useWebHaptics({ debug: true });
+	// Silent by default: web-haptics' `debug` option adds an audible tick, which is
+	// a development aid rather than something to ship over a clipboard write.
+	const haptic = useWebHaptics();
 
 	useEffect(() => () => clearTimeout(timer.current), []);
 
