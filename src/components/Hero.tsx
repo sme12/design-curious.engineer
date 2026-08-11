@@ -14,7 +14,7 @@ export function Hero() {
 				<p className="whitespace-nowrap text-display text-paper md:text-display-lg 2xl:text-display-xl">
 					Hi, I'm Vitalii —
 					<br />a design-
-					<span className="font-hand font-medium text-gradient-accent text-script md:text-script-lg 2xl:text-script-xl">
+					<span className="hero-written-word pen-reveal font-hand font-medium text-gradient-accent text-script md:text-script-lg 2xl:text-script-xl">
 						curious
 					</span>
 					<br />

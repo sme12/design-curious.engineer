@@ -15,6 +15,13 @@ export const Route = createFileRoute("/")({
 				href: "/polaroid.jpg",
 				fetchPriority: "high",
 			},
+			{
+				rel: "preload",
+				as: "font",
+				type: "font/woff2",
+				href: "/fonts/shantell-sans-medium.woff2",
+				crossOrigin: "anonymous",
+			},
 		],
 	}),
 	component: Home,

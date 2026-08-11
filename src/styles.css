@@ -305,6 +305,48 @@
         transparent var(--p)
     );
 }
+
+/* ---------- The hero's flourish ----------
+   `curious` is written on arrival rather than printed, by the same pen as the
+   polaroid's caption and the guitar's note. Only that word: the rest of the
+   headline is the sentence, and a sentence you have to wait to read is a
+   worse sentence.
+
+   In CSS rather than motion, unlike the other three pens, because this one
+   fires at page load. `pen-reveal` rests at unwritten, so a JS version either
+   leaves a hole in the headline until hydration or paints the finished word
+   and rewinds it — see useGuitarNote for that second failure. A keyframe
+   starts at first paint, needs no hydration, and still runs with JS off.
+
+   0.42/0/0.58/1 is what motion's `easeInOut` resolves to (motion-utils,
+   easing/ease.mjs), so this is the same hand at the same speed as
+   useHandwrittenCaption and useGuitarNote — spelled out because the built-in
+   keyword is not something to have to remember the equivalence of.
+
+   The delay is the hand arriving after the line it finishes: `a design-` is
+   printed and read, and then the pen catches up to it. `both` holds the word
+   unwritten across that delay rather than flashing it. */
+@keyframes hero-write {
+    from {
+        --p: 0%;
+    }
+    to {
+        --p: 125%;
+    }
+}
+
+.hero-written-word {
+    animation: hero-write 0.55s cubic-bezier(0.42, 0, 0.58, 1) 0.25s both;
+}
+
+/* Printed, as it is today. Not `--p: 125%` on a still-running animation —
+   the mask goes away entirely. */
+@media (prefers-reduced-motion: reduce) {
+    .hero-written-word {
+        animation: none;
+        --p: 125%;
+    }
+}
 /* ---------- PicturePopover ----------
    A dotted underline, and a snapshot of the thing being named.
 
