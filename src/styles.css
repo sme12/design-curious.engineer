@@ -729,18 +729,25 @@
 
 /* Forward on Z rather than scaled: the perspective does the growing, so the
    book reads as coming toward you off the shelf instead of inflating in place.
-   Held in a variable because the hover half of it is gated on a real pointer
-   and the focus half can't be. */
-@media (hover: hover) {
+   Held in a variable because the two halves are gated differently: the hover
+   half needs a real pointer, the focus half doesn't, and both need a motion
+   preference that allows movement. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .book-slot:hover .book {
         --book-turn: translate3d(0, -4px, 44px) rotateY(-25deg);
     }
 }
 
+/* The ring is the cell's, below — suppressed at every motion preference, since
+   the cell draws one whether or not the book is free to turn. */
 .book:focus-visible {
-    --book-turn: translate3d(0, -4px, 44px) rotateY(-25deg);
-    /* The ring is the cell's, below. */
     outline: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .book:focus-visible {
+        --book-turn: translate3d(0, -4px, 44px) rotateY(-25deg);
+    }
 }
 
 /* What you're hovering is the grid cell, not the cover. Two gaps sit between
@@ -899,11 +906,15 @@
 }
 
 /* Wider than it is taller, and nudged the way the book leans: the turn brings
-   the left edge forward, so the pool goes with it. */
-.book-slot:hover .book-cast,
-.book:focus-visible .book-cast {
-    opacity: 1;
-    transform: translate(-2%, 0) scale(1.12, 1);
+   the left edge forward, so the pool goes with it. Which is also why the pool
+   goes where the lift goes: it exists because the book lifted, and with
+   movement suppressed there is nothing above the shelf to cast it. */
+@media (prefers-reduced-motion: no-preference) {
+    .book-slot:hover .book-cast,
+    .book:focus-visible .book-cast {
+        opacity: 1;
+        transform: translate(-2%, 0) scale(1.12, 1);
+    }
 }
 
 /* The page block. 0% is the back of the book and 100% the front: the light and
@@ -1039,15 +1050,6 @@
         transparent 78%
     );
     filter: blur(3px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .book,
-    .book-body,
-    .book-cast,
-    .shelf-plant {
-        transition: none;
-    }
 }
 
 @layer base {
