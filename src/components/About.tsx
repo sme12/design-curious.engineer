@@ -64,10 +64,6 @@ export function About() {
 						</PicturePopover>
 					</p>
 					<p className="text-body 2xl:text-body-xl">
-						So, how did I end up making websites for a living? It's a bit of a
-						story.
-					</p>
-					<p className="text-body 2xl:text-body-xl">
 						I got into computers early on as a kid, but through the wrong door.
 						While everyone around me was either playing games or writing
 						"programs," I was tinkering with Photoshop and Macromedia Flash, and
