@@ -1,6 +1,10 @@
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { PostHogProvider } from "posthog-js/react";
 
 import appCss from "../styles.css?url";
+
+const posthogKey = import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN;
+const posthogHost = import.meta.env.VITE_PUBLIC_POSTHOG_HOST;
 
 const SITE_URL = "https://design-curious.engineer";
 const TITLE = "Vitalii's Website";
@@ -125,6 +129,46 @@ export const Route = createRootRoute({
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+	const missingPostHogEnvVar = !posthogKey
+		? "VITE_PUBLIC_POSTHOG_PROJECT_TOKEN"
+		: !posthogHost
+			? "VITE_PUBLIC_POSTHOG_HOST"
+			: undefined;
+
+	if (missingPostHogEnvVar) {
+		if (import.meta.env.DEV) {
+			throw new Error(
+				`${missingPostHogEnvVar} variable required by PostHog is missing or un-configured, this causes events to be silently missed. This error stops appearing once ${missingPostHogEnvVar} is configured`,
+			);
+		}
+
+		return <Document>{children}</Document>;
+	}
+
+	return (
+		<PostHogProvider
+			apiKey={posthogKey}
+			options={{
+				api_host: posthogHost,
+				capture_exceptions: {
+					capture_unhandled_errors: true,
+					capture_unhandled_rejections: true,
+					capture_console_errors: false,
+				},
+				// No cookies, no local/session storage: identity comes from a
+				// privacy-preserving hash computed on PostHog's servers.
+				// Requires "Cookieless server hash mode" in project settings.
+				cookieless_mode: "always",
+				debug: import.meta.env.DEV,
+				defaults: "2025-05-24",
+			}}
+		>
+			<Document>{children}</Document>
+		</PostHogProvider>
+	);
+}
+
+function Document({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
 			<head>

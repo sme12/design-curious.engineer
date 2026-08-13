@@ -1,3 +1,4 @@
+import { usePostHog } from "posthog-js/react";
 import type { ReactNode } from "react";
 import { ArrowRightIcon } from "./icons";
 import { useCardVideoPreview } from "./useCardVideoPreview";
@@ -22,6 +23,7 @@ export function Card({
 	backgroundVideo?: BackgroundVideo;
 	children: ReactNode;
 }) {
+	const posthog = usePostHog();
 	const {
 		cardRef,
 		videoRef,
@@ -77,6 +79,7 @@ export function Card({
 					<a
 						className="font-semibold text-paper text-small after:absolute after:inset-0 after:rounded-card 2xl:text-small-xl"
 						href={href}
+						onClick={() => posthog.capture("project_link_opened")}
 						rel="noreferrer"
 						target="_blank"
 					>

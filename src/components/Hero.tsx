@@ -1,3 +1,4 @@
+import { usePostHog } from "posthog-js/react";
 import { GITHUB_URL, LINKEDIN_URL, X_URL } from "../config/contact";
 import { CopyEmailButton } from "./CopyEmailButton";
 import { GitHubIcon, LinkedInIcon, XIcon } from "./icons";
@@ -5,6 +6,8 @@ import { Polaroid } from "./Polaroid";
 import { TornSurface } from "./TornSurface";
 
 export function Hero() {
+	const posthog = usePostHog();
+
 	return (
 		<TornSurface
 			className="bg-(image:--gradient-surface) pt-18.5 pb-16 md:pt-30 md:pb-25 2xl:pt-35 2xl:pb-30"
@@ -27,6 +30,9 @@ export function Hero() {
 						<a
 							aria-label="GitHub"
 							className="btn btn-icon"
+							onClick={() =>
+								posthog.capture("social_profile_opened", { platform: "github" })
+							}
 							href={GITHUB_URL}
 							target="_blank"
 							rel="noreferrer"
@@ -36,6 +42,11 @@ export function Hero() {
 						<a
 							aria-label="LinkedIn"
 							className="btn btn-icon"
+							onClick={() =>
+								posthog.capture("social_profile_opened", {
+									platform: "linkedin",
+								})
+							}
 							href={LINKEDIN_URL}
 							target="_blank"
 							rel="noreferrer"
@@ -45,6 +56,9 @@ export function Hero() {
 						<a
 							aria-label="X (Twitter)"
 							className="btn btn-icon"
+							onClick={() =>
+								posthog.capture("social_profile_opened", { platform: "x" })
+							}
 							href={X_URL}
 							target="_blank"
 							rel="noreferrer"

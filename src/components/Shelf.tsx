@@ -1,3 +1,4 @@
+import { usePostHog } from "posthog-js/react";
 import type { CSSProperties } from "react";
 import type { Book, ShelfSlug } from "../config/shelves";
 import workReads from "../data/shelves/work-reads.json";
@@ -77,6 +78,7 @@ function bookThickness(id: string) {
 }
 
 export function Shelf({ slug }: { slug: ShelfSlug }) {
+	const posthog = usePostHog();
 	const books = SHELF_DATA[slug];
 
 	// A shelf with no books is no shelf: rendering on would leave a plank with
@@ -152,6 +154,9 @@ export function Shelf({ slug }: { slug: ShelfSlug }) {
 								aria-label={`${book.title} on Goodreads (opens in a new tab)`}
 								className="book relative mx-auto block rounded-xs"
 								href={book.link}
+								onClick={() =>
+									posthog.capture("book_link_opened", { shelf: slug })
+								}
 								rel="noreferrer"
 								style={
 									{

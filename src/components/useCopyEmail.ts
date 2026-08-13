@@ -1,3 +1,4 @@
+import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef, useState } from "react";
 import { useWebHaptics } from "web-haptics/react";
 import { EMAIL } from "../config/contact";
@@ -15,6 +16,7 @@ export function useCopyEmail() {
 	// Silent by default: web-haptics' `debug` option adds an audible tick, which is
 	// a development aid rather than something to ship over a clipboard write.
 	const haptic = useWebHaptics();
+	const posthog = usePostHog();
 
 	useEffect(() => () => clearTimeout(timer.current), []);
 
@@ -22,6 +24,7 @@ export function useCopyEmail() {
 	// happens
 	const copy = async () => {
 		if (!(await copyText(EMAIL))) return;
+		posthog.capture("contact_email_copied");
 		setCopied(true);
 		haptic.trigger("success");
 		clearTimeout(timer.current);
